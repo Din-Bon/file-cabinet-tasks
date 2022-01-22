@@ -17,6 +17,7 @@
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -25,6 +26,7 @@
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "show stats", "The 'stat' show stats." },
             new string[] { "create", "create new id", "The 'create' create new id." },
+            new string[] { "list", "show list of ids", "The 'list' show list of ids." },
         };
 
         public static void Main(string[] args)
@@ -47,7 +49,9 @@
                     continue;
                 }
 
+#pragma warning disable CA1309 // Использование порядкового сравнения строк
                 var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
+#pragma warning restore CA1309 // Использование порядкового сравнения строк
                 if (index >= 0)
                 {
                     const int parametersIndex = 1;
@@ -60,6 +64,16 @@
                 }
             }
             while (isRunning);
+        }
+
+        private static void List(string parameters)
+        {
+            FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            for (int i = 0; i < records.Length; i++)
+            {
+                Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
+                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)} ");
+            }
         }
 
         private static void Stat(string parameters)
@@ -75,9 +89,10 @@
             Console.Write("Last name: ");
             var lastName = Console.ReadLine();
             Console.Write("Date of birth: ");
-            var dateOfBirth = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
-            if (firstName != null && lastName != null)
+            string? date = Console.ReadLine();
+            if (firstName != null && lastName != null && date != null)
             {
+                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
                 Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth)} is created.");
             }
         }
@@ -92,7 +107,9 @@
         {
             if (!string.IsNullOrEmpty(parameters))
             {
+#pragma warning disable CA1309 // Использование порядкового сравнения строк
                 var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
+#pragma warning restore CA1309 // Использование порядкового сравнения строк
                 if (index >= 0)
                 {
                     Console.WriteLine(helpMessages[index][Program.ExplanationHelpIndex]);
