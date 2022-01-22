@@ -72,7 +72,8 @@
             for (int i = 0; i < records.Length; i++)
             {
                 Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
-                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)} ");
+                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
+                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
             }
         }
 
@@ -90,10 +91,34 @@
             var lastName = Console.ReadLine();
             Console.Write("Date of birth: ");
             string? date = Console.ReadLine();
+            Console.Write("Income: ");
+            short income;
+
+            if (!short.TryParse(Console.ReadLine(), out income))
+            {
+                throw new ArgumentException("wrong income");
+            }
+
+            Console.Write("Tax: ");
+            decimal tax;
+
+            if (!decimal.TryParse(Console.ReadLine(), out tax))
+            {
+                throw new ArgumentException("wrong tax");
+            }
+
+            Console.Write("Block: ");
+            char block;
+
+            if (!char.TryParse(Console.ReadLine(), out block))
+            {
+                throw new ArgumentException("wrong block");
+            }
+
             if (firstName != null && lastName != null && date != null)
             {
                 var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
-                Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth)} is created.");
+                Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
             }
         }
 
