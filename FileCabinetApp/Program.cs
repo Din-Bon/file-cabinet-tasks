@@ -85,41 +85,89 @@
 
         private static void Create(string parameters)
         {
-            Console.Write("First name: ");
-            var firstName = Console.ReadLine();
-            Console.Write("Last name: ");
-            var lastName = Console.ReadLine();
-            Console.Write("Date of birth: ");
-            string? date = Console.ReadLine();
-            Console.Write("Income: ");
-            short income;
+            bool check = true;
 
-            if (!short.TryParse(Console.ReadLine(), out income))
+            while (check)
             {
-                throw new ArgumentException("wrong income");
-            }
+                Console.Write("First name: ");
+                var firstName = Console.ReadLine();
+                Console.Write("Last name: ");
+                var lastName = Console.ReadLine();
+                Console.Write("Date of birth: ");
+                string? date = Console.ReadLine();
+                Console.Write("Income: ");
+                short income;
 
-            Console.Write("Tax: ");
-            decimal tax;
+                if (!short.TryParse(Console.ReadLine(), out income))
+                {
+                    throw new ArgumentException("wrong income");
+                }
 
-            if (!decimal.TryParse(Console.ReadLine(), out tax))
-            {
-                throw new ArgumentException("wrong tax");
-            }
+                Console.Write("Tax: ");
+                decimal tax;
 
-            Console.Write("Block: ");
-            char block;
+                if (!decimal.TryParse(Console.ReadLine(), out tax))
+                {
+                    throw new ArgumentException("wrong tax");
+                }
 
-            if (!char.TryParse(Console.ReadLine(), out block))
-            {
-                throw new ArgumentException("wrong block");
-            }
+                Console.Write("Block: ");
+                char block;
 
-            if (firstName != null && lastName != null && date != null)
-            {
+                if (!char.TryParse(Console.ReadLine(), out block))
+                {
+                    throw new ArgumentException("wrong block");
+                }
+
+                if (string.IsNullOrWhiteSpace(date))
+                {
+                    throw new ArgumentException("wrong date");
+                }
+
                 var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
-                Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
+
+                check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+
+                if (!check)
+                {
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
+                }
             }
+        }
+
+        private static bool ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 60)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 60)
+            {
+                return true;
+            }
+
+            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Today)
+            {
+                return true;
+            }
+
+            if (income < 0)
+            {
+                return true;
+            }
+
+            if (tax < 0 || tax > 100)
+            {
+                return true;
+            }
+
+            if (block < 65 || block > 90)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void PrintMissedCommandInfo(string command)
