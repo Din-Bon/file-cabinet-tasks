@@ -18,6 +18,7 @@
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("edit", Edit),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -27,6 +28,7 @@
             new string[] { "stat", "show stats", "The 'stat' show stats." },
             new string[] { "create", "create new id", "The 'create' create new id." },
             new string[] { "list", "show list of ids", "The 'list' show list of ids." },
+            new string[] { "edit", "edit existing id", "The 'edit' edit existing id." },
         };
 
         public static void Main(string[] args)
@@ -81,6 +83,60 @@
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Edit(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "empty id");
+            }
+
+            int id = Convert.ToInt32(parameters, System.Globalization.CultureInfo.CurrentCulture);
+            Console.Write("First name: ");
+            var firstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            var lastName = Console.ReadLine();
+            Console.Write("Date of birth: ");
+            string? date = Console.ReadLine();
+            Console.Write("Income: ");
+            short income;
+
+            if (!short.TryParse(Console.ReadLine(), out income))
+            {
+                throw new ArgumentException("wrong income");
+            }
+
+            Console.Write("Tax: ");
+            decimal tax;
+
+            if (!decimal.TryParse(Console.ReadLine(), out tax))
+            {
+                throw new ArgumentException("wrong tax");
+            }
+
+            Console.Write("Block: ");
+            char block;
+
+            if (!char.TryParse(Console.ReadLine(), out block))
+            {
+                throw new ArgumentException("wrong block");
+            }
+
+            if (string.IsNullOrWhiteSpace(date))
+            {
+                throw new ArgumentException("wrong date");
+            }
+
+            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+
+            if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
+            {
+                fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
+                Console.WriteLine($"Record #{id} is updated.");
+            }
+
+            Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
         }
 
         private static void Create(string parameters)

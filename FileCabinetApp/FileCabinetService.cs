@@ -52,6 +52,35 @@
             return record.Id;
         }
 
+        public void EditRecord(int id, string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        {
+            if (id > this.list.Count)
+            {
+                throw new ArgumentException("wrong id", nameof(id));
+            }
+
+            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 60)
+            {
+                throw new ArgumentException("wrong first name", nameof(firstName));
+            }
+
+            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 60)
+            {
+                throw new ArgumentException("wrong last name", nameof(lastName));
+            }
+
+            this.list[id - 1] = new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                Income = income,
+                Tax = tax,
+                Block = block,
+            };
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();
