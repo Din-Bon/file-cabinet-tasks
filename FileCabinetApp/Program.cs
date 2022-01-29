@@ -19,6 +19,7 @@
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -26,9 +27,10 @@
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "show stats", "The 'stat' show stats." },
-            new string[] { "create", "create new id", "The 'create' create new id." },
-            new string[] { "list", "show list of ids", "The 'list' show list of ids." },
-            new string[] { "edit", "edit existing id", "The 'edit' edit existing id." },
+            new string[] { "create", "create new record", "The 'create' create new record." },
+            new string[] { "list", "show list of records", "The 'list' show list of records." },
+            new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
+            new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
         };
 
         public static void Main(string[] args)
@@ -83,6 +85,27 @@
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Find(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            FileCabinetRecord[] records;
+            var commands = parameters.Split(' ', 2);
+            if (commands[0].ToUpperInvariant() == "FIRSTNAME")
+            {
+                records = fileCabinetService.FindByFirstName(commands[1]);
+                for (int i = 0; i < records.Length; i++)
+                {
+                    Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
+                        $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
+                        $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
+                }
+            }
         }
 
         private static void Edit(string parameters)

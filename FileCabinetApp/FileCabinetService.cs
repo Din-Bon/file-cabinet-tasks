@@ -81,6 +81,12 @@
             };
         }
 
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            List<FileCabinetRecord> suit = this.list.FindAll(id => id.FirstName.ToUpperInvariant() == firstName.ToUpperInvariant());
+            return suit.ToArray();
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();
