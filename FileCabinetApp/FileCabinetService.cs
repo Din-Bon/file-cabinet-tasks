@@ -87,6 +87,12 @@
             return suit.ToArray();
         }
 
+        public FileCabinetRecord[] FindByLastName(string lastName)
+        {
+            List<FileCabinetRecord> suit = this.list.FindAll(id => id.LastName.ToUpperInvariant() == lastName.ToUpperInvariant());
+            return suit.ToArray();
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();

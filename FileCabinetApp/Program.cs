@@ -73,12 +73,7 @@
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            for (int i = 0; i < records.Length; i++)
-            {
-                Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
-                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
-                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
-            }
+            PrintRecords(records);
         }
 
         private static void Stat(string parameters)
@@ -94,17 +89,17 @@
                 throw new ArgumentNullException(nameof(parameters), "wrong find command");
             }
 
-            FileCabinetRecord[] records;
             var commands = parameters.Split(' ', 2);
-            if (commands[0].ToUpperInvariant() == "FIRSTNAME")
+            string property = commands[0].ToUpperInvariant();
+
+            switch (property)
             {
-                records = fileCabinetService.FindByFirstName(commands[1]);
-                for (int i = 0; i < records.Length; i++)
-                {
-                    Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
-                        $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
-                        $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
-                }
+                case "FIRSTNAME":
+                    PrintRecords(fileCabinetService.FindByFirstName(commands[1]));
+                    break;
+                case "LASTNAME":
+                    PrintRecords(fileCabinetService.FindByLastName(commands[1]));
+                    break;
             }
         }
 
@@ -247,6 +242,16 @@
             }
 
             return false;
+        }
+
+        private static void PrintRecords(FileCabinetRecord[] records)
+        {
+            for (int i = 0; i < records.Length; i++)
+            {
+                Console.WriteLine($"#{records[i].Id}, {records[i].FirstName}, {records[i].LastName}, " +
+                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
+                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
+            }
         }
 
         private static void PrintMissedCommandInfo(string command)
