@@ -93,6 +93,13 @@
             return suit.ToArray();
         }
 
+        public FileCabinetRecord[] FindByDateofbirth(string date)
+        {
+            List<FileCabinetRecord> suit = this.list.FindAll(id =>
+            id.DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture) == date);
+            return suit.ToArray();
+        }
+
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();

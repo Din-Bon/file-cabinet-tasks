@@ -91,14 +91,18 @@
 
             var commands = parameters.Split(' ', 2);
             string property = commands[0].ToUpperInvariant();
+            string parameter = commands[1].Trim('"');
 
             switch (property)
             {
                 case "FIRSTNAME":
-                    PrintRecords(fileCabinetService.FindByFirstName(commands[1]));
+                    PrintRecords(fileCabinetService.FindByFirstName(parameter));
                     break;
                 case "LASTNAME":
-                    PrintRecords(fileCabinetService.FindByLastName(commands[1]));
+                    PrintRecords(fileCabinetService.FindByLastName(parameter));
+                    break;
+                case "DATEOFBIRTH":
+                    PrintRecords(fileCabinetService.FindByDateofbirth(parameter));
                     break;
             }
         }
