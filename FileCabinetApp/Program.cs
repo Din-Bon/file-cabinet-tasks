@@ -157,8 +157,10 @@
                 fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
                 Console.WriteLine($"Record #{id} is updated.");
             }
-
-            Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
+            else
+            {
+                Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
+            }
         }
 
         private static void Create(string parameters)
