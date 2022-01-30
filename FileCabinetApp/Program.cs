@@ -19,6 +19,7 @@
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -26,9 +27,10 @@
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "show stats", "The 'stat' show stats." },
-            new string[] { "create", "create new id", "The 'create' create new id." },
-            new string[] { "list", "show list of ids", "The 'list' show list of ids." },
-            new string[] { "edit", "edit existing id", "The 'edit' edit existing id." },
+            new string[] { "create", "create new record", "The 'create' create new record." },
+            new string[] { "list", "show list of records", "The 'list' show list of records." },
+            new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
+            new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
         };
 
         public static void Main(string[] args)
@@ -71,18 +73,38 @@
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
-            for (int i = 0; i < records.Length; i++)
-            {
-                Console.WriteLine($"#{i + 1}, {records[i].FirstName}, {records[i].LastName}, " +
-                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
-                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
-            }
+            PrintRecords(records);
         }
 
         private static void Stat(string parameters)
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Find(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            var commands = parameters.Split(' ', 2);
+            string property = commands[0].ToUpperInvariant();
+            string parameter = commands[1].Trim('"');
+
+            switch (property)
+            {
+                case "FIRSTNAME":
+                    PrintRecords(fileCabinetService.FindByFirstName(parameter));
+                    break;
+                case "LASTNAME":
+                    PrintRecords(fileCabinetService.FindByLastName(parameter));
+                    break;
+                case "DATEOFBIRTH":
+                    PrintRecords(fileCabinetService.FindByDateofbirth(parameter));
+                    break;
+            }
         }
 
         private static void Edit(string parameters)
@@ -128,15 +150,17 @@
                 throw new ArgumentException("wrong date");
             }
 
-            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
             if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
             {
                 fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
                 Console.WriteLine($"Record #{id} is updated.");
             }
-
-            Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
+            else
+            {
+                Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
+            }
         }
 
         private static void Create(string parameters)
@@ -180,7 +204,7 @@
                     throw new ArgumentException("wrong date");
                 }
 
-                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
                 check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
 
@@ -224,6 +248,16 @@
             }
 
             return false;
+        }
+
+        private static void PrintRecords(FileCabinetRecord[] records)
+        {
+            for (int i = 0; i < records.Length; i++)
+            {
+                Console.WriteLine($"#{records[i].Id}, {records[i].FirstName}, {records[i].LastName}, " +
+                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
+                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
+            }
         }
 
         private static void PrintMissedCommandInfo(string command)
