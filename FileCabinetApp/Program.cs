@@ -150,7 +150,7 @@
                 throw new ArgumentException("wrong date");
             }
 
-            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
             if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
             {
@@ -204,7 +204,7 @@
                     throw new ArgumentException("wrong date");
                 }
 
-                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.CurrentCulture);
+                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
                 check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
 
