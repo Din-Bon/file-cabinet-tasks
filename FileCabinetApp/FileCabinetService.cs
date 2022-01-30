@@ -23,16 +23,8 @@
             };
 
             this.list.Add(record);
-
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
-            {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
-            }
-            else
-            {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(record);
-            }
-
+            AddFirstNameDictionary(firstName, record);
+            AddLastNameDictionary(lastName, record);
             return record.Id;
         }
 
@@ -52,23 +44,8 @@
                 Block = block,
             };
 
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
-            {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { this.list[id - 1] });
-            }
-            else
-            {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(this.list[id - 1]);
-            }
-
-            if (this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Count > 1)
-            {
-                this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Remove(oldRecord);
-            }
-            else
-            {
-                this.firstNameDictionary.Remove(oldRecord.FirstName.ToUpperInvariant());
-            }
+            EditFirstNameDictionary(firstName, oldRecord, this.list[id - 1]);
+            EditLastNameDictionary(lastName, oldRecord, this.list[id - 1]);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
@@ -78,8 +55,7 @@
 
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
-            List<FileCabinetRecord> suit = this.list.FindAll(id => id.LastName.ToUpperInvariant() == lastName.ToUpperInvariant());
-            return suit.ToArray();
+            return this.lastNameDictionary[lastName.ToUpperInvariant()].ToArray();
         }
 
         public FileCabinetRecord[] FindByDateofbirth(string date)
@@ -129,6 +105,72 @@
             if (block < 65 || block > 90)
             {
                 throw new ArgumentException("wrong block letter", nameof(block));
+            }
+        }
+
+        private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
+        {
+            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            {
+                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+            }
+            else
+            {
+                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(record);
+            }
+        }
+
+        private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
+        {
+            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            {
+                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+            }
+            else
+            {
+                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(record);
+            }
+        }
+
+        private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            {
+                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+            }
+            else
+            {
+                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(newRecord);
+            }
+
+            if (this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Count > 1)
+            {
+                this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Remove(oldRecord);
+            }
+            else
+            {
+                this.firstNameDictionary.Remove(oldRecord.FirstName.ToUpperInvariant());
+            }
+        }
+
+        private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            {
+                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+            }
+            else
+            {
+                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(newRecord);
+            }
+
+            if (this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Count > 1)
+            {
+                this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Remove(oldRecord);
+            }
+            else
+            {
+                this.lastNameDictionary.Remove(oldRecord.LastName.ToUpperInvariant());
             }
         }
     }
