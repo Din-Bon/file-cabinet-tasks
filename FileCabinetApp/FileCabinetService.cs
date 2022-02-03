@@ -14,10 +14,8 @@
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                FirstName = firstName,
-                LastName = lastName,
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
+                FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName)),
+                LastName = lastName ?? throw new ArgumentNullException(nameof(lastName)),
                 DateOfBirth = dateOfBirth,
                 Income = income,
                 Tax = tax,
@@ -25,10 +23,8 @@
             };
 
             this.list.Add(record);
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             this.AddFirstNameDictionary(firstName, record);
             this.AddLastNameDictionary(lastName, record);
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             this.AddDateOfBirthDictionary(dateOfBirth, record);
             return record.Id;
         }
@@ -41,36 +37,50 @@
             this.list[id - 1] = new FileCabinetRecord
             {
                 Id = id,
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                FirstName = firstName,
-                LastName = lastName,
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
+                FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName)),
+                LastName = lastName ?? throw new ArgumentNullException(nameof(lastName)),
                 DateOfBirth = dateOfBirth,
                 Income = income,
                 Tax = tax,
                 Block = block,
             };
 
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             this.EditFirstNameDictionary(firstName, oldRecord, this.list[id - 1]);
             this.EditLastNameDictionary(lastName, oldRecord, this.list[id - 1]);
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             this.EditDateOfBirthDictionary(dateOfBirth, oldRecord, this.list[id - 1]);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            return this.firstNameDictionary[firstName.ToUpperInvariant()].ToArray();
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
+            {
+                throw new ArgumentException("wrong first name", nameof(firstName));
+            }
+
+            return this.firstNameDictionary[firstName].ToArray();
         }
 
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
-            return this.lastNameDictionary[lastName.ToUpperInvariant()].ToArray();
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
+            {
+                throw new ArgumentException("wrong last name", nameof(lastName));
+            }
+
+            return this.lastNameDictionary[lastName].ToArray();
         }
 
         public FileCabinetRecord[] FindByDateofbirth(string date)
         {
             var dateOfBirth = DateTime.ParseExact(date, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                throw new ArgumentException("wrong date of birth", nameof(date));
+            }
+
             return this.dateOfBirthDictionary[dateOfBirth].ToArray();
         }
 
@@ -86,17 +96,22 @@
 
         private static void ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 60)
+            int minNameLength = 2, maxNameLength = 60;
+            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
+            DateTime maxDateOfBirth = DateTime.Today;
+            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
+
+            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
             {
                 throw new ArgumentException("wrong first name", nameof(firstName));
             }
 
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 60)
+            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
             {
                 throw new ArgumentException("wrong last name", nameof(lastName));
             }
 
-            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Today)
+            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
             {
                 throw new ArgumentException("wrong date of birth", nameof(dateOfBirth));
             }
@@ -111,7 +126,7 @@
                 throw new ArgumentException("wrong tax", nameof(tax));
             }
 
-            if (block < 65 || block > 90)
+            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
             {
                 throw new ArgumentException("wrong block letter", nameof(block));
             }
@@ -119,25 +134,27 @@
 
         private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
         {
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
             {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
             }
             else
             {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(record);
+                this.firstNameDictionary[firstName].Add(record);
             }
         }
 
         private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
         {
-            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
             {
-                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
             }
             else
             {
-                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(record);
+                this.lastNameDictionary[lastName].Add(record);
             }
         }
 
@@ -155,43 +172,47 @@
 
         private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
             {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { newRecord });
             }
             else
             {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(newRecord);
+                this.firstNameDictionary[firstName].Add(newRecord);
             }
 
-            if (this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Count > 1)
+            string oldFirstName = oldRecord.FirstName.ToUpperInvariant();
+            if (this.firstNameDictionary[oldFirstName].Count > 1)
             {
-                this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Remove(oldRecord);
+                this.firstNameDictionary[oldFirstName].Remove(oldRecord);
             }
             else
             {
-                this.firstNameDictionary.Remove(oldRecord.FirstName.ToUpperInvariant());
+                this.firstNameDictionary.Remove(oldFirstName);
             }
         }
 
         private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
-            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
             {
-                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { newRecord });
             }
             else
             {
-                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(newRecord);
+                this.lastNameDictionary[lastName].Add(newRecord);
             }
 
-            if (this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Count > 1)
+            string oldLastName = oldRecord.LastName.ToUpperInvariant();
+            if (this.lastNameDictionary[oldLastName].Count > 1)
             {
-                this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Remove(oldRecord);
+                this.lastNameDictionary[oldLastName].Remove(oldRecord);
             }
             else
             {
-                this.lastNameDictionary.Remove(oldRecord.LastName.ToUpperInvariant());
+                this.lastNameDictionary.Remove(oldLastName);
             }
         }
 
@@ -206,13 +227,14 @@
                 this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
             }
 
-            if (this.dateOfBirthDictionary[oldRecord.DateOfBirth].Count > 1)
+            DateTime oldDateOfBirth = oldRecord.DateOfBirth;
+            if (this.dateOfBirthDictionary[oldDateOfBirth].Count > 1)
             {
-                this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
+                this.dateOfBirthDictionary[oldDateOfBirth].Remove(oldRecord);
             }
             else
             {
-                this.dateOfBirthDictionary.Remove(oldRecord.DateOfBirth);
+                this.dateOfBirthDictionary.Remove(oldDateOfBirth);
             }
         }
     }

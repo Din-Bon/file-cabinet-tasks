@@ -70,6 +70,114 @@
             while (isRunning);
         }
 
+        private static void Create(string parameters)
+        {
+            bool check = true;
+
+            while (check)
+            {
+                Console.Write("First name: ");
+                var firstName = Console.ReadLine();
+                Console.Write("Last name: ");
+                var lastName = Console.ReadLine();
+                Console.Write("Date of birth: ");
+                string? date = Console.ReadLine();
+                Console.Write("Income: ");
+                short income;
+
+                if (!short.TryParse(Console.ReadLine(), out income))
+                {
+                    throw new ArgumentException("income value larger than max value");
+                }
+
+                Console.Write("Tax: ");
+                decimal tax;
+
+                if (!decimal.TryParse(Console.ReadLine(), out tax))
+                {
+                    throw new ArgumentException("wrong tax");
+                }
+
+                Console.Write("Block: ");
+                char block;
+
+                if (!char.TryParse(Console.ReadLine(), out block))
+                {
+                    throw new ArgumentException("wrong block");
+                }
+
+                if (string.IsNullOrWhiteSpace(date))
+                {
+                    throw new ArgumentException("wrong date");
+                }
+
+                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+
+                if (!check)
+                {
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
+                }
+            }
+        }
+
+        private static void Edit(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "empty id");
+            }
+
+            int id = Convert.ToInt32(parameters, System.Globalization.CultureInfo.CurrentCulture);
+            Console.Write("First name: ");
+            var firstName = Console.ReadLine();
+            Console.Write("Last name: ");
+            var lastName = Console.ReadLine();
+            Console.Write("Date of birth: ");
+            string? date = Console.ReadLine();
+            Console.Write($"Income: ");
+            short income;
+
+            if (!short.TryParse(Console.ReadLine(), out income))
+            {
+                throw new ArgumentException("income value larger than max value");
+            }
+
+            Console.Write("Tax: ");
+            decimal tax;
+
+            if (!decimal.TryParse(Console.ReadLine(), out tax))
+            {
+                throw new ArgumentException("wrong tax");
+            }
+
+            Console.Write("Block: ");
+            char block;
+
+            if (!char.TryParse(Console.ReadLine(), out block))
+            {
+                throw new ArgumentException("wrong block");
+            }
+
+            if (string.IsNullOrWhiteSpace(date))
+            {
+                throw new ArgumentException("wrong date");
+            }
+
+            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
+            {
+                fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
+                Console.WriteLine($"Record #{id} is updated.");
+            }
+            else
+            {
+                Console.WriteLine($"Wrong parameters{Environment.NewLine}Record #{id} isn't updated.");
+            }
+        }
+
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
@@ -107,127 +215,24 @@
             }
         }
 
-        private static void Edit(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "empty id");
-            }
-
-            int id = Convert.ToInt32(parameters, System.Globalization.CultureInfo.CurrentCulture);
-            Console.Write("First name: ");
-            var firstName = Console.ReadLine();
-            Console.Write("Last name: ");
-            var lastName = Console.ReadLine();
-            Console.Write("Date of birth: ");
-            string? date = Console.ReadLine();
-            Console.Write("Income: ");
-            short income;
-
-            if (!short.TryParse(Console.ReadLine(), out income))
-            {
-                throw new ArgumentException("wrong income");
-            }
-
-            Console.Write("Tax: ");
-            decimal tax;
-
-            if (!decimal.TryParse(Console.ReadLine(), out tax))
-            {
-                throw new ArgumentException("wrong tax");
-            }
-
-            Console.Write("Block: ");
-            char block;
-
-            if (!char.TryParse(Console.ReadLine(), out block))
-            {
-                throw new ArgumentException("wrong block");
-            }
-
-            if (string.IsNullOrWhiteSpace(date))
-            {
-                throw new ArgumentException("wrong date");
-            }
-
-            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-
-            if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
-            {
-                fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
-                Console.WriteLine($"Record #{id} is updated.");
-            }
-            else
-            {
-                Console.WriteLine($"Wrong parameters\nRecord #{id} isn't updated.");
-            }
-        }
-
-        private static void Create(string parameters)
-        {
-            bool check = true;
-
-            while (check)
-            {
-                Console.Write("First name: ");
-                var firstName = Console.ReadLine();
-                Console.Write("Last name: ");
-                var lastName = Console.ReadLine();
-                Console.Write("Date of birth: ");
-                string? date = Console.ReadLine();
-                Console.Write("Income: ");
-                short income;
-
-                if (!short.TryParse(Console.ReadLine(), out income))
-                {
-                    throw new ArgumentException("wrong income");
-                }
-
-                Console.Write("Tax: ");
-                decimal tax;
-
-                if (!decimal.TryParse(Console.ReadLine(), out tax))
-                {
-                    throw new ArgumentException("wrong tax");
-                }
-
-                Console.Write("Block: ");
-                char block;
-
-                if (!char.TryParse(Console.ReadLine(), out block))
-                {
-                    throw new ArgumentException("wrong block");
-                }
-
-                if (string.IsNullOrWhiteSpace(date))
-                {
-                    throw new ArgumentException("wrong date");
-                }
-
-                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-
-                check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
-
-                if (!check)
-                {
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
-                }
-            }
-        }
-
         private static bool ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 60)
+            int minNameLength = 2, maxNameLength = 60;
+            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
+            DateTime maxDateOfBirth = DateTime.Today;
+            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
+
+            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
             {
                 return true;
             }
 
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 60)
+            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
             {
                 return true;
             }
 
-            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Today)
+            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
             {
                 return true;
             }
@@ -242,7 +247,7 @@
                 return true;
             }
 
-            if (block < 65 || block > 90)
+            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
             {
                 return true;
             }
@@ -254,9 +259,7 @@
         {
             for (int i = 0; i < records.Length; i++)
             {
-                Console.WriteLine($"#{records[i].Id}, {records[i].FirstName}, {records[i].LastName}, " +
-                    $"{records[i].DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, " +
-                    $"{records[i].Income}, {records[i].Tax}, {records[i].Block}");
+                Console.WriteLine(records[i].ToString());
             }
         }
 
