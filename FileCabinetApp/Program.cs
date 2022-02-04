@@ -125,10 +125,11 @@
                 var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
                 check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+                Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
 
                 if (!check)
                 {
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(firstName, lastName, dateOfBirth, income, tax, block)} is created.");
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
                 }
             }
         }
@@ -181,10 +182,11 @@
             }
 
             var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
 
             if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
             {
-                fileCabinetService.EditRecord(id, firstName, lastName, dateOfBirth, income, tax, block);
+                fileCabinetService.EditRecord(id, person, income, tax, block);
                 Console.WriteLine($"Record #{id} is updated.");
             }
             else

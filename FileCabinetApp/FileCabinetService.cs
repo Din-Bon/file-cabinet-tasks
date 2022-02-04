@@ -13,32 +13,30 @@
         /// <summary>
         /// Create record from the input parameters.
         /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="person">Personal data.</param>
         /// <param name="income">Person's income.</param>
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
         /// <returns>Records id.</returns>
-        public int CreateRecord(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        public int CreateRecord(Person person, short income, decimal tax, char block)
         {
-            ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+            ExceptionCheck(person, income, tax, block);
 
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
-                FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName)),
-                LastName = lastName ?? throw new ArgumentNullException(nameof(lastName)),
-                DateOfBirth = dateOfBirth,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
                 Income = income,
                 Tax = tax,
                 Block = block,
             };
 
             this.list.Add(record);
-            this.AddFirstNameDictionary(firstName, record);
-            this.AddLastNameDictionary(lastName, record);
-            this.AddDateOfBirthDictionary(dateOfBirth, record);
+            this.AddFirstNameDictionary(person.FirstName, record);
+            this.AddLastNameDictionary(person.LastName, record);
+            this.AddDateOfBirthDictionary(person.DateOfBirth, record);
             return record.Id;
         }
 
@@ -46,31 +44,29 @@
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>
-        /// <param name="firstName">Person's new first name.</param>
-        /// <param name="lastName">Person's new last name.</param>
-        /// <param name="dateOfBirth">Person's new date of birth.</param>
+        /// <param name="person">Personal data.</param>
         /// <param name="income">Person's new income.</param>
         /// <param name="tax">Person's new tax.</param>
         /// <param name="block">Person's new living block.</param>
-        public void EditRecord(int id, string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+            ExceptionCheck(person, income, tax, block);
 
             FileCabinetRecord oldRecord = this.list[id - 1];
             this.list[id - 1] = new FileCabinetRecord
             {
                 Id = id,
-                FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName)),
-                LastName = lastName ?? throw new ArgumentNullException(nameof(lastName)),
-                DateOfBirth = dateOfBirth,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
                 Income = income,
                 Tax = tax,
                 Block = block,
             };
 
-            this.EditFirstNameDictionary(firstName, oldRecord, this.list[id - 1]);
-            this.EditLastNameDictionary(lastName, oldRecord, this.list[id - 1]);
-            this.EditDateOfBirthDictionary(dateOfBirth, oldRecord, this.list[id - 1]);
+            this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[id - 1]);
+            this.EditLastNameDictionary(person.LastName, oldRecord, this.list[id - 1]);
+            this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[id - 1]);
         }
 
         /// <summary>
@@ -143,32 +139,30 @@
         /// <summary>
         /// Validates input values.
         /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="person">Personal data.</param>
         /// <param name="income">Person's income.</param>
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
-        private static void ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        private static void ExceptionCheck(Person person, short income, decimal tax, char block)
         {
             int minNameLength = 2, maxNameLength = 60;
             DateTime minDateOfBirth = new DateTime(1950, 01, 01);
             DateTime maxDateOfBirth = DateTime.Today;
             int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
 
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
+            if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
             {
-                throw new ArgumentException("wrong first name", nameof(firstName));
+                throw new ArgumentException("wrong first name", nameof(person));
             }
 
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
+            if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
             {
-                throw new ArgumentException("wrong last name", nameof(lastName));
+                throw new ArgumentException("wrong last name", nameof(person));
             }
 
-            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
+            if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
             {
-                throw new ArgumentException("wrong date of birth", nameof(dateOfBirth));
+                throw new ArgumentException("wrong date of birth", nameof(person));
             }
 
             if (income < 0)
