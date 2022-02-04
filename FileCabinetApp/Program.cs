@@ -1,5 +1,8 @@
 ﻿namespace FileCabinetApp
 {
+    /// <summary>
+    /// Start class for file cabinet application.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Artem Filimonov";
@@ -33,6 +36,10 @@
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
         };
 
+        /// <summary>
+        /// Program entry point.
+        /// </summary>
+        /// <param name="args">Arguments of command line.</param>
         public static void Main(string[] args)
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
@@ -70,6 +77,10 @@
             while (isRunning);
         }
 
+        /// <summary>
+        /// Create record.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
         private static void Create(string parameters)
         {
             bool check = true;
@@ -122,6 +133,10 @@
             }
         }
 
+        /// <summary>
+        /// Modify existing records.
+        /// </summary>
+        /// <param name="parameters">Id of an existing record.</param>
         private static void Edit(string parameters)
         {
             if (string.IsNullOrEmpty(parameters))
@@ -178,18 +193,30 @@
             }
         }
 
+        /// <summary>
+        /// Shows list of records.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
         private static void List(string parameters)
         {
             FileCabinetRecord[] records = fileCabinetService.GetRecords();
             PrintRecords(records);
         }
 
+        /// <summary>
+        /// Shows count of existing records.
+        /// </summary>
+        /// <param name="parameters">Input prameters.</param>
         private static void Stat(string parameters)
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
         }
 
+        /// <summary>
+        /// Find record.
+        /// </summary>
+        /// <param name="parameters">Array from property and value.</param>
         private static void Find(string parameters)
         {
             if (string.IsNullOrEmpty(parameters))
@@ -215,6 +242,16 @@
             }
         }
 
+        /// <summary>
+        /// Validates input values.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
+        /// <returns>Is the data false.</returns>
         private static bool ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
             int minNameLength = 2, maxNameLength = 60;
@@ -255,6 +292,10 @@
             return false;
         }
 
+        /// <summary>
+        /// Print records data on the console.
+        /// </summary>
+        /// <param name="records">Array of the records.</param>
         private static void PrintRecords(FileCabinetRecord[] records)
         {
             for (int i = 0; i < records.Length; i++)
@@ -263,12 +304,20 @@
             }
         }
 
+        /// <summary>
+        /// Warning message.
+        /// </summary>
+        /// <param name="command">Comman name.</param>
         private static void PrintMissedCommandInfo(string command)
         {
             Console.WriteLine($"There is no '{command}' command.");
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Print lists of the command.
+        /// </summary>
+        /// <param name="parameters">Command name.</param>
         private static void PrintHelp(string parameters)
         {
             if (!string.IsNullOrEmpty(parameters))
@@ -298,6 +347,10 @@
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Exit from the application.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
         private static void Exit(string parameters)
         {
             Console.WriteLine("Exiting an application...");

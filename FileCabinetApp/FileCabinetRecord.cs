@@ -1,21 +1,56 @@
 ﻿namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class describing a person.
+    /// </summary>
     public class FileCabinetRecord
     {
+        /// <summary>
+        /// Gets or sets persons id.
+        /// </summary>
+        /// <value>Persons id.</value>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets persons first name.
+        /// </summary>
+        /// <value>Persons first name.</value>
         public string FirstName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets persons last name.
+        /// </summary>
+        /// <value>Persons last name.</value>
         public string LastName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets persons date of birth.
+        /// </summary>
+        /// <value>Persons date of birth.</value>
         public DateTime DateOfBirth { get; set; }
 
+        /// <summary>
+        /// Gets or sets persons income.
+        /// </summary>
+        /// <value>Persons income.</value>
         public short Income { get; set; }
 
+        /// <summary>
+        /// Gets or sets persons tax.
+        /// </summary>
+        /// <value>Persons tax.</value>
         public decimal Tax { get; set; }
 
+        /// <summary>
+        /// Gets or sets persons living block.
+        /// </summary>
+        /// <value>Persons living block.</value>
         public char Block { get; set; }
 
+        /// <summary>
+        /// Build string from records parameters.
+        /// </summary>
+        /// <returns>Record string representation.</returns>
         public override string ToString()
         {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();

@@ -1,5 +1,8 @@
 ﻿namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class, that working with the records.
+    /// </summary>
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
@@ -7,6 +10,16 @@
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
+        /// <summary>
+        /// Create record from the input parameters.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
+        /// <returns>Records id.</returns>
         public int CreateRecord(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
             ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
@@ -29,6 +42,16 @@
             return record.Id;
         }
 
+        /// <summary>
+        /// Create record from the input parameters.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="firstName">Person's new first name.</param>
+        /// <param name="lastName">Person's new last name.</param>
+        /// <param name="dateOfBirth">Person's new date of birth.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
             ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
@@ -50,6 +73,11 @@
             this.EditDateOfBirthDictionary(dateOfBirth, oldRecord, this.list[id - 1]);
         }
 
+        /// <summary>
+        /// Find persons by first name.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <returns>Array of person with same first name.</returns>
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
             firstName = firstName.ToUpperInvariant();
@@ -61,6 +89,11 @@
             return this.firstNameDictionary[firstName].ToArray();
         }
 
+        /// <summary>
+        /// Find persons by last name.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <returns>Array of person with same last name.</returns>
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
             lastName = lastName.ToUpperInvariant();
@@ -72,6 +105,11 @@
             return this.lastNameDictionary[lastName].ToArray();
         }
 
+        /// <summary>
+        /// Find persons by date of birth.
+        /// </summary>
+        /// <param name="date">Person's date.</param>
+        /// <returns>Array of person with same date of birth.</returns>
         public FileCabinetRecord[] FindByDateofbirth(string date)
         {
             var dateOfBirth = DateTime.ParseExact(date, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
@@ -84,16 +122,33 @@
             return this.dateOfBirthDictionary[dateOfBirth].ToArray();
         }
 
+        /// <summary>
+        /// Get array of records.
+        /// </summary>
+        /// <returns>Array of records.</returns>
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();
         }
 
+        /// <summary>
+        /// Get records count.
+        /// </summary>
+        /// <returns>Records count.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
+        /// <summary>
+        /// Validates input values.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
         private static void ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
             int minNameLength = 2, maxNameLength = 60;
@@ -132,6 +187,11 @@
             }
         }
 
+        /// <summary>
+        /// Add first name as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="record">Record of a person with that first name.</param>
         private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
         {
             firstName = firstName.ToUpperInvariant();
@@ -145,6 +205,11 @@
             }
         }
 
+        /// <summary>
+        /// Add last name as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="record">Record of a person with that last name.</param>
         private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
         {
             lastName = lastName.ToUpperInvariant();
@@ -158,6 +223,11 @@
             }
         }
 
+        /// <summary>
+        /// Add date of birth as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="record">Record of a person with that date of birth.</param>
         private void AddDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord record)
         {
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
@@ -170,6 +240,12 @@
             }
         }
 
+        /// <summary>
+        /// Edit value with that first name in dictionary.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that first name.</param>
         private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             firstName = firstName.ToUpperInvariant();
@@ -193,6 +269,12 @@
             }
         }
 
+        /// <summary>
+        /// Edit value with that last name in dictionary.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that last name.</param>
         private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             lastName = lastName.ToUpperInvariant();
@@ -216,6 +298,12 @@
             }
         }
 
+        /// <summary>
+        /// Edit value with that date of birth in dictionary.
+        /// </summary>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that date of birth.</param>
         private void EditDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
