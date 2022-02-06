@@ -4,6 +4,34 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
+            <summary>
+            Class, that working with the records(with custom validate system).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetDefaultService">
+            <summary>
+            Class, that working with the records(with default validate system).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class describing a person.
@@ -115,7 +143,7 @@
             </summary>
             <returns>Records count.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ExceptionCheck(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validates input values.
             </summary>
@@ -233,7 +261,7 @@
             </summary>
             <param name="parameters">Array from property and value.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ExceptionCheck(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.Program.ValidateParameters(System.String,System.String,System.DateTime,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validates input values.
             </summary>

@@ -10,7 +10,7 @@
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
 
         private static bool isRunning = true;
 
@@ -124,7 +124,7 @@
 
                 var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
-                check = ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+                check = ValidateParameters(firstName, lastName, dateOfBirth, income, tax, block);
                 Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
 
                 if (!check)
@@ -184,7 +184,7 @@
             var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
 
-            if (!ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block))
+            if (!ValidateParameters(firstName, lastName, dateOfBirth, income, tax, block))
             {
                 fileCabinetService.EditRecord(id, person, income, tax, block);
                 Console.WriteLine($"Record #{id} is updated.");
@@ -254,7 +254,7 @@
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
         /// <returns>Is the data false.</returns>
-        private static bool ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        private static bool ValidateParameters(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
         {
             int minNameLength = 2, maxNameLength = 60;
             DateTime minDateOfBirth = new DateTime(1950, 01, 01);

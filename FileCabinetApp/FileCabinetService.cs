@@ -3,7 +3,7 @@
     /// <summary>
     /// Class, that working with the records.
     /// </summary>
-    public class FileCabinetService
+    public abstract class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -20,7 +20,7 @@
         /// <returns>Records id.</returns>
         public int CreateRecord(Person person, short income, decimal tax, char block)
         {
-            ExceptionCheck(person, income, tax, block);
+            this.ValidateParameters(person, income, tax, block);
 
             var record = new FileCabinetRecord
             {
@@ -50,7 +50,7 @@
         /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            ExceptionCheck(person, income, tax, block);
+            this.ValidateParameters(person, income, tax, block);
 
             FileCabinetRecord oldRecord = this.list[id - 1];
             this.list[id - 1] = new FileCabinetRecord
@@ -143,43 +143,7 @@
         /// <param name="income">Person's income.</param>
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
-        private static void ExceptionCheck(Person person, short income, decimal tax, char block)
-        {
-            int minNameLength = 2, maxNameLength = 60;
-            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
-            DateTime maxDateOfBirth = DateTime.Today;
-            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
-
-            if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
-            {
-                throw new ArgumentException("wrong first name", nameof(person));
-            }
-
-            if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
-            {
-                throw new ArgumentException("wrong last name", nameof(person));
-            }
-
-            if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
-            {
-                throw new ArgumentException("wrong date of birth", nameof(person));
-            }
-
-            if (income < 0)
-            {
-                throw new ArgumentException("wrong income", nameof(income));
-            }
-
-            if (tax < 0 || tax > 100)
-            {
-                throw new ArgumentException("wrong tax", nameof(tax));
-            }
-
-            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
-            {
-                throw new ArgumentException("wrong block letter", nameof(block));
-            }
-        }
+        protected abstract void ValidateParameters(Person person, short income, decimal tax, char block);
 
         /// <summary>
         /// Add first name as a key and the record as a value in dictionary.
