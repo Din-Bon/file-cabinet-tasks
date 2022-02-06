@@ -10,7 +10,7 @@
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
+        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
 
         private static bool isRunning = true;
 
@@ -45,6 +45,7 @@
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
+            ChangeValidationMode(args);
 
             do
             {
@@ -292,6 +293,35 @@
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Change validation mode.
+        /// </summary>
+        /// <param name="cmdArguments">Command line arguments.</param>
+        private static void ChangeValidationMode(string[] cmdArguments)
+        {
+            string mode = "DEFAULT";
+            string cmdCommand = "--validation-rules=";
+
+            if (cmdArguments.Length != 0)
+            {
+                string argument = cmdArguments[0];
+
+                if (argument.Contains(cmdCommand, StringComparison.InvariantCulture))
+                {
+                    mode = argument.Substring(cmdCommand.Length);
+                }
+                else if (argument == "-v")
+                {
+                    mode = cmdArguments[1];
+                }
+            }
+
+            if (mode.ToUpperInvariant() == "CUSTOM")
+            {
+                fileCabinetService = new FileCabinetCustomService();
+            }
         }
 
         /// <summary>

@@ -273,6 +273,12 @@
             <param name="block">Person's living block.</param>
             <returns>Is the data false.</returns>
         </member>
+        <member name="M:FileCabinetApp.Program.ChangeValidationMode(System.String[])">
+            <summary>
+            Change validation mode.
+            </summary>
+            <param name="cmdArguments">Command line arguments.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.PrintRecords(FileCabinetApp.FileCabinetRecord[])">
             <summary>
             Print records data on the console.
