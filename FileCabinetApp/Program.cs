@@ -1,4 +1,6 @@
-﻿namespace FileCabinetApp
+﻿using System.Collections.ObjectModel;
+
+namespace FileCabinetApp
 {
     /// <summary>
     /// Start class for file cabinet application.
@@ -202,7 +204,7 @@
         /// <param name="parameters">Input parameters.</param>
         private static void List(string parameters)
         {
-            FileCabinetRecord[] records = fileCabinetService.GetRecords();
+            ReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
             PrintRecords(records);
         }
 
@@ -328,9 +330,9 @@
         /// Print records data on the console.
         /// </summary>
         /// <param name="records">Array of the records.</param>
-        private static void PrintRecords(FileCabinetRecord[] records)
+        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records)
         {
-            for (int i = 0; i < records.Length; i++)
+            for (int i = 0; i < records.Count; i++)
             {
                 Console.WriteLine(records[i].ToString());
             }

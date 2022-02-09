@@ -1,4 +1,6 @@
-﻿namespace FileCabinetApp
+﻿using System.Collections.ObjectModel;
+
+namespace FileCabinetApp
 {
     /// <summary>
     /// Class, that working with the records.
@@ -84,7 +86,7 @@
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             firstName = firstName.ToUpperInvariant();
             if (!this.firstNameDictionary.ContainsKey(firstName))
@@ -92,7 +94,7 @@
                 throw new ArgumentException("wrong first name", nameof(firstName));
             }
 
-            return this.firstNameDictionary[firstName].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName]);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             lastName = lastName.ToUpperInvariant();
             if (!this.lastNameDictionary.ContainsKey(lastName))
@@ -108,7 +110,7 @@
                 throw new ArgumentException("wrong last name", nameof(lastName));
             }
 
-            return this.lastNameDictionary[lastName].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName]);
         }
 
         /// <summary>
@@ -116,7 +118,7 @@
         /// </summary>
         /// <param name="date">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public FileCabinetRecord[] FindByDateofbirth(string date)
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string date)
         {
             var dateOfBirth = DateTime.ParseExact(date, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -125,16 +127,16 @@
                 throw new ArgumentException("wrong date of birth", nameof(date));
             }
 
-            return this.dateOfBirthDictionary[dateOfBirth].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
         }
 
         /// <summary>
         /// Get array of records.
         /// </summary>
-        /// <returns>Array of records.</returns>
-        public FileCabinetRecord[] GetRecords()
+        /// <returns>Collection of records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.list.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }
 
         /// <summary>

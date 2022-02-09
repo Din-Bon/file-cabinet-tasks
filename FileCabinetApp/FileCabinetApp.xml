@@ -161,7 +161,7 @@
             <summary>
             Get array of records.
             </summary>
-            <returns>Array of records.</returns>
+            <returns>Collection of records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetStat">
             <summary>
@@ -310,7 +310,7 @@
             </summary>
             <param name="cmdArguments">Command line arguments.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.PrintRecords(FileCabinetApp.FileCabinetRecord[])">
+        <member name="M:FileCabinetApp.Program.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Print records data on the console.
             </summary>
