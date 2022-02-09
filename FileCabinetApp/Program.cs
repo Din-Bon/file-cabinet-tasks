@@ -10,7 +10,7 @@
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
+        private static FileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
 
         private static bool isRunning = true;
 
@@ -320,7 +320,7 @@
 
             if (mode.ToUpperInvariant() == "CUSTOM")
             {
-                fileCabinetService = new FileCabinetCustomService();
+                fileCabinetService = new FileCabinetService(new CustomValidator());
             }
         }
 
