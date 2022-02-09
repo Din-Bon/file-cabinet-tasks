@@ -37,22 +37,20 @@
             Class, that working with the records(with custom validate system).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
+        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
             <summary>
-            Get current mode validator.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
             </summary>
-            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
             Class, that working with the records(with default validate system).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
             <summary>
-            Get current mode validator.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
             </summary>
-            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -112,6 +110,12 @@
             Class, that working with the records.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            </summary>
+            <param name="validator">.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Create record from the input parameters.
@@ -164,12 +168,6 @@
             Get records count.
             </summary>
             <returns>Records count.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
-            <summary>
-            Validates input values.
-            </summary>
-            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
             <summary>

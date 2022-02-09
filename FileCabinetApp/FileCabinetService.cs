@@ -3,12 +3,22 @@
     /// <summary>
     /// Class, that working with the records.
     /// </summary>
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly IRecordValidator validator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// </summary>
+        /// <param name="validator">.</param>
+        public FileCabinetService(IRecordValidator validator)
+        {
+            this.validator = validator;
+        }
 
         /// <summary>
         /// Create record from the input parameters.
@@ -20,7 +30,7 @@
         /// <returns>Records id.</returns>
         public int CreateRecord(Person person, short income, decimal tax, char block)
         {
-            this.CreateValidator().ValidateParameters(person, income, tax, block);
+            this.validator.ValidateParameters(person, income, tax, block);
 
             var record = new FileCabinetRecord
             {
@@ -50,7 +60,7 @@
         /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            this.CreateValidator().ValidateParameters(person, income, tax, block);
+            this.validator.ValidateParameters(person, income, tax, block);
 
             FileCabinetRecord oldRecord = this.list[id - 1];
             this.list[id - 1] = new FileCabinetRecord
@@ -135,12 +145,6 @@
         {
             return this.list.Count;
         }
-
-        /// <summary>
-        /// Validates input values.
-        /// </summary>
-        /// <returns>Validator with concrete mode.</returns>
-        protected abstract IRecordValidator CreateValidator();
 
         /// <summary>
         /// Add first name as a key and the record as a value in dictionary.

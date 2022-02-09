@@ -6,12 +6,11 @@
     public class FileCabinetCustomService : FileCabinetService
     {
         /// <summary>
-        /// Get current mode validator.
+        /// Initializes a new instance of the <see cref="FileCabinetCustomService"/> class.
         /// </summary>
-        /// <returns>Validator with concrete mode.</returns>
-        protected override CustomValidator CreateValidator()
+        public FileCabinetCustomService()
+            : base(new CustomValidator())
         {
-            return new CustomValidator();
         }
     }
 }
