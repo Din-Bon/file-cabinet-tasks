@@ -4,12 +4,12 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
+        <member name="T:FileCabinetApp.CustomValidator">
             <summary>
-            Class, that working with the records(with custom validate system).
+            Custom validate system.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validates input values.
             </summary>
@@ -17,20 +17,42 @@
             <param name="income">Person's income.</param>
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Default validate system.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
+            <summary>
+            Class, that working with the records(with custom validate system).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
+            <summary>
+            Get current mode validator.
+            </summary>
+            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
             Class, that working with the records(with default validate system).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
             <summary>
-            Validates input values.
+            Get current mode validator.
             </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
+            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -143,14 +165,11 @@
             </summary>
             <returns>Records count.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
             <summary>
             Validates input values.
             </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
+            <returns>Validator with concrete mode.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -196,6 +215,20 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Vlidate system interface.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
         </member>
         <member name="T:FileCabinetApp.Person">
             <summary>

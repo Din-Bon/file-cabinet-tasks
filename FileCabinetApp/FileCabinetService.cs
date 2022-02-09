@@ -20,7 +20,7 @@
         /// <returns>Records id.</returns>
         public int CreateRecord(Person person, short income, decimal tax, char block)
         {
-            this.ValidateParameters(person, income, tax, block);
+            this.CreateValidator().ValidateParameters(person, income, tax, block);
 
             var record = new FileCabinetRecord
             {
@@ -50,7 +50,7 @@
         /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            this.ValidateParameters(person, income, tax, block);
+            this.CreateValidator().ValidateParameters(person, income, tax, block);
 
             FileCabinetRecord oldRecord = this.list[id - 1];
             this.list[id - 1] = new FileCabinetRecord
@@ -139,11 +139,8 @@
         /// <summary>
         /// Validates input values.
         /// </summary>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's income.</param>
-        /// <param name="tax">Person's tax.</param>
-        /// <param name="block">Person's living block.</param>
-        protected abstract void ValidateParameters(Person person, short income, decimal tax, char block);
+        /// <returns>Validator with concrete mode.</returns>
+        protected abstract IRecordValidator CreateValidator();
 
         /// <summary>
         /// Add first name as a key and the record as a value in dictionary.
