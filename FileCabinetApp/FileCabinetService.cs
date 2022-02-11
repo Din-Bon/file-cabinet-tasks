@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Class, that working with the records.
     /// </summary>
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -116,15 +116,15 @@ namespace FileCabinetApp
         /// <summary>
         /// Find persons by date of birth.
         /// </summary>
-        /// <param name="date">Person's date.</param>
+        /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string date)
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
         {
-            var dateOfBirth = DateTime.ParseExact(date, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            var dateOfBirth = DateTime.ParseExact(strDateOfBirth, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
 
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
             {
-                throw new ArgumentException("wrong date of birth", nameof(date));
+                throw new ArgumentException("wrong date of birth", nameof(strDateOfBirth));
             }
 
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);

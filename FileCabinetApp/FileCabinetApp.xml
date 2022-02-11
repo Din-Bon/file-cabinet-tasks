@@ -154,7 +154,7 @@
             <summary>
             Find persons by date of birth.
             </summary>
-            <param name="date">Person's date.</param>
+            <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
@@ -213,6 +213,64 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            File cabinet service interface.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Records count.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
