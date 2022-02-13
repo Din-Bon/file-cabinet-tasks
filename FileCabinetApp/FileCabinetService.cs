@@ -1,146 +1,194 @@
-﻿namespace FileCabinetApp
+﻿using System.Collections.ObjectModel;
+
+namespace FileCabinetApp
 {
-    public class FileCabinetService
+    /// <summary>
+    /// Class, that working with the records.
+    /// </summary>
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly IRecordValidator validator;
 
-        public int CreateRecord(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// </summary>
+        /// <param name="validator">.</param>
+        public FileCabinetService(IRecordValidator validator)
         {
-            ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+            this.validator = validator;
+        }
+
+        /// <summary>
+        /// Create record from the input parameters.
+        /// </summary>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
+        /// <returns>Records id.</returns>
+        public int CreateRecord(Person person, short income, decimal tax, char block)
+        {
+            this.validator.ValidateParameters(person, income, tax, block);
 
             var record = new FileCabinetRecord
             {
                 Id = this.list.Count + 1,
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                FirstName = firstName,
-                LastName = lastName,
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                DateOfBirth = dateOfBirth,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
                 Income = income,
                 Tax = tax,
                 Block = block,
             };
 
             this.list.Add(record);
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            this.AddFirstNameDictionary(firstName, record);
-            this.AddLastNameDictionary(lastName, record);
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            this.AddDateOfBirthDictionary(dateOfBirth, record);
+            this.AddFirstNameDictionary(person.FirstName, record);
+            this.AddLastNameDictionary(person.LastName, record);
+            this.AddDateOfBirthDictionary(person.DateOfBirth, record);
             return record.Id;
         }
 
-        public void EditRecord(int id, string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        /// <summary>
+        /// Create record from the input parameters.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
+        public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            ExceptionCheck(firstName, lastName, dateOfBirth, income, tax, block);
+            this.validator.ValidateParameters(person, income, tax, block);
 
             FileCabinetRecord oldRecord = this.list[id - 1];
             this.list[id - 1] = new FileCabinetRecord
             {
                 Id = id,
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                FirstName = firstName,
-                LastName = lastName,
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-                DateOfBirth = dateOfBirth,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
                 Income = income,
                 Tax = tax,
                 Block = block,
             };
 
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            this.EditFirstNameDictionary(firstName, oldRecord, this.list[id - 1]);
-            this.EditLastNameDictionary(lastName, oldRecord, this.list[id - 1]);
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            this.EditDateOfBirthDictionary(dateOfBirth, oldRecord, this.list[id - 1]);
+            this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[id - 1]);
+            this.EditLastNameDictionary(person.LastName, oldRecord, this.list[id - 1]);
+            this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[id - 1]);
         }
 
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        /// <summary>
+        /// Find persons by first name.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <returns>Array of person with same first name.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            return this.firstNameDictionary[firstName.ToUpperInvariant()].ToArray();
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
+            {
+                throw new ArgumentException("wrong first name", nameof(firstName));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName]);
         }
 
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        /// <summary>
+        /// Find persons by last name.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <returns>Array of person with same last name.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            return this.lastNameDictionary[lastName.ToUpperInvariant()].ToArray();
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
+            {
+                throw new ArgumentException("wrong last name", nameof(lastName));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName]);
         }
 
-        public FileCabinetRecord[] FindByDateofbirth(string date)
+        /// <summary>
+        /// Find persons by date of birth.
+        /// </summary>
+        /// <param name="strDateOfBirth">Person's date.</param>
+        /// <returns>Array of person with same date of birth.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
         {
-            var dateOfBirth = DateTime.ParseExact(date, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            return this.dateOfBirthDictionary[dateOfBirth].ToArray();
+            var dateOfBirth = DateTime.ParseExact(strDateOfBirth, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                throw new ArgumentException("wrong date of birth", nameof(strDateOfBirth));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
         }
 
-        public FileCabinetRecord[] GetRecords()
+        /// <summary>
+        /// Get array of records.
+        /// </summary>
+        /// <returns>Collection of records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.list.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }
 
+        /// <summary>
+        /// Get records count.
+        /// </summary>
+        /// <returns>Records count.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
-        private static void ExceptionCheck(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
-        {
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 60)
-            {
-                throw new ArgumentException("wrong first name", nameof(firstName));
-            }
-
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 60)
-            {
-                throw new ArgumentException("wrong last name", nameof(lastName));
-            }
-
-            if (dateOfBirth < new DateTime(1950, 01, 01) || dateOfBirth > DateTime.Today)
-            {
-                throw new ArgumentException("wrong date of birth", nameof(dateOfBirth));
-            }
-
-            if (income < 0)
-            {
-                throw new ArgumentException("wrong income", nameof(income));
-            }
-
-            if (tax < 0 || tax > 100)
-            {
-                throw new ArgumentException("wrong tax", nameof(tax));
-            }
-
-            if (block < 65 || block > 90)
-            {
-                throw new ArgumentException("wrong block letter", nameof(block));
-            }
-        }
-
+        /// <summary>
+        /// Add first name as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="record">Record of a person with that first name.</param>
         private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
         {
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
             {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
             }
             else
             {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(record);
+                this.firstNameDictionary[firstName].Add(record);
             }
         }
 
+        /// <summary>
+        /// Add last name as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="record">Record of a person with that last name.</param>
         private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
         {
-            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
             {
-                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { record });
+                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
             }
             else
             {
-                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(record);
+                this.lastNameDictionary[lastName].Add(record);
             }
         }
 
+        /// <summary>
+        /// Add date of birth as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="record">Record of a person with that date of birth.</param>
         private void AddDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord record)
         {
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
@@ -153,48 +201,70 @@
             }
         }
 
+        /// <summary>
+        /// Edit value with that first name in dictionary.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that first name.</param>
         private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
-            if (!this.firstNameDictionary.ContainsKey(firstName.ToUpperInvariant()))
+            firstName = firstName.ToUpperInvariant();
+            if (!this.firstNameDictionary.ContainsKey(firstName))
             {
-                this.firstNameDictionary.Add(firstName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { newRecord });
             }
             else
             {
-                this.firstNameDictionary[firstName.ToUpperInvariant()].Add(newRecord);
+                this.firstNameDictionary[firstName].Add(newRecord);
             }
 
-            if (this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Count > 1)
+            string oldFirstName = oldRecord.FirstName.ToUpperInvariant();
+            if (this.firstNameDictionary[oldFirstName].Count > 1)
             {
-                this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].Remove(oldRecord);
+                this.firstNameDictionary[oldFirstName].Remove(oldRecord);
             }
             else
             {
-                this.firstNameDictionary.Remove(oldRecord.FirstName.ToUpperInvariant());
+                this.firstNameDictionary.Remove(oldFirstName);
             }
         }
 
+        /// <summary>
+        /// Edit value with that last name in dictionary.
+        /// </summary>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that last name.</param>
         private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
-            if (!this.lastNameDictionary.ContainsKey(lastName.ToUpperInvariant()))
+            lastName = lastName.ToUpperInvariant();
+            if (!this.lastNameDictionary.ContainsKey(lastName))
             {
-                this.lastNameDictionary.Add(lastName.ToUpperInvariant(), new List<FileCabinetRecord>() { newRecord });
+                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { newRecord });
             }
             else
             {
-                this.lastNameDictionary[lastName.ToUpperInvariant()].Add(newRecord);
+                this.lastNameDictionary[lastName].Add(newRecord);
             }
 
-            if (this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Count > 1)
+            string oldLastName = oldRecord.LastName.ToUpperInvariant();
+            if (this.lastNameDictionary[oldLastName].Count > 1)
             {
-                this.lastNameDictionary[oldRecord.LastName.ToUpperInvariant()].Remove(oldRecord);
+                this.lastNameDictionary[oldLastName].Remove(oldRecord);
             }
             else
             {
-                this.lastNameDictionary.Remove(oldRecord.LastName.ToUpperInvariant());
+                this.lastNameDictionary.Remove(oldLastName);
             }
         }
 
+        /// <summary>
+        /// Edit value with that date of birth in dictionary.
+        /// </summary>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that date of birth.</param>
         private void EditDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
@@ -206,13 +276,14 @@
                 this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
             }
 
-            if (this.dateOfBirthDictionary[oldRecord.DateOfBirth].Count > 1)
+            DateTime oldDateOfBirth = oldRecord.DateOfBirth;
+            if (this.dateOfBirthDictionary[oldDateOfBirth].Count > 1)
             {
-                this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
+                this.dateOfBirthDictionary[oldDateOfBirth].Remove(oldRecord);
             }
             else
             {
-                this.dateOfBirthDictionary.Remove(oldRecord.DateOfBirth);
+                this.dateOfBirthDictionary.Remove(oldDateOfBirth);
             }
         }
     }
