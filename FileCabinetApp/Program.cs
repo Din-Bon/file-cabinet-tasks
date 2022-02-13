@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -13,6 +14,7 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
         private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static string validationMode = "DEFAULT";
 
         private static bool isRunning = true;
 
@@ -87,54 +89,28 @@ namespace FileCabinetApp
         private static void Create(string parameters)
         {
             bool check = true;
-
-            while (check)
+            do
             {
                 Console.Write("First name: ");
-                var firstName = Console.ReadLine();
+                var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
                 Console.Write("Last name: ");
-                var lastName = Console.ReadLine();
+                var lastName = ReadInput<string>(StringConverter, ValidateLastName);
                 Console.Write("Date of birth: ");
-                string? date = Console.ReadLine();
+                var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
                 Console.Write("Income: ");
-                short income;
-
-                if (!short.TryParse(Console.ReadLine(), out income))
-                {
-                    throw new ArgumentException("income value larger than max value");
-                }
-
+                var income = ReadInput<short>(ShortConverter, ValidateIncome);
                 Console.Write("Tax: ");
-                decimal tax;
-
-                if (!decimal.TryParse(Console.ReadLine(), out tax))
-                {
-                    throw new ArgumentException("wrong tax");
-                }
-
+                decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
                 Console.Write("Block: ");
-                char block;
-
-                if (!char.TryParse(Console.ReadLine(), out block))
-                {
-                    throw new ArgumentException("wrong block");
-                }
-
-                if (string.IsNullOrWhiteSpace(date))
-                {
-                    throw new ArgumentException("wrong date");
-                }
-
-                var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-
-                check = ValidateParameters(firstName, lastName, dateOfBirth, income, tax, block);
+                char block = ReadInput<char>(CharConverter, ValidateBlock);
                 Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-
+                check = ValidateParameters(person, income, tax, block);
                 if (!check)
                 {
                     Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
                 }
             }
+            while (check);
         }
 
         /// <summary>
@@ -148,53 +124,31 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(parameters), "empty id");
             }
 
-            int id = Convert.ToInt32(parameters, System.Globalization.CultureInfo.CurrentCulture);
+            int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
             Console.Write("First name: ");
-            var firstName = Console.ReadLine();
+            var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
             Console.Write("Last name: ");
-            var lastName = Console.ReadLine();
+            var lastName = ReadInput<string>(StringConverter, ValidateLastName);
             Console.Write("Date of birth: ");
-            string? date = Console.ReadLine();
-            Console.Write($"Income: ");
-            short income;
-
-            if (!short.TryParse(Console.ReadLine(), out income))
-            {
-                throw new ArgumentException("income value larger than max value");
-            }
-
+            var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
+            Console.Write("Income: ");
+            var income = ReadInput<short>(ShortConverter, ValidateIncome);
             Console.Write("Tax: ");
-            decimal tax;
-
-            if (!decimal.TryParse(Console.ReadLine(), out tax))
-            {
-                throw new ArgumentException("wrong tax");
-            }
-
+            decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
             Console.Write("Block: ");
-            char block;
-
-            if (!char.TryParse(Console.ReadLine(), out block))
-            {
-                throw new ArgumentException("wrong block");
-            }
-
-            if (string.IsNullOrWhiteSpace(date))
-            {
-                throw new ArgumentException("wrong date");
-            }
-
-            var dateOfBirth = DateTime.ParseExact(date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            char block = ReadInput<char>(CharConverter, ValidateBlock);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
+            fileCabinetService.EditRecord(id, person, income, tax, block);
+            Console.WriteLine($"Record #{id} is updated.");
 
-            if (!ValidateParameters(firstName, lastName, dateOfBirth, income, tax, block))
+            if (!ValidateParameters(person, income, tax, block))
             {
                 fileCabinetService.EditRecord(id, person, income, tax, block);
-                Console.WriteLine($"Record #{id} is updated.");
+                Console.WriteLine($"record #{id} is updated.");
             }
             else
             {
-                Console.WriteLine($"Wrong parameters{Environment.NewLine}Record #{id} isn't updated.");
+                Console.WriteLine($"wrong parameters{Environment.NewLine}record #{id} isn't updated.");
             }
         }
 
@@ -248,33 +202,105 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="name">String parameter(name).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, string> StringConverter(string name)
+        {
+            return new Tuple<bool, string, string>(true, nameof(name), name);
+        }
+
+        /// <summary>
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="strDateOfBirth">String parameter(date of birth).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, DateTime> DateTimeConverter(string strDateOfBirth)
+        {
+            DateTime dateOfBirth;
+            if (!DateTime.TryParseExact(strDateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
+            {
+                return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
+            }
+
+            return new Tuple<bool, string, DateTime>(true, nameof(strDateOfBirth), dateOfBirth);
+        }
+
+        /// <summary>
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="strIncome">String parameter(income).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, short> ShortConverter(string strIncome)
+        {
+            short income;
+            if (!short.TryParse(strIncome, out income))
+            {
+                return new Tuple<bool, string, short>(false, nameof(strIncome), 0);
+            }
+
+            return new Tuple<bool, string, short>(true, nameof(strIncome), income);
+        }
+
+        /// <summary>
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="strTax">String parameter(tax).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, decimal> DecimalConverter(string strTax)
+        {
+            decimal tax;
+            if (!decimal.TryParse(strTax, out tax))
+            {
+                return new Tuple<bool, string, decimal>(false, nameof(strTax), 0);
+            }
+
+            return new Tuple<bool, string, decimal>(true, nameof(strTax), tax);
+        }
+
+        /// <summary>
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="strBlock">String parameter(block).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, char> CharConverter(string strBlock)
+        {
+            char block;
+            if (!char.TryParse(strBlock, out block))
+            {
+                return new Tuple<bool, string, char>(false, nameof(strBlock), '\0');
+            }
+
+            return new Tuple<bool, string, char>(true, nameof(strBlock), block);
+        }
+
+        /// <summary>
         /// Validates input values.
         /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="person">Personal data.</param>
         /// <param name="income">Person's income.</param>
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
         /// <returns>Is the data false.</returns>
-        private static bool ValidateParameters(string? firstName, string? lastName, DateTime dateOfBirth, short income, decimal tax, char block)
+        private static bool ValidateParameters(Person person, short income, decimal tax, char block)
         {
             int minNameLength = 2, maxNameLength = 60;
             DateTime minDateOfBirth = new DateTime(1950, 01, 01);
             DateTime maxDateOfBirth = DateTime.Today;
             int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
 
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
+            if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
             {
                 return true;
             }
 
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
+            if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
             {
                 return true;
             }
 
-            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
+            if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
             {
                 return true;
             }
@@ -295,6 +321,147 @@ namespace FileCabinetApp
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks first name for compliance with the validation rules.
+        /// </summary>
+        /// <param name="firstName">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateFirstName(string firstName)
+        {
+            int minNameLength = 2, maxNameLength = 60;
+            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
+            {
+                return new Tuple<bool, string>(false, nameof(firstName));
+            }
+
+            return new Tuple<bool, string>(true, nameof(firstName));
+        }
+
+        /// <summary>
+        /// Checks last name for compliance with the validation rules.
+        /// </summary>
+        /// <param name="lastName">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateLastName(string lastName)
+        {
+            int minNameLength = 2, maxNameLength = 60;
+            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
+            {
+                return new Tuple<bool, string>(false, nameof(lastName));
+            }
+
+            return new Tuple<bool, string>(true, nameof(lastName));
+        }
+
+        /// <summary>
+        /// Checks date of birth for compliance with the validation rules.
+        /// </summary>
+        /// <param name="dateOfBirth">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
+        {
+            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
+            DateTime maxDateOfBirth = DateTime.Today;
+            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
+            {
+                return new Tuple<bool, string>(false, nameof(dateOfBirth));
+            }
+
+            return new Tuple<bool, string>(true, nameof(dateOfBirth));
+        }
+
+        /// <summary>
+        /// Checks income for compliance with the validation rules.
+        /// </summary>
+        /// <param name="income">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateIncome(short income)
+        {
+            if (income < 0)
+            {
+                return new Tuple<bool, string>(false, nameof(income));
+            }
+
+            return new Tuple<bool, string>(true, nameof(income));
+        }
+
+        /// <summary>
+        /// Checks tax for compliance with the validation rules.
+        /// </summary>
+        /// <param name="tax">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateTax(decimal tax)
+        {
+            int minTax = 0, maxTax = 100;
+            if (validationMode == "CUSTOM")
+            {
+                minTax = 10;
+            }
+
+            if (tax < minTax || tax > maxTax)
+            {
+                return new Tuple<bool, string>(false, nameof(tax));
+            }
+
+            return new Tuple<bool, string>(true, nameof(tax));
+        }
+
+        /// <summary>
+        /// Checks block letter for compliance with the validation rules.
+        /// </summary>
+        /// <param name="block">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateBlock(char block)
+        {
+            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
+            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
+            {
+                return new Tuple<bool, string>(false, nameof(block));
+            }
+
+            return new Tuple<bool, string>(true, nameof(block));
+        }
+
+        /// <summary>
+        /// Main manipulation with the input parameters.
+        /// </summary>
+        /// <param name="converter">Convert input string in the right type.</param>
+        /// <param name="validator">Check input data for compliance with the validation rules.</param>
+        /// <returns>Test results.</returns>
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                if (input == null)
+                {
+                    throw new ArgumentNullException("empty input", nameof(input));
+                }
+
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
         }
 
         /// <summary>
@@ -320,9 +487,11 @@ namespace FileCabinetApp
                 }
             }
 
-            if (mode.ToUpperInvariant() == "CUSTOM")
+            mode = mode.ToUpperInvariant();
+            if (mode == "CUSTOM")
             {
                 fileCabinetService = new FileCabinetService(new CustomValidator());
+                validationMode = mode;
             }
         }
 
