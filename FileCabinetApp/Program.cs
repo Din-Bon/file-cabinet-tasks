@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 
 namespace FileCabinetApp
 {
@@ -27,6 +28,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -38,6 +40,7 @@ namespace FileCabinetApp
             new string[] { "list", "show list of records", "The 'list' show list of records." },
             new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
+            new string[] { "export", "export records in csv file", "The 'export' export records in csv file." },
         };
 
         /// <summary>
@@ -199,6 +202,72 @@ namespace FileCabinetApp
                     PrintRecords(fileCabinetService.FindByDateofbirth(parameter));
                     break;
             }
+        }
+
+        /// <summary>
+        /// Export records in file.
+        /// </summary>
+        /// <param name="parameters">Array from property and value.</param>
+        private static void Export(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            string path = ParseExportString(parameters);
+            if (!string.IsNullOrEmpty(path))
+            {
+                StreamWriter writer = new StreamWriter(path);
+                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
+                serviceSnapshot.SaveToCsv(writer);
+                writer.Flush();
+                writer.Close();
+                Console.WriteLine($"All records are exported to file {path}.");
+            }
+        }
+
+        /// <summary>
+        /// Parse string for export command.
+        /// </summary>
+        /// <param name="input">Array from property and value.</param>
+        private static string ParseExportString(string input)
+        {
+            var commands = input.Split(' ', 2);
+            string property = commands[0].ToUpperInvariant();
+            string fileName = commands[1];
+            string path = fileName;
+            char rewrite = 'Y';
+
+            if (property != "CSV")
+            {
+                Console.WriteLine("Wrong command");
+                return string.Empty;
+            }
+
+            if (path.Contains('\\', StringComparison.InvariantCulture))
+            {
+                path = commands[1].Substring(0, commands[1].LastIndexOf('\\'));
+                fileName = commands[1].Substring(commands[1].LastIndexOf('\\'), commands[1].Length - commands[1].LastIndexOf('\\') - 1);
+                if (!Directory.Exists(path))
+                {
+                    Console.WriteLine($"Export failed: can't open file {path}.");
+                    return string.Empty;
+                }
+            }
+
+            if (File.Exists(fileName))
+            {
+                Console.Write($"File is exist - rewrite {path}? [Y/n] ");
+                rewrite = (char)Console.Read();
+            }
+
+            if (rewrite == 'Y')
+            {
+                return commands[1];
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

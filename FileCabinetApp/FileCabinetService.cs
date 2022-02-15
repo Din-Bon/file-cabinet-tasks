@@ -131,6 +131,16 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Make snapshot of the current list of records.
+        /// </summary>
+        /// <returns>Array of person with same date of birth.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            FileCabinetServiceSnapshot serviceSnapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
+            return serviceSnapshot;
+        }
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
