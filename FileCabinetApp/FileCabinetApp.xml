@@ -107,7 +107,7 @@
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
-            Class that create snapshot of records.
+            Class that create snapshot of records in csv format.
             </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
@@ -117,6 +117,23 @@
             <param name="writer">Stream to write data.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Class that create snapshot of records in xml format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Write data from record to stream.
             </summary>
@@ -251,6 +268,12 @@
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Save records data to csv file.
+            </summary>
+            <param name="writer">Stream that will contain records data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Save records data to xml file.
             </summary>
             <param name="writer">Stream that will contain records data.</param>
         </member>

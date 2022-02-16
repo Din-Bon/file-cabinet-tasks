@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class that create snapshot of records.
+    /// Class that create snapshot of records in csv format.
     /// </summary>
     internal class FileCabinetRecordCsvWriter
     {
