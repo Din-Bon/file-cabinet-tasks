@@ -105,6 +105,40 @@
             </summary>
             <returns>Record string representation.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Class that create snapshot of records in csv format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Class that create snapshot of records in xml format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Class, that working with the records.
@@ -155,6 +189,12 @@
             Find persons by date of birth.
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
             <returns>Array of person with same date of birth.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
@@ -214,6 +254,29 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Class that create snapshot of records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">Array of records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Save records data to csv file.
+            </summary>
+            <param name="writer">Stream that will contain records data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Save records data to xml file.
+            </summary>
+            <param name="writer">Stream that will contain records data.</param>
+        </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
             File cabinet service interface.
@@ -259,6 +322,12 @@
             </summary>
             <param name="lastName">Person's last name.</param>
             <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
             <summary>
@@ -349,6 +418,18 @@
             Find record.
             </summary>
             <param name="parameters">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Export(System.String)">
+            <summary>
+            Export records in file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ParseExportString(System.String)">
+            <summary>
+            Parse string for export command.
+            </summary>
+            <param name="input">Array from property and value.</param>
         </member>
         <member name="M:FileCabinetApp.Program.StringConverter(System.String)">
             <summary>

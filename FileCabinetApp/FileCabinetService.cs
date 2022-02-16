@@ -63,8 +63,8 @@ namespace FileCabinetApp
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
             this.validator.ValidateParameters(person, income, tax, block);
-
             FileCabinetRecord oldRecord = this.list[id - 1];
+
             this.list[id - 1] = new FileCabinetRecord
             {
                 Id = id,
@@ -89,6 +89,7 @@ namespace FileCabinetApp
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             firstName = firstName.ToUpperInvariant();
+
             if (!this.firstNameDictionary.ContainsKey(firstName))
             {
                 throw new ArgumentException("wrong first name", nameof(firstName));
@@ -105,6 +106,7 @@ namespace FileCabinetApp
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             lastName = lastName.ToUpperInvariant();
+
             if (!this.lastNameDictionary.ContainsKey(lastName))
             {
                 throw new ArgumentException("wrong last name", nameof(lastName));
@@ -128,6 +130,16 @@ namespace FileCabinetApp
             }
 
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
+        }
+
+        /// <summary>
+        /// Make snapshot of the current list of records.
+        /// </summary>
+        /// <returns>Array of person with same date of birth.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            FileCabinetServiceSnapshot serviceSnapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
+            return serviceSnapshot;
         }
 
         /// <summary>
@@ -156,6 +168,7 @@ namespace FileCabinetApp
         private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
         {
             firstName = firstName.ToUpperInvariant();
+
             if (!this.firstNameDictionary.ContainsKey(firstName))
             {
                 this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
@@ -174,6 +187,7 @@ namespace FileCabinetApp
         private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
         {
             lastName = lastName.ToUpperInvariant();
+
             if (!this.lastNameDictionary.ContainsKey(lastName))
             {
                 this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
@@ -210,6 +224,7 @@ namespace FileCabinetApp
         private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             firstName = firstName.ToUpperInvariant();
+
             if (!this.firstNameDictionary.ContainsKey(firstName))
             {
                 this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { newRecord });
@@ -220,6 +235,7 @@ namespace FileCabinetApp
             }
 
             string oldFirstName = oldRecord.FirstName.ToUpperInvariant();
+
             if (this.firstNameDictionary[oldFirstName].Count > 1)
             {
                 this.firstNameDictionary[oldFirstName].Remove(oldRecord);
@@ -239,6 +255,7 @@ namespace FileCabinetApp
         private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
         {
             lastName = lastName.ToUpperInvariant();
+
             if (!this.lastNameDictionary.ContainsKey(lastName))
             {
                 this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { newRecord });
@@ -249,6 +266,7 @@ namespace FileCabinetApp
             }
 
             string oldLastName = oldRecord.LastName.ToUpperInvariant();
+
             if (this.lastNameDictionary[oldLastName].Count > 1)
             {
                 this.lastNameDictionary[oldLastName].Remove(oldRecord);
@@ -277,6 +295,7 @@ namespace FileCabinetApp
             }
 
             DateTime oldDateOfBirth = oldRecord.DateOfBirth;
+
             if (this.dateOfBirthDictionary[oldDateOfBirth].Count > 1)
             {
                 this.dateOfBirthDictionary[oldDateOfBirth].Remove(oldRecord);

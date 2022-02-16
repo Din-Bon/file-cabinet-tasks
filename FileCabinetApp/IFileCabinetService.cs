@@ -49,6 +49,12 @@ namespace FileCabinetApp
         ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
+        /// Make snapshot of the current list of records.
+        /// </summary>
+        /// <returns>Array of person with same date of birth.</returns>
+        FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>

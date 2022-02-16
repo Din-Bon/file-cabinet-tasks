@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 
 namespace FileCabinetApp
 {
@@ -27,6 +28,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -38,6 +40,7 @@ namespace FileCabinetApp
             new string[] { "list", "show list of records", "The 'list' show list of records." },
             new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
+            new string[] { "export", "export records in csv file", "The 'export' export records in csv file." },
         };
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace FileCabinetApp
 #pragma warning disable CA1309 // Использование порядкового сравнения строк
                 var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
 #pragma warning restore CA1309 // Использование порядкового сравнения строк
+
                 if (index >= 0)
                 {
                     const int parametersIndex = 1;
@@ -89,6 +93,7 @@ namespace FileCabinetApp
         private static void Create(string parameters)
         {
             bool check = true;
+
             do
             {
                 Console.Write("First name: ");
@@ -202,6 +207,78 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Export records in file.
+        /// </summary>
+        /// <param name="parameters">Array from property and value.</param>
+        private static void Export(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            var commands = parameters.Split(' ', 2);
+            string fileName = commands[1];
+            string path = ParseExportString(fileName);
+            string property = commands[0].ToUpperInvariant();
+            string[] formats = { "CSV", "XML" };
+
+            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
+            {
+                StreamWriter writer = new StreamWriter(path);
+                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
+
+                if (property == "CSV")
+                {
+                    serviceSnapshot.SaveToCsv(writer);
+                }
+                else if (property == "XML")
+                {
+                    serviceSnapshot.SaveToXml(writer);
+                }
+
+                writer.Flush();
+                writer.Close();
+                Console.WriteLine($"All records are exported to file {path}.");
+            }
+        }
+
+        /// <summary>
+        /// Parse string for export command.
+        /// </summary>
+        /// <param name="input">Array from property and value.</param>
+        private static string ParseExportString(string input)
+        {
+            string fileName = input;
+            string path = fileName;
+            char rewrite = 'Y';
+
+            if (path.Contains('\\', StringComparison.InvariantCulture))
+            {
+                path = input.Substring(0, input.LastIndexOf('\\'));
+                fileName = input.Substring(input.LastIndexOf('\\'), input.Length - input.LastIndexOf('\\') - 1);
+                if (!Directory.Exists(path))
+                {
+                    Console.WriteLine($"Export failed: can't open file {path}.");
+                    return string.Empty;
+                }
+            }
+
+            if (File.Exists(input))
+            {
+                Console.Write($"File is exist - rewrite {input}? [Y/n] ");
+                rewrite = (char)Console.Read();
+            }
+
+            if (rewrite == 'Y')
+            {
+                return input;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Return tuple of parameters.
         /// </summary>
         /// <param name="name">String parameter(name).</param>
@@ -219,6 +296,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string, DateTime> DateTimeConverter(string strDateOfBirth)
         {
             DateTime dateOfBirth;
+
             if (!DateTime.TryParseExact(strDateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
             {
                 return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
@@ -235,6 +313,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string, short> ShortConverter(string strIncome)
         {
             short income;
+
             if (!short.TryParse(strIncome, out income))
             {
                 return new Tuple<bool, string, short>(false, nameof(strIncome), 0);
@@ -251,6 +330,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string, decimal> DecimalConverter(string strTax)
         {
             decimal tax;
+
             if (!decimal.TryParse(strTax, out tax))
             {
                 return new Tuple<bool, string, decimal>(false, nameof(strTax), 0);
@@ -267,6 +347,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string, char> CharConverter(string strBlock)
         {
             char block;
+
             if (!char.TryParse(strBlock, out block))
             {
                 return new Tuple<bool, string, char>(false, nameof(strBlock), '\0');
@@ -331,6 +412,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string> ValidateFirstName(string firstName)
         {
             int minNameLength = 2, maxNameLength = 60;
+
             if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
             {
                 return new Tuple<bool, string>(false, nameof(firstName));
@@ -347,6 +429,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string> ValidateLastName(string lastName)
         {
             int minNameLength = 2, maxNameLength = 60;
+
             if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
             {
                 return new Tuple<bool, string>(false, nameof(lastName));
@@ -364,6 +447,7 @@ namespace FileCabinetApp
         {
             DateTime minDateOfBirth = new DateTime(1950, 01, 01);
             DateTime maxDateOfBirth = DateTime.Today;
+
             if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
             {
                 return new Tuple<bool, string>(false, nameof(dateOfBirth));
@@ -395,6 +479,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string> ValidateTax(decimal tax)
         {
             int minTax = 0, maxTax = 100;
+
             if (validationMode == "CUSTOM")
             {
                 minTax = 10;
@@ -416,6 +501,7 @@ namespace FileCabinetApp
         private static Tuple<bool, string> ValidateBlock(char block)
         {
             int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
+
             if (block < firstAlphabetLetter || block > lastAlphabetLetter)
             {
                 return new Tuple<bool, string>(false, nameof(block));
@@ -435,8 +521,8 @@ namespace FileCabinetApp
             do
             {
                 T value;
-
                 var input = Console.ReadLine();
+
                 if (input == null)
                 {
                     throw new ArgumentNullException("empty input", nameof(input));
@@ -451,8 +537,8 @@ namespace FileCabinetApp
                 }
 
                 value = conversionResult.Item3;
-
                 var validationResult = validator(value);
+
                 if (!validationResult.Item1)
                 {
                     Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
@@ -488,6 +574,7 @@ namespace FileCabinetApp
             }
 
             mode = mode.ToUpperInvariant();
+
             if (mode == "CUSTOM")
             {
                 fileCabinetService = new FileCabinetService(new CustomValidator());
@@ -528,6 +615,7 @@ namespace FileCabinetApp
 #pragma warning disable CA1309 // Использование порядкового сравнения строк
                 var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
 #pragma warning restore CA1309 // Использование порядкового сравнения строк
+
                 if (index >= 0)
                 {
                     Console.WriteLine(helpMessages[index][Program.ExplanationHelpIndex]);
