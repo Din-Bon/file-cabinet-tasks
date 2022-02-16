@@ -52,6 +52,185 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
             </summary>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetFilesystemService">
+            <summary>
+            Class, that working with the records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
+            </summary>
+            <param name="fileStream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Records count.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetMemoryService">
+            <summary>
+            Class, that working with the records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="validator">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Records count.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add first name as a key and the record as a value in dictionary.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <param name="record">Record of a person with that first name.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add last name as a key and the record as a value in dictionary.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <param name="record">Record of a person with that last name.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add date of birth as a key and the record as a value in dictionary.
+            </summary>
+            <param name="dateOfBirth">Person's date of birth.</param>
+            <param name="record">Record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that first name in dictionary.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that first name.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that last name in dictionary.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that last name.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that date of birth in dictionary.
+            </summary>
+            <param name="dateOfBirth">Person's date of birth.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class describing a person.
@@ -138,121 +317,6 @@
             Write data from record to stream.
             </summary>
             <param name="record">Record with data.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
-            <summary>
-            Class, that working with the records.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
-            </summary>
-            <param name="validator">.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Create record from the input parameters.
-            </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
-            <returns>Records id.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Create record from the input parameters.
-            </summary>
-            <param name="id">Person's id.</param>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's new income.</param>
-            <param name="tax">Person's new tax.</param>
-            <param name="block">Person's new living block.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Find persons by first name.
-            </summary>
-            <param name="firstName">Person's first name.</param>
-            <returns>Array of person with same first name.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Find persons by last name.
-            </summary>
-            <param name="lastName">Person's last name.</param>
-            <returns>Array of person with same last name.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateofbirth(System.String)">
-            <summary>
-            Find persons by date of birth.
-            </summary>
-            <param name="strDateOfBirth">Person's date.</param>
-            <returns>Array of person with same date of birth.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
-            <summary>
-            Make snapshot of the current list of records.
-            </summary>
-            <returns>Array of person with same date of birth.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
-            <summary>
-            Get array of records.
-            </summary>
-            <returns>Collection of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
-            <summary>
-            Get records count.
-            </summary>
-            <returns>Records count.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add first name as a key and the record as a value in dictionary.
-            </summary>
-            <param name="firstName">Person's first name.</param>
-            <param name="record">Record of a person with that first name.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.AddLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add last name as a key and the record as a value in dictionary.
-            </summary>
-            <param name="lastName">Person's last name.</param>
-            <param name="record">Record of a person with that last name.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.AddDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add date of birth as a key and the record as a value in dictionary.
-            </summary>
-            <param name="dateOfBirth">Person's date of birth.</param>
-            <param name="record">Record of a person with that date of birth.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that first name in dictionary.
-            </summary>
-            <param name="firstName">Person's first name.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that first name.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that last name in dictionary.
-            </summary>
-            <param name="lastName">Person's last name.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that last name.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that date of birth in dictionary.
-            </summary>
-            <param name="dateOfBirth">Person's date of birth.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that date of birth.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>

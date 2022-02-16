@@ -14,7 +14,7 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         private static string validationMode = "DEFAULT";
 
         private static bool isRunning = true;
@@ -577,7 +577,7 @@ namespace FileCabinetApp
 
             if (mode == "CUSTOM")
             {
-                fileCabinetService = new FileCabinetService(new CustomValidator());
+                fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                 validationMode = mode;
             }
         }

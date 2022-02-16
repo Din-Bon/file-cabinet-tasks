@@ -1,12 +1,24 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// File cabinet service interface.
+    /// Class, that working with the records.
     /// </summary>
-    public interface IFileCabinetService
+    internal class FileCabinetFilesystemService
     {
+        private readonly FileStream fileStream;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
+        /// </summary>
+        /// <param name="fileStream">.</param>
+        public FileCabinetFilesystemService(FileStream fileStream)
+        {
+            this.fileStream = fileStream;
+        }
+
         /// <summary>
         /// Create record from the input parameters.
         /// </summary>
@@ -15,7 +27,10 @@ namespace FileCabinetApp
         /// <param name="tax">Person's tax.</param>
         /// <param name="block">Person's living block.</param>
         /// <returns>Records id.</returns>
-        int CreateRecord(Person person, short income, decimal tax, char block);
+        public int CreateRecord(Person person, short income, decimal tax, char block)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Create record from the input parameters.
@@ -25,45 +40,57 @@ namespace FileCabinetApp
         /// <param name="income">Person's new income.</param>
         /// <param name="tax">Person's new tax.</param>
         /// <param name="block">Person's new living block.</param>
-        void EditRecord(int id, Person person, short income, decimal tax, char block);
+        public void EditRecord(int id, Person person, short income, decimal tax, char block)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Find persons by date of birth.
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth);
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Find persons by last name.
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
-
-        /// <summary>
-        /// Make snapshot of the current list of records.
-        /// </summary>
-        /// <returns>Array of person with same date of birth.</returns>
-        FileCabinetServiceSnapshot MakeSnapshot() => throw new NotImplementedException();
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
-        ReadOnlyCollection<FileCabinetRecord> GetRecords();
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Get records count.
         /// </summary>
         /// <returns>Records count.</returns>
-        int GetStat();
+        public int GetStat()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
