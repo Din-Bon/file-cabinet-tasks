@@ -590,11 +590,23 @@
             <param name="validator">Check input data for compliance with the validation rules.</param>
             <returns>Test results.</returns>
         </member>
-        <member name="M:FileCabinetApp.Program.ChangeValidationMode(System.String[])">
+        <member name="M:FileCabinetApp.Program.ChangeValidationMode(System.String)">
             <summary>
             Change validation mode.
             </summary>
-            <param name="cmdArguments">Command line arguments.</param>
+            <param name="mode">Validation mode.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String)">
+            <summary>
+            Change storage system type.
+            </summary>
+            <param name="mode">Storage mode.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ParseCLArguments(System.String[])">
+            <summary>
+            Parse command line argumets string.
+            </summary>
+            <param name="cmdArguments">CL arguments.</param>
         </member>
         <member name="M:FileCabinetApp.Program.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>

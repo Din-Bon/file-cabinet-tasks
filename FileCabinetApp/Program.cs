@@ -52,7 +52,7 @@ namespace FileCabinetApp
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
-            ChangeValidationMode(args);
+            ParseCLArguments(args);
 
             do
             {
@@ -553,32 +553,75 @@ namespace FileCabinetApp
         /// <summary>
         /// Change validation mode.
         /// </summary>
-        /// <param name="cmdArguments">Command line arguments.</param>
-        private static void ChangeValidationMode(string[] cmdArguments)
+        /// <param name="mode">Validation mode.</param>
+        private static void ChangeValidationMode(string mode)
         {
-            string mode = "DEFAULT";
-            string cmdCommand = "--validation-rules=";
-
-            if (cmdArguments.Length != 0)
-            {
-                string argument = cmdArguments[0];
-
-                if (argument.Contains(cmdCommand, StringComparison.InvariantCulture))
-                {
-                    mode = argument.Substring(cmdCommand.Length);
-                }
-                else if (argument == "-v")
-                {
-                    mode = cmdArguments[1];
-                }
-            }
-
-            mode = mode.ToUpperInvariant();
-
             if (mode == "CUSTOM")
             {
                 fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                 validationMode = mode;
+            }
+            else
+            {
+                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+            }
+        }
+
+        /// <summary>
+        /// Change storage system type.
+        /// </summary>
+        /// <param name="mode">Storage mode.</param>
+        private static void ChangeStorage(string mode)
+        {
+            if (mode == "FILE")
+            {
+                FileStream stream = new FileStream("cabinet-records.db", FileMode.Create);
+                fileCabinetService = new FileCabinetFilesystemService(stream);
+            }
+            else if (mode == "MEMORY")
+            {
+                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+            }
+        }
+
+        /// <summary>
+        /// Parse command line argumets string.
+        /// </summary>
+        /// <param name="cmdArguments">CL arguments.</param>
+        private static void ParseCLArguments(string[] cmdArguments)
+        {
+            string[][] commands = new string[][]
+            {
+                new string[] { "--validation-rules", "-v" },
+                new string[] { "--storage", "-s" },
+            };
+
+            if (cmdArguments.Length != 0)
+            {
+                string command = cmdArguments[0];
+                string currentCommand = string.Empty;
+                string mode = string.Empty;
+
+                if (cmdArguments.Length == 1 && command.Contains('=', StringComparison.InvariantCulture))
+                {
+                    int breakingElementIndex = command.IndexOf('=', StringComparison.InvariantCulture);
+                    currentCommand = command.Substring(0, breakingElementIndex);
+                    mode = command.Substring(breakingElementIndex + 1, command.Length - breakingElementIndex - 1).ToUpperInvariant();
+                }
+                else if (cmdArguments.Length == 2)
+                {
+                    currentCommand = command;
+                    mode = cmdArguments[1].ToUpperInvariant();
+                }
+
+                if (commands[0].Contains(currentCommand))
+                {
+                    ChangeValidationMode(mode);
+                }
+                else if (commands[1].Contains(currentCommand))
+                {
+                    ChangeStorage(mode);
+                }
             }
         }
 

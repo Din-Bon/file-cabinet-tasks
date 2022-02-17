@@ -6,7 +6,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Class, that working with the records.
     /// </summary>
-    internal class FileCabinetFilesystemService
+    public class FileCabinetFilesystemService : IFileCabinetService
     {
         private readonly FileStream fileStream;
 
