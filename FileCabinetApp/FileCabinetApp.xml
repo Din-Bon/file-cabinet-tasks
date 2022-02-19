@@ -63,6 +63,16 @@
             </summary>
             <param name="fileStream">.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Convert record parameters to bytes.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Byte array.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Create record from the input parameters.
