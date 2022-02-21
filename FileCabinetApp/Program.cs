@@ -575,7 +575,7 @@ namespace FileCabinetApp
         {
             if (mode == "FILE")
             {
-                FileStream stream = new FileStream("D:\\Course projects\\file-cabinet-tasks\\cabinet-records.db", FileMode.Append);
+                FileStream stream = new FileStream("D:\\Course projects\\file-cabinet-tasks\\cabinet-records.db", FileMode.OpenOrCreate);
                 fileCabinetService = new FileCabinetFilesystemService(stream);
             }
             else if (mode == "MEMORY")
