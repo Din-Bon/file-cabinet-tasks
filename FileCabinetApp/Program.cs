@@ -130,6 +130,12 @@ namespace FileCabinetApp
             }
 
             int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
+
+            if (id > fileCabinetService.GetStat())
+            {
+                throw new ArgumentException("id value larger than list", nameof(parameters));
+            }
+
             Console.Write("First name: ");
             var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
             Console.Write("Last name: ");
