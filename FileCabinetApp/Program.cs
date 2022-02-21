@@ -131,7 +131,7 @@ namespace FileCabinetApp
 
             int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
 
-            if (id > fileCabinetService.GetStat())
+            if (id > fileCabinetService.GetStat() || id < 0)
             {
                 throw new ArgumentException("id value larger than list", nameof(parameters));
             }
@@ -150,7 +150,6 @@ namespace FileCabinetApp
             char block = ReadInput<char>(CharConverter, ValidateBlock);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
             fileCabinetService.EditRecord(id, person, income, tax, block);
-            Console.WriteLine($"Record #{id} is updated.");
 
             if (!ValidateParameters(person, income, tax, block))
             {

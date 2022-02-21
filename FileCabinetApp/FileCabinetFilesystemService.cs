@@ -128,6 +128,7 @@ namespace FileCabinetApp
             DefaultValidator validator = new DefaultValidator();
             validator.ValidateParameters(person, income, tax, block);
             int id = (int)(this.fileStream.Length / (long)RecordSize) + 1;
+
             FileCabinetRecord record = new FileCabinetRecord
             {
                 Id = id,
@@ -138,6 +139,7 @@ namespace FileCabinetApp
                 Tax = tax,
                 Block = block,
             };
+
             byte[] recordInByte = RecordToBytes(record);
             this.fileStream.Write(recordInByte, 0, recordInByte.Length);
             this.fileStream.Flush();
@@ -154,7 +156,23 @@ namespace FileCabinetApp
         /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
-            throw new NotImplementedException();
+            this.fileStream.Position = (id - 1) * RecordSize;
+
+            FileCabinetRecord newRecord = new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
+                Income = income,
+                Tax = tax,
+                Block = block,
+            };
+
+            byte[] newRecordInByte = RecordToBytes(newRecord);
+            this.fileStream.Write(newRecordInByte, 0, newRecordInByte.Length);
+            this.fileStream.Flush();
+            this.list[id - 1] = newRecord;
         }
 
         /// <summary>
