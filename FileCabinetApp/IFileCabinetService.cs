@@ -28,13 +28,6 @@ namespace FileCabinetApp
         void EditRecord(int id, Person person, short income, decimal tax, char block);
 
         /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth);
-
-        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
@@ -47,6 +40,13 @@ namespace FileCabinetApp
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
         ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+
+        /// <summary>
+        /// Find persons by date of birth.
+        /// </summary>
+        /// <param name="strDateOfBirth">Person's date.</param>
+        /// <returns>Array of person with same date of birth.</returns>
+        ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth);
 
         /// <summary>
         /// Make snapshot of the current list of records.

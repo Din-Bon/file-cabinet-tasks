@@ -110,6 +110,7 @@ namespace FileCabinetApp
                 char block = ReadInput<char>(CharConverter, ValidateBlock);
                 Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
                 check = ValidateParameters(person, income, tax, block);
+
                 if (!check)
                 {
                     Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
@@ -149,7 +150,6 @@ namespace FileCabinetApp
             Console.Write("Block: ");
             char block = ReadInput<char>(CharConverter, ValidateBlock);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-            fileCabinetService.EditRecord(id, person, income, tax, block);
 
             if (!ValidateParameters(person, income, tax, block))
             {
@@ -580,7 +580,7 @@ namespace FileCabinetApp
         {
             if (mode == "FILE")
             {
-                FileStream stream = new FileStream("D:\\Course projects\\file-cabinet-tasks\\cabinet-records.db", FileMode.OpenOrCreate);
+                FileStream stream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
                 fileCabinetService = new FileCabinetFilesystemService(stream);
             }
             else if (mode == "MEMORY")
