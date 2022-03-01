@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 
-namespace FileCabinetApp
+namespace FileCabinetGenerator
 {
     /// <summary>
     /// Start class for file cabinet generator.
@@ -31,6 +31,9 @@ namespace FileCabinetApp
 
                 ParseCommand(args[i], argument);
             }
+
+            RecordGenerator generator = new RecordGenerator(id, amount);
+            Console.WriteLine($"{amount} records were written written to {path}");
         }
 
         /// <summary>
