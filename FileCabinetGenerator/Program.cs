@@ -32,8 +32,38 @@ namespace FileCabinetGenerator
                 ParseCommand(args[i], argument);
             }
 
+            if (amount < 0)
+            {
+                throw new ArgumentException("wrond amount", nameof(amount));
+            }
+
+            if (id < 0)
+            {
+                throw new ArgumentException("wrond start id", nameof(id));
+            }
+
+            string[] formats = { "CSV", "XML" };
+            type = type.ToUpperInvariant();
             RecordGenerator generator = new RecordGenerator(id, amount);
-            Console.WriteLine($"{amount} records were written written to {path}");
+            generator.GenerateRecords();
+
+            if (!string.IsNullOrEmpty(path) && formats.Contains(type))
+            {
+                StreamWriter writer = new StreamWriter(path);
+
+                if (type == "CSV")
+                {
+                    generator.ExportRecordsCsv(writer);
+                }
+                else if (type == "XML")
+                {
+                    
+                }
+
+                writer.Flush();
+                writer.Close();
+            }
+            Console.WriteLine($"{amount} records were written to {path}");
         }
 
         /// <summary>
