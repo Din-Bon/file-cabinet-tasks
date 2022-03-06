@@ -10,19 +10,19 @@ namespace FileCabinetGenerator
     /// <summary>
     /// Class that generate records.
     /// </summary>
-    public class RecordGenerator
+    public class FileCabinetRecordGenerator
     {
         private int id = 0;
         private int amount = 0;
         private readonly char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
-        private static Record[]? records;
+        private static FileCabinetRecord[]? records;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecordGenerator"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetRecordGenerator"/> class.
         /// </summary>
         /// <param name="id">Start id.</param>
         /// <param name="amount">Amount of records.</param>
-        public RecordGenerator(int id, int amount)
+        public FileCabinetRecordGenerator(int id, int amount)
         {
             this.id = id;
             this.amount = amount;
@@ -34,7 +34,7 @@ namespace FileCabinetGenerator
         public void GenerateRecords()
         {
             Random random = new Random();
-            records = new Record[amount];
+            records = new FileCabinetRecord[amount];
 
             for (int i = 0; i < amount; i++)
             {
@@ -45,7 +45,7 @@ namespace FileCabinetGenerator
                 decimal tax = GenerateTax(random);
                 char block = GenerateBlock(random);
 
-                Record record = new Record()
+                FileCabinetRecord record = new FileCabinetRecord()
                 {
                     Id = this.id + i,
                     FirstName = firstName,
@@ -67,7 +67,7 @@ namespace FileCabinetGenerator
         public void ExportRecordsCsv(StreamWriter stream)
         {
             stream.WriteLine("Id,First Name,Last Name,Date of Birth,Income,Tax,Block");
-            CsvExport export = new CsvExport(stream);
+            FileCabinetCsvExport export = new FileCabinetCsvExport(stream);
             
             if (records != null)
             {
@@ -75,6 +75,20 @@ namespace FileCabinetGenerator
                 {
                     export.Write(records[i]);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Save records data to xml file.
+        /// </summary>
+        /// <param name="stream">Stream that will contain records data.</param>
+        public void ExportRecordXml(StreamWriter stream)
+        {
+            FileCabinetXmlExport export = new FileCabinetXmlExport(stream);
+
+            if (records != null)
+            {
+                export.Write(records);
             }
         }
 

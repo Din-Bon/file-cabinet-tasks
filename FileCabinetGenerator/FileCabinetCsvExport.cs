@@ -10,15 +10,15 @@ namespace FileCabinetGenerator
     /// <summary>
     /// Class that export records data in csv file.
     /// </summary>
-    public class CsvExport
+    public class FileCabinetCsvExport
     {
         private TextWriter writer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvExport"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetCsvExport"/> class.
         /// </summary>
         /// <param name="writer">Stream to write data.</param>
-        public CsvExport(TextWriter writer)
+        public FileCabinetCsvExport(TextWriter writer)
         {
             this.writer = writer;
         }
@@ -27,7 +27,7 @@ namespace FileCabinetGenerator
         /// Write data from record to stream.
         /// </summary>
         /// <param name="record">Record with data.</param>
-        public void Write(Record record)
+        public void Write(FileCabinetRecord record)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(record.Id);

@@ -44,7 +44,7 @@ namespace FileCabinetGenerator
 
             string[] formats = { "CSV", "XML" };
             type = type.ToUpperInvariant();
-            RecordGenerator generator = new RecordGenerator(id, amount);
+            FileCabinetRecordGenerator generator = new FileCabinetRecordGenerator(id, amount);
             generator.GenerateRecords();
 
             if (!string.IsNullOrEmpty(path) && formats.Contains(type))
@@ -57,7 +57,7 @@ namespace FileCabinetGenerator
                 }
                 else if (type == "XML")
                 {
-                    
+                    generator.ExportRecordXml(writer);
                 }
 
                 writer.Flush();
