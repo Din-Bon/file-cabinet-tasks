@@ -135,11 +135,82 @@ namespace FileCabinetApp
         /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
-        /// <returns>Array of person with same date of birth.</returns>
+        /// <returns>Snapshot of records.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             FileCabinetServiceSnapshot serviceSnapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
             return serviceSnapshot;
+        }
+
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="snapshot">Records snapshot.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            IList<FileCabinetRecord> importRecords = snapshot.Records;
+
+            if (importRecords.Count == 0)
+            {
+                throw new ArgumentNullException("empty import file", nameof(importRecords));
+            }
+
+            int startId = importRecords[0].Id - 1, index = 0;
+
+            for (; index < importRecords.Count && startId < this.list.Count; index++, startId++)
+            {
+                FileCabinetRecord record = importRecords[index];
+                Person person = new Person
+                {
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                };
+
+                try
+                {
+                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
+                }
+                catch (ArgumentException exception)
+                {
+                    Console.Write(exception.Message);
+                    Console.WriteLine($". Record id - {record.Id}.");
+                    continue;
+                }
+
+                if (record.Id == this.list[startId].Id)
+                {
+                    this.list[startId] = record;
+                }
+                else
+                {
+                    this.list.Insert(index, record);
+                }
+            }
+
+            for (; index < importRecords.Count; index++)
+            {
+                FileCabinetRecord record = importRecords[index];
+                Person person = new Person
+                {
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                };
+
+                try
+                {
+                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
+                }
+                catch (ArgumentException exception)
+                {
+                    Console.Write(exception.Message);
+                    Console.WriteLine($". Record id - {record.Id}.");
+                    continue;
+                }
+
+                this.list.Add(importRecords[index]);
+            }
         }
 
         /// <summary>

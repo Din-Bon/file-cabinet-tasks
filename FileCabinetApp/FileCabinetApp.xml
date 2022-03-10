@@ -231,7 +231,13 @@
             <summary>
             Make snapshot of the current list of records.
             </summary>
-            <returns>Array of person with same date of birth.</returns>
+            <returns>Snapshot of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
             <summary>
@@ -360,6 +366,23 @@
             </summary>
             <param name="record">Record with data.</param>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordsCsvReader">
+            <summary>
+            Class, that working with the records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordsCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordsCsvReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordsCsvReader.ReadAll">
+            <summary>
+            Read data from csv file.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
             Class that create snapshot of records in xml format.
@@ -388,6 +411,12 @@
             </summary>
             <param name="records">Array of records.</param>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets records.
+            </summary>
+            <value>Records.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Save records data to csv file.
@@ -399,6 +428,12 @@
             Save records data to xml file.
             </summary>
             <param name="writer">Stream that will contain records data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            Load records from csv file.
+            </summary>
+            <param name="stream">Stream that will contain records data.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -451,6 +486,12 @@
             Make snapshot of the current list of records.
             </summary>
             <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
             <summary>
@@ -542,15 +583,27 @@
             </summary>
             <param name="parameters">Array from property and value.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.Import(System.String)">
+            <summary>
+            Import records from file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.Export(System.String)">
             <summary>
             Export records in file.
             </summary>
             <param name="parameters">Array from property and value.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ParseExportString(System.String)">
+        <member name="M:FileCabinetApp.Program.ParseExport(System.String)">
             <summary>
             Parse string for export command.
+            </summary>
+            <param name="input">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.ParseImport(System.String)">
+            <summary>
+            Parse string for import command.
             </summary>
             <param name="input">Array from property and value.</param>
         </member>
