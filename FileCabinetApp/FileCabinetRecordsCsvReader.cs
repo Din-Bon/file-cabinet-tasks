@@ -39,7 +39,7 @@ namespace FileCabinetApp
                 string[] parameters = line.Split(',');
                 int id = Convert.ToInt32(parameters[0], provider);
                 string firstName = parameters[1], lastName = parameters[2];
-                DateTime dateOfBirth = DateTime.ParseExact(parameters[3], $"mm/dd/yyyy", provider);
+                DateTime dateOfBirth = DateTime.ParseExact(parameters[3] + " 00:00:00", $"MM/dd/yyyy hh:mm:ss", provider);
                 short income = Convert.ToInt16(parameters[4], provider);
                 char block = '\0';
                 decimal tax = -1;

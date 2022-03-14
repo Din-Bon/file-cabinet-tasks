@@ -57,11 +57,12 @@
             Class, that working with the records.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream,FileCabinetApp.IRecordValidator)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
-            <param name="fileStream">.</param>
+            <param name="fileStream">Stream with data.</param>
+            <param name="validator">.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -117,6 +118,18 @@
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Snapshot of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
             <summary>

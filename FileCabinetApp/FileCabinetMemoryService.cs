@@ -149,17 +149,14 @@ namespace FileCabinetApp
         public void Restore(FileCabinetServiceSnapshot snapshot)
         {
             IList<FileCabinetRecord> importRecords = snapshot.Records;
+            int listSize = this.list.Count;
+            int index = listSize;
+            List<int> importIds = new List<int>();
+            this.list.AddRange(importRecords);
 
-            if (importRecords.Count == 0)
+            for (; index < this.list.Count; index++)
             {
-                throw new ArgumentNullException("empty import file", nameof(importRecords));
-            }
-
-            int startId = importRecords[0].Id - 1, index = 0;
-
-            for (; index < importRecords.Count && startId < this.list.Count; index++, startId++)
-            {
-                FileCabinetRecord record = importRecords[index];
+                FileCabinetRecord record = this.list[index];
                 Person person = new Person
                 {
                     FirstName = record.FirstName,
@@ -170,46 +167,40 @@ namespace FileCabinetApp
                 try
                 {
                     this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
+                    importIds.Add(record.Id);
+                    this.AddFirstNameDictionary(record.FirstName, record);
+                    this.AddLastNameDictionary(record.LastName, record);
+                    this.AddDateOfBirthDictionary(record.DateOfBirth, record);
                 }
                 catch (ArgumentException exception)
                 {
-                    Console.Write(exception.Message);
-                    Console.WriteLine($". Record id - {record.Id}.");
+                    Console.WriteLine($"{exception.Message}. Record id - {record.Id}.");
+                    this.list.Remove(record);
+                    index--;
                     continue;
-                }
-
-                if (record.Id == this.list[startId].Id)
-                {
-                    this.list[startId] = record;
-                }
-                else
-                {
-                    this.list.Insert(index, record);
                 }
             }
 
-            for (; index < importRecords.Count; index++)
+            if (listSize > 0 && importRecords.Count > 0)
             {
-                FileCabinetRecord record = importRecords[index];
-                Person person = new Person
-                {
-                    FirstName = record.FirstName,
-                    LastName = record.LastName,
-                    DateOfBirth = record.DateOfBirth,
-                };
+                index = 0;
 
-                try
+                for (int deleted = 0; index < (listSize - deleted); index++)
                 {
-                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
-                }
-                catch (ArgumentException exception)
-                {
-                    Console.Write(exception.Message);
-                    Console.WriteLine($". Record id - {record.Id}.");
-                    continue;
+                    FileCabinetRecord record = this.list[index];
+
+                    if (importIds.Contains(record.Id))
+                    {
+                        this.list.Remove(record);
+                        index--;
+                        deleted++;
+                        this.firstNameDictionary.Remove(record.FirstName);
+                        this.lastNameDictionary.Remove(record.LastName);
+                        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                    }
                 }
 
-                this.list.Add(importRecords[index]);
+                this.list.Sort(delegate(FileCabinetRecord firstRecord, FileCabinetRecord secondRecord) { return firstRecord.Id.CompareTo(secondRecord.Id); });
             }
         }
 

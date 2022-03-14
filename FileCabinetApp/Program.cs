@@ -344,7 +344,7 @@ namespace FileCabinetApp
 
             if (!File.Exists(input))
             {
-                Console.Write($"File doesn't exist");
+                Console.WriteLine($"File doesn't exist");
                 return string.Empty;
             }
 
@@ -649,11 +649,25 @@ namespace FileCabinetApp
             if (mode == "FILE")
             {
                 FileStream stream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
-                fileCabinetService = new FileCabinetFilesystemService(stream);
+                if (validationMode == "CUSTOM")
+                {
+                    fileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());
+                }
+                else
+                {
+                    fileCabinetService = new FileCabinetFilesystemService(stream, new DefaultValidator());
+                }
             }
-            else if (mode == "MEMORY")
+            else
             {
-                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                if (validationMode == "CUSTOM")
+                {
+                    fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                }
+                else
+                {
+                    fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                }
             }
         }
 
@@ -669,33 +683,39 @@ namespace FileCabinetApp
                 new string[] { "--storage", "-s" },
             };
 
-            if (cmdArguments.Length != 0)
+            StringComparison culture = StringComparison.InvariantCulture;
+            string validationMode = "DEFAULT";
+            string storageMode = "MEMORY";
+
+            for (int i = 0; i < cmdArguments.Length; i++)
             {
-                string command = cmdArguments[0];
-                string currentCommand = string.Empty;
-                string mode = string.Empty;
+                if (cmdArguments[i].Contains("-v", culture))
+                {
+                    if (cmdArguments[i].Contains("--validation-rules=", culture))
+                    {
+                        validationMode = cmdArguments[i].Split('=')[1].ToUpperInvariant();
+                    }
+                    else if (cmdArguments[i] == "-v")
+                    {
+                        validationMode = cmdArguments[i + 1].ToUpperInvariant();
+                    }
 
-                if (cmdArguments.Length == 1 && command.Contains('=', StringComparison.InvariantCulture))
-                {
-                    int breakingElementIndex = command.IndexOf('=', StringComparison.InvariantCulture);
-                    currentCommand = command.Substring(0, breakingElementIndex);
-                    mode = command.Substring(breakingElementIndex + 1, command.Length - breakingElementIndex - 1).ToUpperInvariant();
+                    ChangeValidationMode(validationMode);
                 }
-                else if (cmdArguments.Length == 2)
+                else if (cmdArguments[i].Contains("-s", culture))
                 {
-                    currentCommand = command;
-                    mode = cmdArguments[1].ToUpperInvariant();
-                }
-
-                if (commands[0].Contains(currentCommand))
-                {
-                    ChangeValidationMode(mode);
-                }
-                else if (commands[1].Contains(currentCommand))
-                {
-                    ChangeStorage(mode);
+                    if (cmdArguments[i].Contains("--storage=", culture))
+                    {
+                        storageMode = cmdArguments[i].Split('=')[1].ToUpperInvariant();
+                    }
+                    else if (cmdArguments[i] == "-s")
+                    {
+                        storageMode = cmdArguments[i + 1].ToUpperInvariant();
+                    }
                 }
             }
+
+            ChangeStorage(storageMode);
         }
 
         /// <summary>

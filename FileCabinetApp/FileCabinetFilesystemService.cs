@@ -16,14 +16,17 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly IRecordValidator validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
-        /// <param name="fileStream">.</param>
-        public FileCabinetFilesystemService(FileStream fileStream)
+        /// <param name="fileStream">Stream with data.</param>
+        /// <param name="validator">.</param>
+        public FileCabinetFilesystemService(FileStream fileStream, IRecordValidator validator)
         {
             this.fileStream = fileStream;
+            this.validator = validator;
             this.FillDictionaries();
         }
 
@@ -134,8 +137,7 @@ namespace FileCabinetApp
         public int CreateRecord(Person person, short income, decimal tax, char block)
         {
             this.fileStream.Position = this.fileStream.Length;
-            DefaultValidator validator = new DefaultValidator();
-            validator.ValidateParameters(person, income, tax, block);
+            this.validator.ValidateParameters(person, income, tax, block);
             int id = (int)(this.fileStream.Length / (long)RecordSize) + 1;
 
             FileCabinetRecord record = new FileCabinetRecord
@@ -168,6 +170,7 @@ namespace FileCabinetApp
         /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
+            this.validator.ValidateParameters(person, income, tax, block);
             this.fileStream.Position = (id - 1) * RecordSize;
             byte[] oldRecordInByte = new byte[RecordSize];
             this.fileStream.Read(oldRecordInByte, 0, RecordSize);
@@ -243,6 +246,108 @@ namespace FileCabinetApp
             }
 
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
+        }
+
+        /// <summary>
+        /// Make snapshot of the current list of records.
+        /// </summary>
+        /// <returns>Snapshot of records.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            int fileLength = (int)(this.fileStream.Length / (long)RecordSize) + 1;
+            FileCabinetRecord[] records = new FileCabinetRecord[fileLength];
+            this.GetRecords().CopyTo(records, 0);
+            FileCabinetServiceSnapshot serviceSnapshot = new FileCabinetServiceSnapshot(records);
+            return serviceSnapshot;
+        }
+
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="snapshot">Records snapshot.</param>
+        public void Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            IList<FileCabinetRecord> importRecords = snapshot.Records;
+            List<FileCabinetRecord> streamList = new List<FileCabinetRecord>();
+
+            if (importRecords.Count == 0)
+            {
+                throw new ArgumentNullException("empty import file", nameof(importRecords));
+            }
+
+            int listSize = (int)(this.fileStream.Length / (long)RecordSize);
+            int index = listSize;
+            List<int> importIds = new List<int>();
+            this.fileStream.Position = 0;
+            byte[] oldRecordInByte = new byte[RecordSize];
+
+            for (int i = 0; i < listSize; i++)
+            {
+                this.fileStream.Read(oldRecordInByte, 0, RecordSize);
+                FileCabinetRecord oldRecord = BytesToRecord(oldRecordInByte);
+                streamList.Add(oldRecord);
+            }
+
+            streamList.AddRange(importRecords);
+
+            for (; index < streamList.Count; index++)
+            {
+                FileCabinetRecord record = streamList[index];
+                Person person = new Person
+                {
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                };
+
+                try
+                {
+                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
+                    importIds.Add(record.Id);
+                    this.AddFirstNameDictionary(record.FirstName, record);
+                    this.AddLastNameDictionary(record.LastName, record);
+                    this.AddDateOfBirthDictionary(record.DateOfBirth, record);
+                }
+                catch (ArgumentException exception)
+                {
+                    Console.WriteLine($"{exception.Message}. Record id - {record.Id}.");
+                    streamList.Remove(record);
+                    index--;
+                    continue;
+                }
+            }
+
+            if (listSize > 0 && importRecords.Count > 0)
+            {
+                index = 0;
+
+                for (int deleted = 0; index < (listSize - deleted); index++)
+                {
+                    FileCabinetRecord record = streamList[index];
+
+                    if (importIds.Contains(record.Id))
+                    {
+                        streamList.Remove(record);
+                        index--;
+                        deleted++;
+                        this.firstNameDictionary.Remove(record.FirstName);
+                        this.lastNameDictionary.Remove(record.LastName);
+                        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                    }
+                }
+
+                streamList.Sort(delegate(FileCabinetRecord firstRecord, FileCabinetRecord secondRecord) { return firstRecord.Id.CompareTo(secondRecord.Id); });
+            }
+
+            this.fileStream.Position = 0;
+
+            for (int i = 0; i < streamList.Count; i++)
+            {
+                byte[] record = RecordToBytes(streamList[i]);
+                this.fileStream.Write(record, 0, record.Length);
+            }
+
+            this.fileStream.Flush();
         }
 
         /// <summary>
@@ -338,6 +443,15 @@ namespace FileCabinetApp
             {
                 this.fileStream.Read(recordBuffer, 0, RecordSize);
                 var record = BytesToRecord(recordBuffer);
+
+                Person person = new Person
+                {
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                };
+
+                this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
                 this.AddFirstNameDictionary(record.FirstName, record);
                 this.AddLastNameDictionary(record.LastName, record);
                 this.AddDateOfBirthDictionary(record.DateOfBirth, record);
