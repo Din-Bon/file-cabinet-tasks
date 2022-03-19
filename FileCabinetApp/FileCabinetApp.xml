@@ -98,6 +98,12 @@
             <param name="tax">Person's new tax.</param>
             <param name="block">Person's new living block.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
             Find persons by first name.
@@ -220,6 +226,12 @@
             <param name="tax">Person's new tax.</param>
             <param name="block">Person's new living block.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
             Find persons by first name.
@@ -310,6 +322,24 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInFirstNameDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the firstNameDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInLastNameDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the lastNameDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInDateOfBirthDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the dateOfBirthDictionary.
+            </summary>
+            <param name="record">Record.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -516,6 +546,12 @@
             <param name="tax">Person's new tax.</param>
             <param name="block">Person's new living block.</param>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
             Find persons by first name.
@@ -680,6 +716,12 @@
             Parse string for import command.
             </summary>
             <param name="input">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Remove(System.String)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="parameters">String parameter(id).</param>
         </member>
         <member name="M:FileCabinetApp.Program.StringConverter(System.String)">
             <summary>

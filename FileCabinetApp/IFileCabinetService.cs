@@ -28,6 +28,12 @@ namespace FileCabinetApp
         void EditRecord(int id, Person person, short income, decimal tax, char block);
 
         /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        void RemoveRecord(int id);
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>

@@ -30,6 +30,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -43,6 +44,7 @@ namespace FileCabinetApp
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
             new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
             new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
+            new string[] { "remove", "remove record", "The 'remove' remove record by id." },
         };
 
         /// <summary>
@@ -133,8 +135,9 @@ namespace FileCabinetApp
             }
 
             int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
+            int lastId = fileCabinetService.GetRecords()[fileCabinetService.GetStat() - 1].Id;
 
-            if (id > fileCabinetService.GetStat() || id < 0)
+            if (id > lastId || id < 0)
             {
                 throw new ArgumentException("id value larger than list", nameof(parameters));
             }
@@ -349,6 +352,27 @@ namespace FileCabinetApp
             }
 
             return input;
+        }
+
+        /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="parameters">String parameter(id).</param>
+        private static void Remove(string parameters)
+        {
+            int id = 0;
+
+            if (string.IsNullOrEmpty(parameters) || !int.TryParse(parameters, out id))
+            {
+                throw new ArgumentNullException(nameof(parameters), "empty id");
+            }
+
+            if (id <= 0)
+            {
+                throw new ArgumentException("wrond id (<1)", nameof(parameters));
+            }
+
+            fileCabinetService.RemoveRecord(id);
         }
 
         /// <summary>

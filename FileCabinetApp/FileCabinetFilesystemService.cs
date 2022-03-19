@@ -198,6 +198,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        public void RemoveRecord(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
