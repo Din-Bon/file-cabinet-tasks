@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace FileCabinetGenerator
 {
@@ -27,13 +21,15 @@ namespace FileCabinetGenerator
         /// <summary>
         /// Write data from record to stream.
         /// </summary>
-        /// <param name="record">Record with data.</param>
-        public void Write(FileCabinetRecord[] record)
+        /// <param name="records">Record with data.</param>
+        public void Write(FileCabinetRecord[] records)
         {
-            FileCabinetRecordArray recordArray = new FileCabinetRecordArray();
-            recordArray.Records = record;
-            XmlSerializer serializer = new XmlSerializer(typeof(FileCabinetRecordArray));
-            serializer.Serialize(stream, recordArray);
+            XmlRootAttribute root = new XmlRootAttribute();
+            root.ElementName = "records";
+            XmlSerializerNamespaces space = new XmlSerializerNamespaces();
+            space.Add("", "");
+            XmlSerializer serializer = new XmlSerializer(typeof(FileCabinetRecord[]), root);
+            serializer.Serialize(stream, records, space);
         }
     }
 }

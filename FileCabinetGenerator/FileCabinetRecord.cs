@@ -1,30 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace FileCabinetGenerator
 {
     /// <summary>
-    /// Class creating an array from records.
-    /// </summary>
-    [Serializable, XmlRoot(Namespace = "https://github.com/Din-Bon", ElementName = "FileCabinetRecords")]
-    public class FileCabinetRecordArray
-    {
-        /// <summary>
-        /// Gets or sets record array.
-        /// </summary>
-        /// <value>Records.</value>
-        [XmlArray("records")]
-        public FileCabinetRecord[]? Records { get; set; }
-    }
-
-    /// <summary>
     /// Class describing a person.
     /// </summary>
-    [XmlRoot("record")]
+    [XmlType("record")]
     public class FileCabinetRecord
     {
         /// <summary>
@@ -35,25 +16,29 @@ namespace FileCabinetGenerator
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets persons first name.
+        /// Gets or sets persons name.
         /// </summary>
-        /// <value>Persons first name.</value>
-        [XmlElement("firstName")]
-        public string FirstName { get; set; } = String.Empty;
-
-        /// <summary>
-        /// Gets or sets persons last name.
-        /// </summary>
-        /// <value>Persons last name.</value>
-        [XmlElement("lastName")]
-        public string LastName { get; set; } = String.Empty;
+        /// <value>Persons name.</value>
+        [XmlElement("name")]
+        public PersonName Name { get; set; } = new PersonName();
 
         /// <summary>
         /// Gets or sets persons date of birth.
         /// </summary>
         /// <value>Persons date of birth.</value>
-        [XmlElement("dateOfBirth")]
+        [XmlIgnore]
         public DateTime DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets persons date of birth in string format.
+        /// </summary>
+        /// <value>Persons date of birth.</value>
+        [XmlElement("dateOfBirth")]
+        public string DateString
+        {
+            get { return this.DateOfBirth.ToString("MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture); }
+            set { this.DateOfBirth = DateTime.Parse(value, System.Globalization.CultureInfo.InvariantCulture); }
+        }
 
         /// <summary>
         /// Gets or sets persons income.
@@ -73,8 +58,19 @@ namespace FileCabinetGenerator
         /// Gets or sets persons living block.
         /// </summary>
         /// <value>Persons living block.</value>
-        [XmlElement("block")]
+        [XmlIgnore]
         public char Block { get; set; }
+
+        /// <summary>
+        /// Gets or sets persons living block in string.
+        /// </summary>
+        /// <value>Persons living block.</value>
+        [XmlElement("block")]
+        public string StringBlock
+        {
+            get { return this.Block.ToString(); }
+            set { this.Block = value.Single(); }
+        }
 
         /// <summary>
         /// Build string from records parameters.
@@ -83,9 +79,17 @@ namespace FileCabinetGenerator
         public override string ToString()
         {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            string firstName = "empty", lastName = "empty";
+
+            if (this.Name != null)
+            {
+                firstName = this.Name.FirstName;
+                lastName = this.Name.LastName;
+            }
+
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"#{this.Id}, ");
-            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.FirstName}, ");
-            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.LastName}, ");
+            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{firstName}, ");
+            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{lastName}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.Income}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.Tax}, ");

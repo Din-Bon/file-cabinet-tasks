@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace FileCabinetGenerator
 {
@@ -32,8 +28,8 @@ namespace FileCabinetGenerator
             StringBuilder builder = new StringBuilder();
             builder.Append(record.Id);
             builder.Append(',');
-            builder.Append(record.FirstName + ',');
-            builder.Append(record.LastName + ',');
+            builder.Append(record.Name.FirstName + ',');
+            builder.Append(record.Name.LastName + ',');
             builder.Append(record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) + ',');
             builder.Append(record.Income);
             builder.Append(',');

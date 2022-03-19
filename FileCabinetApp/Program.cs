@@ -241,12 +241,12 @@ namespace FileCabinetApp
                 }
                 else if (property == "XML")
                 {
-                    throw new NotImplementedException();
+                    serviceSnapshot.LoadFromXml(reader);
                 }
 
-                fileCabinetService.Restore(serviceSnapshot);
+                int count = fileCabinetService.Restore(serviceSnapshot);
                 reader.Close();
-                Console.WriteLine($"All records are imported from file {path}.");
+                Console.WriteLine($"{count} records were imported from {path}.");
             }
         }
 
@@ -649,6 +649,7 @@ namespace FileCabinetApp
             if (mode == "FILE")
             {
                 FileStream stream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
+
                 if (validationMode == "CUSTOM")
                 {
                     fileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());

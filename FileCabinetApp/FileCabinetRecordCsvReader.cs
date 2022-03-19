@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class, that working with the records.
+    /// Class, that import csv.
     /// </summary>
-    public class FileCabinetRecordsCsvReader
+    public class FileCabinetRecordCsvReader
     {
         private StreamReader reader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetRecordsCsvReader"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetRecordCsvReader"/> class.
         /// </summary>
         /// <param name="stream">.</param>
-        public FileCabinetRecordsCsvReader(StreamReader stream)
+        public FileCabinetRecordCsvReader(StreamReader stream)
         {
             this.reader = stream;
         }

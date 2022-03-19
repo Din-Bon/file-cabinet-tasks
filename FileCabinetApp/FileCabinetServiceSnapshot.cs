@@ -70,7 +70,18 @@ namespace FileCabinetApp
         /// <param name="stream">Stream that will contain records data.</param>
         public void LoadFromCsv(StreamReader stream)
         {
-            FileCabinetRecordsCsvReader reader = new FileCabinetRecordsCsvReader(stream);
+            FileCabinetRecordCsvReader reader = new FileCabinetRecordCsvReader(stream);
+            this.list = reader.ReadAll();
+            this.Records = new ReadOnlyCollection<FileCabinetRecord>(this.list);
+        }
+
+        /// <summary>
+        /// Load records from xml file.
+        /// </summary>
+        /// <param name="stream">Stream that will contain records data.</param>
+        public void LoadFromXml(StreamReader stream)
+        {
+            FileCabinetRecordXmlReader reader = new FileCabinetRecordXmlReader(stream);
             this.list = reader.ReadAll();
             this.Records = new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }

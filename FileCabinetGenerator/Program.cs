@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-
-namespace FileCabinetGenerator
+﻿namespace FileCabinetGenerator
 {
     /// <summary>
     /// Start class for file cabinet generator.
@@ -83,6 +79,7 @@ namespace FileCabinetGenerator
 
             string currentCommand = string.Empty;
             string mode = string.Empty;
+            argument = argument.Trim(new char[] { '\'', '"' });
 
             if (command.Contains("--", StringComparison.InvariantCulture))
             {

@@ -265,17 +265,13 @@ namespace FileCabinetApp
         /// Restore records.
         /// </summary>
         /// <param name="snapshot">Records snapshot.</param>
-        public void Restore(FileCabinetServiceSnapshot snapshot)
+        /// <returns>Counts of imported records.</returns>
+        public int Restore(FileCabinetServiceSnapshot snapshot)
         {
             IList<FileCabinetRecord> importRecords = snapshot.Records;
             List<FileCabinetRecord> streamList = new List<FileCabinetRecord>();
-
-            if (importRecords.Count == 0)
-            {
-                throw new ArgumentNullException("empty import file", nameof(importRecords));
-            }
-
             int listSize = (int)(this.fileStream.Length / (long)RecordSize);
+            int count = 0;
             int index = listSize;
             List<int> importIds = new List<int>();
             this.fileStream.Position = 0;
@@ -303,10 +299,11 @@ namespace FileCabinetApp
                 try
                 {
                     this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
-                    importIds.Add(record.Id);
                     this.AddFirstNameDictionary(record.FirstName, record);
                     this.AddLastNameDictionary(record.LastName, record);
                     this.AddDateOfBirthDictionary(record.DateOfBirth, record);
+                    importIds.Add(record.Id);
+                    count++;
                 }
                 catch (ArgumentException exception)
                 {
@@ -348,6 +345,7 @@ namespace FileCabinetApp
             }
 
             this.fileStream.Flush();
+            return count;
         }
 
         /// <summary>

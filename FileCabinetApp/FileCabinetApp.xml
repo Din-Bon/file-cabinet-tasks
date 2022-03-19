@@ -130,6 +130,7 @@
             Restore records.
             </summary>
             <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
             <summary>
@@ -251,6 +252,7 @@
             Restore records.
             </summary>
             <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
             <summary>
@@ -320,6 +322,12 @@
             </summary>
             <value>Persons id.</value>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Name">
+            <summary>
+            Gets or sets persons name.
+            </summary>
+            <value>Persons name.</value>
+        </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
             <summary>
             Gets or sets persons first name.
@@ -335,6 +343,12 @@
         <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
             <summary>
             Gets or sets persons date of birth.
+            </summary>
+            <value>Persons date of birth.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateString">
+            <summary>
+            Gets or sets persons date of birth in string format.
             </summary>
             <value>Persons date of birth.</value>
         </member>
@@ -356,11 +370,34 @@
             </summary>
             <value>Persons living block.</value>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.StringBlock">
+            <summary>
+            Gets or sets persons living block in string.
+            </summary>
+            <value>Persons living block.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
             <summary>
             Build string from records parameters.
             </summary>
             <returns>Record string representation.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            Class, that import csv.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Read data from csv file.
+            </summary>
+            <returns>List of records.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
@@ -379,20 +416,20 @@
             </summary>
             <param name="record">Record with data.</param>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordsCsvReader">
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
             <summary>
-            Class, that working with the records.
+            Class, that import xml.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordsCsvReader.#ctor(System.IO.StreamReader)">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordsCsvReader"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
             </summary>
             <param name="stream">.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordsCsvReader.ReadAll">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
             <summary>
-            Read data from csv file.
+            Read data from xml file.
             </summary>
             <returns>List of records.</returns>
         </member>
@@ -445,6 +482,12 @@
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
             <summary>
             Load records from csv file.
+            </summary>
+            <param name="stream">Stream that will contain records data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+            Load records from xml file.
             </summary>
             <param name="stream">Stream that will contain records data.</param>
         </member>
@@ -505,6 +548,7 @@
             Restore records.
             </summary>
             <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
             <summary>
@@ -554,6 +598,23 @@
             Gets or sets persons date of birth.
             </summary>
             <value>Persons date of birth.</value>
+        </member>
+        <member name="T:FileCabinetApp.PersonName">
+            <summary>
+            Class describing name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.PersonName.FirstName">
+            <summary>
+            Gets or sets persons first name.
+            </summary>
+            <value>Persons first name.</value>
+        </member>
+        <member name="P:FileCabinetApp.PersonName.LastName">
+            <summary>
+            Gets or sets persons last name.
+            </summary>
+            <value>Persons last name.</value>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

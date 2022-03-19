@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace FileCabinetGenerator
 {
@@ -44,12 +39,14 @@ namespace FileCabinetGenerator
                 short income = GenerateIncome(random);
                 decimal tax = GenerateTax(random);
                 char block = GenerateBlock(random);
+                PersonName name = new PersonName();
+                name.FirstName = firstName;
+                name.LastName = lastName;
 
                 FileCabinetRecord record = new FileCabinetRecord()
                 {
                     Id = this.id + i,
-                    FirstName = firstName,
-                    LastName = lastName,
+                    Name = name,
                     DateOfBirth = dateOfBirth,
                     Income = income,
                     Tax = tax,
@@ -162,6 +159,7 @@ namespace FileCabinetGenerator
         private decimal GenerateTax(Random random)
         {
             decimal tax = (decimal)random.NextSingle() * 100;
+            tax = decimal.Round(tax, 2);
             return tax;
         }
 
