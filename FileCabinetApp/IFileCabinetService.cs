@@ -55,6 +55,13 @@ namespace FileCabinetApp
         FileCabinetServiceSnapshot MakeSnapshot() => throw new NotImplementedException();
 
         /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="snapshot">Records snapshot.</param>
+        /// <returns>Counts of imported records.</returns>
+        int Restore(FileCabinetServiceSnapshot snapshot) => throw new NotImplementedException();
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>

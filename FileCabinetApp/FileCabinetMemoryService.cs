@@ -135,11 +135,78 @@ namespace FileCabinetApp
         /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
-        /// <returns>Array of person with same date of birth.</returns>
+        /// <returns>Snapshot of records.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             FileCabinetServiceSnapshot serviceSnapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
             return serviceSnapshot;
+        }
+
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="snapshot">Records snapshot.</param>
+        /// <returns>Counts of imported records.</returns>
+        public int Restore(FileCabinetServiceSnapshot snapshot)
+        {
+            IList<FileCabinetRecord> importRecords = snapshot.Records;
+            int listSize = this.list.Count;
+            int count = 0;
+            int index = listSize;
+            List<int> importIds = new List<int>();
+            this.list.AddRange(importRecords);
+
+            for (; index < this.list.Count; index++)
+            {
+                FileCabinetRecord record = this.list[index];
+                Person person = new Person
+                {
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                };
+
+                try
+                {
+                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
+                    this.AddFirstNameDictionary(record.FirstName, record);
+                    this.AddLastNameDictionary(record.LastName, record);
+                    this.AddDateOfBirthDictionary(record.DateOfBirth, record);
+                    importIds.Add(record.Id);
+                    count++;
+                }
+                catch (ArgumentException exception)
+                {
+                    Console.WriteLine($"{exception.Message}. Record id - {record.Id}.");
+                    this.list.Remove(record);
+                    index--;
+                    continue;
+                }
+            }
+
+            if (listSize > 0 && importRecords.Count > 0)
+            {
+                index = 0;
+
+                for (int deleted = 0; index < (listSize - deleted); index++)
+                {
+                    FileCabinetRecord record = this.list[index];
+
+                    if (importIds.Contains(record.Id))
+                    {
+                        this.list.Remove(record);
+                        index--;
+                        deleted++;
+                        this.firstNameDictionary.Remove(record.FirstName);
+                        this.lastNameDictionary.Remove(record.LastName);
+                        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                    }
+                }
+
+                this.list.Sort(delegate(FileCabinetRecord firstRecord, FileCabinetRecord secondRecord) { return firstRecord.Id.CompareTo(secondRecord.Id); });
+            }
+
+            return count;
         }
 
         /// <summary>

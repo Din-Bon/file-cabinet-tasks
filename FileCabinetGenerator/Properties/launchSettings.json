@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileCabinetGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-t xml -o \"D:\\Course projects-AR\\file-cabinet-tasks\\FileCabinetApp\\bin\\Debug\\net6.0\\xmlrecords.xml\" -a 500 -i 10"
+    }
+  }
+}

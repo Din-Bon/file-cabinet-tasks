@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FileCabinetApp
+namespace FileCabinetGenerator
 {
     /// <summary>
     /// Class describing a person.
@@ -23,28 +23,6 @@ namespace FileCabinetApp
         public PersonName Name { get; set; } = new PersonName();
 
         /// <summary>
-        /// Gets or sets persons first name.
-        /// </summary>
-        /// <value>Persons first name.</value>
-        [XmlIgnore]
-        public string FirstName
-        {
-            get { return this.Name.FirstName; }
-            set { this.Name.FirstName = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets persons last name.
-        /// </summary>
-        /// <value>Persons last name.</value>
-        [XmlIgnore]
-        public string LastName
-        {
-            get { return this.Name.LastName; }
-            set { this.Name.LastName = value; }
-        }
-
-        /// <summary>
         /// Gets or sets persons date of birth.
         /// </summary>
         /// <value>Persons date of birth.</value>
@@ -59,7 +37,7 @@ namespace FileCabinetApp
         public string DateString
         {
             get { return this.DateOfBirth.ToString("MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture); }
-            set { this.DateOfBirth = DateTime.ParseExact(value, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture); }
+            set { this.DateOfBirth = DateTime.Parse(value, System.Globalization.CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
@@ -101,9 +79,17 @@ namespace FileCabinetApp
         public override string ToString()
         {
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            string firstName = "empty", lastName = "empty";
+
+            if (this.Name != null)
+            {
+                firstName = this.Name.FirstName;
+                lastName = this.Name.LastName;
+            }
+
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"#{this.Id}, ");
-            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.FirstName}, ");
-            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.LastName}, ");
+            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{firstName}, ");
+            builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{lastName}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.DateOfBirth.ToString("yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture)}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.Income}, ");
             builder.Append(System.Globalization.CultureInfo.InvariantCulture, $"{this.Tax}, ");
