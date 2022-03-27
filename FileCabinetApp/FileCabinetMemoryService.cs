@@ -73,24 +73,26 @@ namespace FileCabinetApp
 
             if (index == -1)
             {
-                throw new ArgumentException("id doesn't exists", nameof(id));
+                Console.WriteLine($"record with #{id} doesn't exists");
             }
-
-            FileCabinetRecord oldRecord = this.list[index];
-            this.list[index] = new FileCabinetRecord
+            else
             {
-                Id = id,
-                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
-                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
-                DateOfBirth = person.DateOfBirth,
-                Income = income,
-                Tax = tax,
-                Block = block,
-            };
+                FileCabinetRecord oldRecord = this.list[index];
+                this.list[index] = new FileCabinetRecord
+                {
+                    Id = id,
+                    FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                    LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                    DateOfBirth = person.DateOfBirth,
+                    Income = income,
+                    Tax = tax,
+                    Block = block,
+                };
 
-            this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[index]);
-            this.EditLastNameDictionary(person.LastName, oldRecord, this.list[index]);
-            this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[index]);
+                this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[index]);
+                this.EditLastNameDictionary(person.LastName, oldRecord, this.list[index]);
+                this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[index]);
+            }
         }
 
         /// <summary>

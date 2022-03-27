@@ -135,11 +135,10 @@ namespace FileCabinetApp
             }
 
             int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
-            int lastId = fileCabinetService.GetRecords()[fileCabinetService.GetStat() - 1].Id;
 
-            if (id > lastId || id < 0)
+            if (id < 0)
             {
-                throw new ArgumentException("id value larger than list", nameof(parameters));
+                throw new ArgumentException("id value less than 0", nameof(parameters));
             }
 
             Console.Write("First name: ");

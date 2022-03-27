@@ -64,11 +64,12 @@
             <param name="fileStream">Stream with data.</param>
             <param name="validator">.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.FileCabinetRecord,System.Byte)">
             <summary>
             Convert record parameters to bytes.
             </summary>
             <param name="record">Record with data.</param>
+            <param name="isDeleted">Deleted value.</param>
             <returns>Byte array.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.BytesToRecord(System.Byte[])">
@@ -194,6 +195,37 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInFirstNameDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the firstNameDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInLastNameDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the lastNameDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInDateOfBirthDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the dateOfBirthDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindLastId">
+            <summary>
+            Find last id in the file.
+            </summary>
+            <returns>Last id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindPositionById(System.Int32)">
+            <summary>
+            Find position by id.
+            </summary>
+            <param name="id">Records id.</param>
+            <returns>Records position.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
