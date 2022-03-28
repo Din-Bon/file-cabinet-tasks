@@ -28,6 +28,12 @@ namespace FileCabinetApp
         void EditRecord(int id, Person person, short income, decimal tax, char block);
 
         /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        void RemoveRecord(int id);
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
@@ -62,6 +68,12 @@ namespace FileCabinetApp
         int Restore(FileCabinetServiceSnapshot snapshot) => throw new NotImplementedException();
 
         /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <returns>Count of purged records.</returns>
+        int Purge() => throw new NotImplementedException();
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
@@ -70,7 +82,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Get records count.
         /// </summary>
-        /// <returns>Records count.</returns>
-        int GetStat();
+        /// <returns>Count of record and count of removed records.</returns>
+        Tuple<int, int> GetStat();
     }
 }

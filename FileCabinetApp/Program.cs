@@ -30,6 +30,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("Purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -43,6 +45,8 @@ namespace FileCabinetApp
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
             new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
             new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
+            new string[] { "remove", "remove record", "The 'remove' remove record by id." },
+            new string[] { "purge", "purge records", "The 'purge' purge removed records." },
         };
 
         /// <summary>
@@ -134,9 +138,9 @@ namespace FileCabinetApp
 
             int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
 
-            if (id > fileCabinetService.GetStat() || id < 0)
+            if (id < 0)
             {
-                throw new ArgumentException("id value larger than list", nameof(parameters));
+                throw new ArgumentException("id value less than 0", nameof(parameters));
             }
 
             Console.Write("First name: ");
@@ -180,8 +184,8 @@ namespace FileCabinetApp
         /// <param name="parameters">Input prameters.</param>
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            var recordsCount = fileCabinetService.GetStat();
+            Console.WriteLine($"{recordsCount.Item1} record(s). Removed - {recordsCount.Item2}");
         }
 
         /// <summary>
@@ -349,6 +353,38 @@ namespace FileCabinetApp
             }
 
             return input;
+        }
+
+        /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="parameters">String parameter(id).</param>
+        private static void Remove(string parameters)
+        {
+            int id = 0;
+
+            if (string.IsNullOrEmpty(parameters) || !int.TryParse(parameters, out id))
+            {
+                throw new ArgumentNullException(nameof(parameters), "empty id");
+            }
+
+            if (id <= 0)
+            {
+                throw new ArgumentException("wrond id (<1)", nameof(parameters));
+            }
+
+            fileCabinetService.RemoveRecord(id);
+        }
+
+        /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private static void Purge(string parameters)
+        {
+            int count = fileCabinetService.Purge();
+            var length = fileCabinetService.GetStat().Item1 + count;
+            Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
         }
 
         /// <summary>

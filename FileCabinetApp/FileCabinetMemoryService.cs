@@ -33,10 +33,16 @@ namespace FileCabinetApp
         public int CreateRecord(Person person, short income, decimal tax, char block)
         {
             this.validator.ValidateParameters(person, income, tax, block);
+            int id = 0;
+
+            if (this.list.Count > 0)
+            {
+                id = this.list[this.list.Count - 1].Id;
+            }
 
             var record = new FileCabinetRecord
             {
-                Id = this.list.Count + 1,
+                Id = id + 1,
                 FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
                 LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
                 DateOfBirth = person.DateOfBirth,
@@ -63,22 +69,57 @@ namespace FileCabinetApp
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
             this.validator.ValidateParameters(person, income, tax, block);
-            FileCabinetRecord oldRecord = this.list[id - 1];
+            int index = this.list.FindIndex(record => record.Id == id);
 
-            this.list[id - 1] = new FileCabinetRecord
+            if (index == -1)
             {
-                Id = id,
-                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
-                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
-                DateOfBirth = person.DateOfBirth,
-                Income = income,
-                Tax = tax,
-                Block = block,
-            };
+                Console.WriteLine($"record with #{id} doesn't exists");
+            }
+            else
+            {
+                FileCabinetRecord oldRecord = this.list[index];
+                this.list[index] = new FileCabinetRecord
+                {
+                    Id = id,
+                    FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                    LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                    DateOfBirth = person.DateOfBirth,
+                    Income = income,
+                    Tax = tax,
+                    Block = block,
+                };
 
-            this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[id - 1]);
-            this.EditLastNameDictionary(person.LastName, oldRecord, this.list[id - 1]);
-            this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[id - 1]);
+                this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[index]);
+                this.EditLastNameDictionary(person.LastName, oldRecord, this.list[index]);
+                this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[index]);
+            }
+        }
+
+        /// <summary>
+        /// Remove record by id.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        public void RemoveRecord(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("wrong id(<1)", nameof(id));
+            }
+
+            FileCabinetRecord? record = this.list.Find(record => record.Id == id);
+
+            if (record != null)
+            {
+                this.list.Remove(record);
+                this.RemoveInFirstNameDictionary(record);
+                this.RemoveInLastNameDictionary(record);
+                this.RemoveInDateOfBirthDictionary(record);
+                Console.WriteLine($"Record #{id} is removed");
+            }
+            else
+            {
+                Console.WriteLine($"Record #{id} doesn't exists");
+            }
         }
 
         /// <summary>
@@ -210,6 +251,15 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <returns>Count of purged records.</returns>
+        public int Purge()
+        {
+            return 0;
+        }
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
@@ -222,9 +272,9 @@ namespace FileCabinetApp
         /// Get records count.
         /// </summary>
         /// <returns>Records count.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            return new Tuple<int, int>(this.list.Count, 0);
         }
 
         /// <summary>
@@ -301,16 +351,7 @@ namespace FileCabinetApp
                 this.firstNameDictionary[firstName].Add(newRecord);
             }
 
-            string oldFirstName = oldRecord.FirstName.ToUpperInvariant();
-
-            if (this.firstNameDictionary[oldFirstName].Count > 1)
-            {
-                this.firstNameDictionary[oldFirstName].Remove(oldRecord);
-            }
-            else
-            {
-                this.firstNameDictionary.Remove(oldFirstName);
-            }
+            this.RemoveInFirstNameDictionary(oldRecord);
         }
 
         /// <summary>
@@ -332,16 +373,7 @@ namespace FileCabinetApp
                 this.lastNameDictionary[lastName].Add(newRecord);
             }
 
-            string oldLastName = oldRecord.LastName.ToUpperInvariant();
-
-            if (this.lastNameDictionary[oldLastName].Count > 1)
-            {
-                this.lastNameDictionary[oldLastName].Remove(oldRecord);
-            }
-            else
-            {
-                this.lastNameDictionary.Remove(oldLastName);
-            }
+            this.RemoveInLastNameDictionary(oldRecord);
         }
 
         /// <summary>
@@ -361,15 +393,60 @@ namespace FileCabinetApp
                 this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
             }
 
-            DateTime oldDateOfBirth = oldRecord.DateOfBirth;
+            this.RemoveInDateOfBirthDictionary(oldRecord);
+        }
 
-            if (this.dateOfBirthDictionary[oldDateOfBirth].Count > 1)
+        /// <summary>
+        /// Remove record from the firstNameDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInFirstNameDictionary(FileCabinetRecord record)
+        {
+            string firstName = record.FirstName.ToUpperInvariant();
+
+            if (this.firstNameDictionary[firstName].Count > 1)
             {
-                this.dateOfBirthDictionary[oldDateOfBirth].Remove(oldRecord);
+                this.firstNameDictionary[firstName].Remove(record);
             }
             else
             {
-                this.dateOfBirthDictionary.Remove(oldDateOfBirth);
+                this.firstNameDictionary.Remove(firstName);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from the lastNameDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInLastNameDictionary(FileCabinetRecord record)
+        {
+            string lastName = record.LastName.ToUpperInvariant();
+
+            if (this.lastNameDictionary[lastName].Count > 1)
+            {
+                this.lastNameDictionary[lastName].Remove(record);
+            }
+            else
+            {
+                this.lastNameDictionary.Remove(lastName);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from the dateOfBirthDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInDateOfBirthDictionary(FileCabinetRecord record)
+        {
+            DateTime dateOfBirth = record.DateOfBirth;
+
+            if (this.dateOfBirthDictionary[dateOfBirth].Count > 1)
+            {
+                this.dateOfBirthDictionary[dateOfBirth].Remove(record);
+            }
+            else
+            {
+                this.dateOfBirthDictionary.Remove(dateOfBirth);
             }
         }
     }
