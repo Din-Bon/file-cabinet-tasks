@@ -64,21 +64,6 @@
             <param name="fileStream">Stream with data.</param>
             <param name="validator">.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.FileCabinetRecord,System.Byte)">
-            <summary>
-            Convert record parameters to bytes.
-            </summary>
-            <param name="record">Record with data.</param>
-            <param name="isDeleted">Deleted value.</param>
-            <returns>Byte array.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.BytesToRecord(System.Byte[])">
-            <summary>
-            Convert bytes to record parameters.
-            </summary>
-            <param name="bytes">Bytes with data.</param>
-            <returns>Record.</returns>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Create record from the input parameters.
@@ -104,6 +89,12 @@
             Remove record by id.
             </summary>
             <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
@@ -150,6 +141,34 @@
             Get records count.
             </summary>
             <returns>Records count.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RecordToBytes(FileCabinetApp.FileCabinetRecord,System.Byte)">
+            <summary>
+            Convert record parameters to bytes.
+            </summary>
+            <param name="record">Record with data.</param>
+            <param name="isDeleted">Deleted value.</param>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.BytesToRecord(System.Byte[])">
+            <summary>
+            Convert bytes to record parameters.
+            </summary>
+            <param name="bytes">Bytes with data.</param>
+            <returns>Record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindLastId">
+            <summary>
+            Find last id in the file.
+            </summary>
+            <returns>Last id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindPositionById(System.Int32)">
+            <summary>
+            Find position by id.
+            </summary>
+            <param name="id">Records id.</param>
+            <returns>Records position.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
             <summary>
@@ -213,19 +232,6 @@
             Remove record from the dateOfBirthDictionary.
             </summary>
             <param name="record">Record.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindLastId">
-            <summary>
-            Find last id in the file.
-            </summary>
-            <returns>Last id.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindPositionById(System.Int32)">
-            <summary>
-            Find position by id.
-            </summary>
-            <param name="id">Records id.</param>
-            <returns>Records position.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
@@ -297,6 +303,12 @@
             </summary>
             <param name="snapshot">Records snapshot.</param>
             <returns>Counts of imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
             <summary>
@@ -618,6 +630,12 @@
             <param name="snapshot">Records snapshot.</param>
             <returns>Counts of imported records.</returns>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
+        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
             <summary>
             Get array of records.
@@ -754,6 +772,12 @@
             Remove record by id.
             </summary>
             <param name="parameters">String parameter(id).</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.Purge(System.String)">
+            <summary>
+            Purge records.
+            </summary>
+            <param name="parameters">Input parameters.</param>
         </member>
         <member name="M:FileCabinetApp.Program.StringConverter(System.String)">
             <summary>

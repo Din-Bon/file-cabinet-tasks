@@ -31,106 +31,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Convert record parameters to bytes.
-        /// </summary>
-        /// <param name="record">Record with data.</param>
-        /// <param name="isDeleted">Deleted value.</param>
-        /// <returns>Byte array.</returns>
-        public static byte[] RecordToBytes(FileCabinetRecord record, byte isDeleted)
-        {
-            if (string.IsNullOrEmpty(record.FirstName) || string.IsNullOrEmpty(record.LastName))
-            {
-                throw new ArgumentNullException(nameof(record));
-            }
-
-            var bytes = new byte[RecordSize];
-            using (var memoryStream = new MemoryStream(bytes))
-            using (var binaryWriter = new BinaryWriter(memoryStream))
-            {
-                var reservedBytes = new byte[16];
-                reservedBytes[13] = isDeleted;
-                binaryWriter.Write(reservedBytes);
-                binaryWriter.Write(record.Id);
-
-                var firstNameBytes = Encoding.ASCII.GetBytes(record.FirstName.ToCharArray());
-                var firstNameBuffer = new byte[MaxNameLength];
-                var lastNameBytes = Encoding.ASCII.GetBytes(record.LastName.ToCharArray());
-                var lastNameBuffer = new byte[MaxNameLength];
-
-                int firstNameLength = firstNameBytes.Length;
-                int lastNameLength = lastNameBytes.Length;
-
-                if (firstNameLength > MaxNameLength)
-                {
-                    firstNameLength = MaxNameLength;
-                }
-
-                if (lastNameLength > MaxNameLength)
-                {
-                    lastNameLength = MaxNameLength;
-                }
-
-                Array.Copy(firstNameBytes, 0, firstNameBuffer, 0, firstNameLength);
-                Array.Copy(lastNameBytes, 0, lastNameBuffer, 0, lastNameLength);
-
-                binaryWriter.Write(firstNameLength);
-                binaryWriter.Write(firstNameBuffer);
-                binaryWriter.Write(lastNameLength);
-                binaryWriter.Write(lastNameBuffer);
-                binaryWriter.Write(record.DateOfBirth.Year);
-                binaryWriter.Write(record.DateOfBirth.Month);
-                binaryWriter.Write(record.DateOfBirth.Day);
-                binaryWriter.Write(record.Income);
-                binaryWriter.Write(record.Tax);
-                binaryWriter.Write(record.Block);
-            }
-
-            return bytes;
-        }
-
-        /// <summary>
-        /// Convert bytes to record parameters.
-        /// </summary>
-        /// <param name="bytes">Bytes with data.</param>
-        /// <returns>Record.</returns>
-        public static FileCabinetRecord BytesToRecord(byte[] bytes)
-        {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException(nameof(bytes));
-            }
-
-            var record = new FileCabinetRecord();
-            byte[] reserved = new byte[16];
-
-            using (var memoryStream = new MemoryStream(bytes))
-            using (var binaryReader = new BinaryReader(memoryStream))
-            {
-                reserved = binaryReader.ReadBytes(16);
-                record.Id = binaryReader.ReadInt32();
-                var fistNameLength = binaryReader.ReadInt32();
-                var fistNameBuffer = binaryReader.ReadBytes(MaxNameLength);
-                var lastNameLength = binaryReader.ReadInt32();
-                var lastNameBuffer = binaryReader.ReadBytes(MaxNameLength);
-                var year = binaryReader.ReadInt32();
-                var month = binaryReader.ReadInt32();
-                var day = binaryReader.ReadInt32();
-                var income = binaryReader.ReadInt16();
-                var tax = binaryReader.ReadDecimal();
-                var block = binaryReader.ReadChar();
-
-                record.FirstName = Encoding.ASCII.GetString(fistNameBuffer, 0, fistNameLength);
-                record.LastName = Encoding.ASCII.GetString(lastNameBuffer, 0, lastNameLength);
-                record.DateOfBirth = new DateTime(year, month, day);
-                record.Income = income;
-                record.Tax = tax;
-                record.Block = block;
-            }
-
-            return record;
-        }
-
-        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="person">Personal data.</param>
@@ -257,6 +157,28 @@ namespace FileCabinetApp
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <returns>Count of purged records.</returns>
+        public int Purge()
+        {
+            var records = this.GetRecords();
+            int count = (int)(this.fileStream.Length / (long)RecordSize) - records.Count;
+            byte[] recordBuffer = new byte[RecordSize];
+            this.fileStream.SetLength(0);
+            this.fileStream.Flush();
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                recordBuffer = RecordToBytes(records[i], 0);
+                this.fileStream.Write(recordBuffer);
+            }
+
+            this.fileStream.Flush();
+            return count;
         }
 
         /// <summary>
@@ -455,6 +377,177 @@ namespace FileCabinetApp
         public int GetStat()
         {
             return this.GetRecords().Count;
+        }
+
+        /// <summary>
+        /// Convert record parameters to bytes.
+        /// </summary>
+        /// <param name="record">Record with data.</param>
+        /// <param name="isDeleted">Deleted value.</param>
+        /// <returns>Byte array.</returns>
+        private static byte[] RecordToBytes(FileCabinetRecord record, byte isDeleted)
+        {
+            if (string.IsNullOrEmpty(record.FirstName) || string.IsNullOrEmpty(record.LastName))
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            var bytes = new byte[RecordSize];
+            using (var memoryStream = new MemoryStream(bytes))
+            using (var binaryWriter = new BinaryWriter(memoryStream))
+            {
+                var reservedBytes = new byte[16];
+                reservedBytes[13] = isDeleted;
+                binaryWriter.Write(reservedBytes);
+                binaryWriter.Write(record.Id);
+
+                var firstNameBytes = Encoding.ASCII.GetBytes(record.FirstName.ToCharArray());
+                var firstNameBuffer = new byte[MaxNameLength];
+                var lastNameBytes = Encoding.ASCII.GetBytes(record.LastName.ToCharArray());
+                var lastNameBuffer = new byte[MaxNameLength];
+
+                int firstNameLength = firstNameBytes.Length;
+                int lastNameLength = lastNameBytes.Length;
+
+                if (firstNameLength > MaxNameLength)
+                {
+                    firstNameLength = MaxNameLength;
+                }
+
+                if (lastNameLength > MaxNameLength)
+                {
+                    lastNameLength = MaxNameLength;
+                }
+
+                Array.Copy(firstNameBytes, 0, firstNameBuffer, 0, firstNameLength);
+                Array.Copy(lastNameBytes, 0, lastNameBuffer, 0, lastNameLength);
+
+                binaryWriter.Write(firstNameLength);
+                binaryWriter.Write(firstNameBuffer);
+                binaryWriter.Write(lastNameLength);
+                binaryWriter.Write(lastNameBuffer);
+                binaryWriter.Write(record.DateOfBirth.Year);
+                binaryWriter.Write(record.DateOfBirth.Month);
+                binaryWriter.Write(record.DateOfBirth.Day);
+                binaryWriter.Write(record.Income);
+                binaryWriter.Write(record.Tax);
+                binaryWriter.Write(record.Block);
+            }
+
+            return bytes;
+        }
+
+        /// <summary>
+        /// Convert bytes to record parameters.
+        /// </summary>
+        /// <param name="bytes">Bytes with data.</param>
+        /// <returns>Record.</returns>
+        private static FileCabinetRecord BytesToRecord(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
+            var record = new FileCabinetRecord();
+            byte[] reserved = new byte[16];
+
+            using (var memoryStream = new MemoryStream(bytes))
+            using (var binaryReader = new BinaryReader(memoryStream))
+            {
+                reserved = binaryReader.ReadBytes(16);
+                record.Id = binaryReader.ReadInt32();
+                var fistNameLength = binaryReader.ReadInt32();
+                var fistNameBuffer = binaryReader.ReadBytes(MaxNameLength);
+                var lastNameLength = binaryReader.ReadInt32();
+                var lastNameBuffer = binaryReader.ReadBytes(MaxNameLength);
+                var year = binaryReader.ReadInt32();
+                var month = binaryReader.ReadInt32();
+                var day = binaryReader.ReadInt32();
+                var income = binaryReader.ReadInt16();
+                var tax = binaryReader.ReadDecimal();
+                var block = binaryReader.ReadChar();
+
+                record.FirstName = Encoding.ASCII.GetString(fistNameBuffer, 0, fistNameLength);
+                record.LastName = Encoding.ASCII.GetString(lastNameBuffer, 0, lastNameLength);
+                record.DateOfBirth = new DateTime(year, month, day);
+                record.Income = income;
+                record.Tax = tax;
+                record.Block = block;
+            }
+
+            return record;
+        }
+
+        /// <summary>
+        /// Find last id in the file.
+        /// </summary>
+        /// <returns>Last id.</returns>
+        private int FindLastId()
+        {
+            int length = (int)(this.fileStream.Length / (long)RecordSize);
+            int currentId = 0, lastId = 0;
+            byte[] recordInByte = new byte[RecordSize];
+            byte[] reservedBytes = new byte[16];
+            byte isDeleted = 0;
+
+            for (int i = 0; i < length; i++)
+            {
+                using (var memoryStream = new MemoryStream(recordInByte))
+                using (var binaryReader = new BinaryReader(memoryStream))
+                {
+                    this.fileStream.Position = RecordSize * i;
+                    this.fileStream.Read(recordInByte, 0, RecordSize);
+                    reservedBytes = binaryReader.ReadBytes(16);
+                    isDeleted = reservedBytes[13];
+                    currentId = binaryReader.ReadInt32();
+                    if (currentId > lastId)
+                    {
+                        lastId = currentId;
+                    }
+                }
+            }
+
+            return lastId;
+        }
+
+        /// <summary>
+        /// Find position by id.
+        /// </summary>
+        /// <param name="id">Records id.</param>
+        /// <returns>Records position.</returns>
+        private long FindPositionById(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("wrong id(<1)", nameof(id));
+            }
+
+            int length = (int)(this.fileStream.Length / (long)RecordSize);
+            long position = -1;
+            int currentId = 0;
+            byte[] recordInByte = new byte[RecordSize];
+            byte[] reservedBytes = new byte[16];
+            byte isDeleted = 0;
+
+            for (int i = 0; i < length; i++)
+            {
+                using (var memoryStream = new MemoryStream(recordInByte))
+                using (var binaryReader = new BinaryReader(memoryStream))
+                {
+                    this.fileStream.Position = RecordSize * i;
+                    this.fileStream.Read(recordInByte, 0, RecordSize);
+                    reservedBytes = binaryReader.ReadBytes(16);
+                    isDeleted = reservedBytes[13];
+                    currentId = binaryReader.ReadInt32();
+                    if (currentId == id && isDeleted == 0)
+                    {
+                        position = RecordSize * i;
+                    }
+                }
+            }
+
+            return position;
         }
 
         private void FillDictionaries()
@@ -656,77 +749,6 @@ namespace FileCabinetApp
             {
                 this.dateOfBirthDictionary.Remove(dateOfBirth);
             }
-        }
-
-        /// <summary>
-        /// Find last id in the file.
-        /// </summary>
-        /// <returns>Last id.</returns>
-        private int FindLastId()
-        {
-            int length = (int)(this.fileStream.Length / (long)RecordSize);
-            int currentId = 0, lastId = 0;
-            byte[] recordInByte = new byte[RecordSize];
-            byte[] reservedBytes = new byte[16];
-            byte isDeleted = 0;
-
-            for (int i = 0; i < length; i++)
-            {
-                using (var memoryStream = new MemoryStream(recordInByte))
-                using (var binaryReader = new BinaryReader(memoryStream))
-                {
-                    this.fileStream.Position = RecordSize * i;
-                    this.fileStream.Read(recordInByte, 0, RecordSize);
-                    reservedBytes = binaryReader.ReadBytes(16);
-                    isDeleted = reservedBytes[13];
-                    currentId = binaryReader.ReadInt32();
-                    if (currentId > lastId)
-                    {
-                        lastId = currentId;
-                    }
-                }
-            }
-
-            return lastId;
-        }
-
-        /// <summary>
-        /// Find position by id.
-        /// </summary>
-        /// <param name="id">Records id.</param>
-        /// <returns>Records position.</returns>
-        private long FindPositionById(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("wrong id(<1)", nameof(id));
-            }
-
-            int length = (int)(this.fileStream.Length / (long)RecordSize);
-            long position = -1;
-            int currentId = 0;
-            byte[] recordInByte = new byte[RecordSize];
-            byte[] reservedBytes = new byte[16];
-            byte isDeleted = 0;
-
-            for (int i = 0; i < length; i++)
-            {
-                using (var memoryStream = new MemoryStream(recordInByte))
-                using (var binaryReader = new BinaryReader(memoryStream))
-                {
-                    this.fileStream.Position = RecordSize * i;
-                    this.fileStream.Read(recordInByte, 0, RecordSize);
-                    reservedBytes = binaryReader.ReadBytes(16);
-                    isDeleted = reservedBytes[13];
-                    currentId = binaryReader.ReadInt32();
-                    if (currentId == id && isDeleted == 0)
-                    {
-                        position = RecordSize * i;
-                    }
-                }
-            }
-
-            return position;
         }
     }
 }

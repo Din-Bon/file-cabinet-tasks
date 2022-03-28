@@ -31,6 +31,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("Purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -45,6 +46,7 @@ namespace FileCabinetApp
             new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
             new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
             new string[] { "remove", "remove record", "The 'remove' remove record by id." },
+            new string[] { "purge", "purge records", "The 'purge' purge removed records." },
         };
 
         /// <summary>
@@ -372,6 +374,17 @@ namespace FileCabinetApp
             }
 
             fileCabinetService.RemoveRecord(id);
+        }
+
+        /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private static void Purge(string parameters)
+        {
+            int count = fileCabinetService.Purge();
+            int length = fileCabinetService.GetStat() + count;
+            Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
         }
 
         /// <summary>

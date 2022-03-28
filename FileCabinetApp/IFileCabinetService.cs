@@ -68,6 +68,12 @@ namespace FileCabinetApp
         int Restore(FileCabinetServiceSnapshot snapshot) => throw new NotImplementedException();
 
         /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <returns>Count of purged records.</returns>
+        int Purge() => throw new NotImplementedException();
+
+        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
