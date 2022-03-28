@@ -82,7 +82,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Get records count.
         /// </summary>
-        /// <returns>Records count.</returns>
-        int GetStat();
+        /// <returns>Count of record and count of removed records.</returns>
+        Tuple<int, int> GetStat();
     }
 }

@@ -374,9 +374,12 @@ namespace FileCabinetApp
         /// Get records count.
         /// </summary>
         /// <returns>Records count.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.GetRecords().Count;
+            int length = (int)(this.fileStream.Length / (long)RecordSize);
+            int count = this.GetRecords().Count;
+            int removed = length - count;
+            return new Tuple<int, int>(count, removed);
         }
 
         /// <summary>

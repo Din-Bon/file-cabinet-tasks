@@ -272,9 +272,9 @@ namespace FileCabinetApp
         /// Get records count.
         /// </summary>
         /// <returns>Records count.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            return new Tuple<int, int>(this.list.Count, 0);
         }
 
         /// <summary>
