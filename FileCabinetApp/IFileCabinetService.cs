@@ -71,7 +71,10 @@ namespace FileCabinetApp
         /// Purge records.
         /// </summary>
         /// <returns>Count of purged records.</returns>
-        int Purge() => throw new NotImplementedException();
+        int Purge()
+        {
+            return 0;
+        }
 
         /// <summary>
         /// Get array of records.
