@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileCabinetApp
+﻿namespace FileCabinetApp
 {
     /// <summary>
     /// Class that handle stat command.
     /// </summary>
     internal class StatCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public StatCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute stat command.
         /// </summary>
@@ -36,7 +41,7 @@ namespace FileCabinetApp
         /// <param name="parameters">Input prameters.</param>
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.FileCabinetService.GetStat();
+            var recordsCount = fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount.Item1} record(s). Removed - {recordsCount.Item2}");
         }
     }

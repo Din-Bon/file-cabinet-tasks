@@ -9,6 +9,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class CreateCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public CreateCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute create command.
         /// </summary>
@@ -26,16 +37,6 @@ namespace FileCabinetApp
             {
                 base.Handle(request);
             }
-        }
-
-        /// <summary>
-        /// Warning message.
-        /// </summary>
-        /// <param name="command">Command name.</param>
-        private static void PrintMissedCommandInfo(string command)
-        {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace FileCabinetApp
 
                 if (!check)
                 {
-                    Console.WriteLine($"Record #{Program.FileCabinetService.CreateRecord(person, income, tax, block)} is created.");
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
                 }
             }
             while (check);

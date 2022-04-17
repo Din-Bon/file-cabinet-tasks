@@ -9,10 +9,10 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-        public static IFileCabinetService FileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         public static bool IsRunning = true;
         private const string DeveloperName = "Artem Filimonov";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         /// <summary>
         /// Gets and sets validation mode.
@@ -61,16 +61,16 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler();
+            var createHandler = new CreateCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler();
-            var statHandler = new StatCommandHandler();
-            var listHandler = new ListCommandHandler();
-            var editHandler = new EditCommandHandler();
-            var findHandler = new FindCommandHandler();
-            var exportHandler = new ExportCommandHandler();
-            var importHandler = new ImportCommandHandler();
-            var removeHandler = new RemoveCommandHandler();
-            var purgeHandler = new PurgeCommandHandler();
+            var statHandler = new StatCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService);
+            var editHandler = new EditCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService);
+            var exportHandler = new ExportCommandHandler(fileCabinetService);
+            var importHandler = new ImportCommandHandler(fileCabinetService);
+            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(exitHandler);
             exitHandler.SetNext(statHandler);
@@ -92,12 +92,12 @@ namespace FileCabinetApp
         {
             if (mode == "CUSTOM")
             {
-                FileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                 ValidationMode = mode;
             }
             else
             {
-                FileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
             }
         }
 
@@ -113,22 +113,22 @@ namespace FileCabinetApp
 
                 if (ValidationMode == "CUSTOM")
                 {
-                    FileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());
+                    fileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());
                 }
                 else
                 {
-                    FileCabinetService = new FileCabinetFilesystemService(stream, new DefaultValidator());
+                    fileCabinetService = new FileCabinetFilesystemService(stream, new DefaultValidator());
                 }
             }
             else
             {
                 if (ValidationMode == "CUSTOM")
                 {
-                    FileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                    fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                 }
                 else
                 {
-                    FileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                    fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                 }
             }
         }

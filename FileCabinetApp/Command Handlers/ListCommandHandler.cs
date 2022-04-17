@@ -7,6 +7,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class ListCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public ListCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute list command.
         /// </summary>
@@ -32,7 +43,7 @@ namespace FileCabinetApp
         /// <param name="parameters">Input parameters.</param>
         private static void List(string parameters)
         {
-            ReadOnlyCollection<FileCabinetRecord> records = Program.FileCabinetService.GetRecords();
+            ReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
             PrintRecords(records);
         }
 

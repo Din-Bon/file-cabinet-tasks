@@ -5,6 +5,17 @@
     /// </summary>
     internal class PurgeCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public PurgeCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute purge command.
         /// </summary>
@@ -30,8 +41,8 @@
         /// <param name="parameters">Input parameters.</param>
         private static void Purge(string parameters)
         {
-            int count = Program.FileCabinetService.Purge();
-            var length = Program.FileCabinetService.GetStat().Item1 + count;
+            int count = fileCabinetService.Purge();
+            var length = fileCabinetService.GetStat().Item1 + count;
             Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
         }
 

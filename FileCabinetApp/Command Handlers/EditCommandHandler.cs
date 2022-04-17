@@ -7,6 +7,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class EditCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public EditCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute edit command.
         /// </summary>
@@ -60,7 +71,7 @@ namespace FileCabinetApp
 
             if (!ValidateParameters(person, income, tax, block))
             {
-                Program.FileCabinetService.EditRecord(id, person, income, tax, block);
+                fileCabinetService.EditRecord(id, person, income, tax, block);
                 Console.WriteLine($"record #{id} is updated.");
             }
             else

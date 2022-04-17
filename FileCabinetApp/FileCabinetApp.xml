@@ -51,17 +51,17 @@
             Class that handle create command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CreateCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
+        </member>
         <member name="M:FileCabinetApp.CreateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute create command.
             </summary>
             <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.CreateCommandHandler.PrintMissedCommandInfo(System.String)">
-            <summary>
-            Warning message.
-            </summary>
-            <param name="command">Command name.</param>
         </member>
         <member name="M:FileCabinetApp.CreateCommandHandler.Create(System.String)">
             <summary>
@@ -168,6 +168,12 @@
             <summary>
             Class that handle edit command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.EditCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -298,6 +304,12 @@
             Class that handle export command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.ExportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ExportCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
+        </member>
         <member name="M:FileCabinetApp.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute export command.
@@ -320,6 +332,12 @@
             <summary>
             Class that handle find command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FindCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -378,6 +396,12 @@
             Class that handle import command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.ImportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ImportCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
+        </member>
         <member name="M:FileCabinetApp.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute import command.
@@ -400,6 +424,12 @@
             <summary>
             Class that handle list command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ListCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -424,6 +454,12 @@
             Class that handle purge command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.PurgeCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.PurgeCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
+        </member>
         <member name="M:FileCabinetApp.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute purge command.
@@ -447,6 +483,12 @@
             Class that handle remove command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.RemoveCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.RemoveCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
+        </member>
         <member name="M:FileCabinetApp.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute remove command.
@@ -463,6 +505,12 @@
             <summary>
             Class that handle stat command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.StatCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.StatCommandHandler"/> class.
+            </summary>
+            <param name="cabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.StatCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>

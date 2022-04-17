@@ -7,6 +7,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class FindCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public FindCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute find command.
         /// </summary>
@@ -44,13 +55,13 @@ namespace FileCabinetApp
             switch (property)
             {
                 case "FIRSTNAME":
-                    PrintRecords(Program.FileCabinetService.FindByFirstName(parameter));
+                    PrintRecords(fileCabinetService.FindByFirstName(parameter));
                     break;
                 case "LASTNAME":
-                    PrintRecords(Program.FileCabinetService.FindByLastName(parameter));
+                    PrintRecords(fileCabinetService.FindByLastName(parameter));
                     break;
                 case "DATEOFBIRTH":
-                    PrintRecords(Program.FileCabinetService.FindByDateofbirth(parameter));
+                    PrintRecords(fileCabinetService.FindByDateofbirth(parameter));
                     break;
             }
         }

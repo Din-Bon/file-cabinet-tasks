@@ -5,6 +5,17 @@
     /// </summary>
     internal class ImportCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public ImportCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute import command.
         /// </summary>
@@ -44,7 +55,7 @@
             if (!string.IsNullOrEmpty(path) && formats.Contains(property))
             {
                 StreamReader reader = new StreamReader(path);
-                FileCabinetServiceSnapshot serviceSnapshot = Program.FileCabinetService.MakeSnapshot();
+                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
 
                 if (property == "CSV")
                 {
@@ -55,7 +66,7 @@
                     serviceSnapshot.LoadFromXml(reader);
                 }
 
-                int count = Program.FileCabinetService.Restore(serviceSnapshot);
+                int count = fileCabinetService.Restore(serviceSnapshot);
                 reader.Close();
                 Console.WriteLine($"{count} records were imported from {path}.");
             }

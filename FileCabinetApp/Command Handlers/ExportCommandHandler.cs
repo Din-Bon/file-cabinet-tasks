@@ -5,6 +5,17 @@
     /// </summary>
     internal class ExportCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public ExportCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute export command.
         /// </summary>
@@ -44,7 +55,7 @@
             if (!string.IsNullOrEmpty(path) && formats.Contains(property))
             {
                 StreamWriter writer = new StreamWriter(path);
-                FileCabinetServiceSnapshot serviceSnapshot = Program.FileCabinetService.MakeSnapshot();
+                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
 
                 if (property == "CSV")
                 {

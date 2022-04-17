@@ -5,6 +5,17 @@
     /// </summary>
     internal class RemoveCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cabinetService">Service object.</param>
+        public RemoveCommandHandler(IFileCabinetService cabinetService)
+        {
+            fileCabinetService = cabinetService;
+        }
+
         /// <summary>
         /// Execute remove command.
         /// </summary>
@@ -42,7 +53,7 @@
                 throw new ArgumentException("wrond id (<1)", nameof(parameters));
             }
 
-            Program.FileCabinetService.RemoveRecord(id);
+            fileCabinetService.RemoveRecord(id);
         }
     }
 }
