@@ -9,9 +9,9 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-        public static bool IsRunning = true;
         private const string DeveloperName = "Artem Filimonov";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
+        private static bool IsRunning = true;
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler();
+            var exitHandler = new ExitCommandHandler(obj => { IsRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService);
             var editHandler = new EditCommandHandler(fileCabinetService);

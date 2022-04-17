@@ -287,6 +287,12 @@
             Class that handle exit command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.ExitCommandHandler.#ctor(System.Action{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ExitCommandHandler"/> class.
+            </summary>
+            <param name="exit">Exit action.</param>
+        </member>
         <member name="M:FileCabinetApp.ExitCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute exit command.
