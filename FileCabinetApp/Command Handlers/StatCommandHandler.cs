@@ -3,17 +3,15 @@
     /// <summary>
     /// Class that handle stat command.
     /// </summary>
-    internal class StatCommandHandler : CommandHandlerBase
+    internal class StatCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public StatCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public StatCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -27,7 +25,7 @@
 
             if (command == "stat")
             {
-                Stat(parameters);
+                this.Stat(parameters);
             }
             else
             {
@@ -39,9 +37,9 @@
         /// Shows count of existing records.
         /// </summary>
         /// <param name="parameters">Input prameters.</param>
-        private static void Stat(string parameters)
+        private void Stat(string parameters)
         {
-            var recordsCount = fileCabinetService.GetStat();
+            var recordsCount = this.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount.Item1} record(s). Removed - {recordsCount.Item2}");
         }
     }

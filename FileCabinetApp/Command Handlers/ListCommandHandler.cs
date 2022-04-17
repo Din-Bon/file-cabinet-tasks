@@ -5,17 +5,15 @@ namespace FileCabinetApp
     /// <summary>
     /// Class that handle list command.
     /// </summary>
-    internal class ListCommandHandler : CommandHandlerBase
+    internal class ListCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public ListCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -29,22 +27,12 @@ namespace FileCabinetApp
 
             if (command == "list")
             {
-                List(parameters);
+                this.List(parameters);
             }
             else
             {
                 base.Handle(request);
             }
-        }
-
-        /// <summary>
-        /// Shows list of records.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void List(string parameters)
-        {
-            ReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
-            PrintRecords(records);
         }
 
         /// <summary>
@@ -57,6 +45,16 @@ namespace FileCabinetApp
             {
                 Console.WriteLine(records[i].ToString());
             }
+        }
+
+        /// <summary>
+        /// Shows list of records.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private void List(string parameters)
+        {
+            ReadOnlyCollection<FileCabinetRecord> records = this.fileCabinetService.GetRecords();
+            PrintRecords(records);
         }
     }
 }

@@ -55,19 +55,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CreateCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.CreateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute create command.
             </summary>
             <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.CreateCommandHandler.Create(System.String)">
-            <summary>
-            Create record.
-            </summary>
-            <param name="parameters">Input parameters.</param>
         </member>
         <member name="M:FileCabinetApp.CreateCommandHandler.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -164,6 +158,12 @@
             <param name="strBlock">String parameter(block).</param>
             <returns>Tuple of parameters.</returns>
         </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.Create(System.String)">
+            <summary>
+            Create record.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.EditCommandHandler">
             <summary>
             Class that handle edit command.
@@ -173,19 +173,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.EditCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute edit command.
             </summary>
             <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.EditCommandHandler.Edit(System.String)">
-            <summary>
-            Modify existing records.
-            </summary>
-            <param name="parameters">Id of an existing record.</param>
         </member>
         <member name="M:FileCabinetApp.EditCommandHandler.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -282,6 +276,12 @@
             <param name="strBlock">String parameter(block).</param>
             <returns>Tuple of parameters.</returns>
         </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.Edit(System.String)">
+            <summary>
+            Modify existing records.
+            </summary>
+            <param name="parameters">Id of an existing record.</param>
+        </member>
         <member name="T:FileCabinetApp.ExitCommandHandler">
             <summary>
             Class that handle exit command.
@@ -308,7 +308,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.ExportCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -316,17 +316,17 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.ExportCommandHandler.Export(System.String)">
-            <summary>
-            Export records in file.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
         <member name="M:FileCabinetApp.ExportCommandHandler.ParseExport(System.String)">
             <summary>
             Parse string for export command.
             </summary>
             <param name="input">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.ExportCommandHandler.Export(System.String)">
+            <summary>
+            Export records in file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
         </member>
         <member name="T:FileCabinetApp.FindCommandHandler">
             <summary>
@@ -337,7 +337,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FindCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -345,17 +345,17 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.FindCommandHandler.Find(System.String)">
-            <summary>
-            Find record.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
         <member name="M:FileCabinetApp.FindCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Print records data on the console.
             </summary>
             <param name="records">Array of the records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FindCommandHandler.Find(System.String)">
+            <summary>
+            Find record.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
         </member>
         <member name="T:FileCabinetApp.HelpCommandHandler">
             <summary>
@@ -400,7 +400,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.ImportCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -408,17 +408,17 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.ImportCommandHandler.Import(System.String)">
-            <summary>
-            Import records from file.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
         <member name="M:FileCabinetApp.ImportCommandHandler.ParseImport(System.String)">
             <summary>
             Parse string for import command.
             </summary>
             <param name="input">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.ImportCommandHandler.Import(System.String)">
+            <summary>
+            Import records from file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
         </member>
         <member name="T:FileCabinetApp.ListCommandHandler">
             <summary>
@@ -429,7 +429,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.ListCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -437,17 +437,17 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.ListCommandHandler.List(System.String)">
-            <summary>
-            Shows list of records.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
         <member name="M:FileCabinetApp.ListCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
             <summary>
             Print records data on the console.
             </summary>
             <param name="records">Array of the records.</param>
+        </member>
+        <member name="M:FileCabinetApp.ListCommandHandler.List(System.String)">
+            <summary>
+            Shows list of records.
+            </summary>
+            <param name="parameters">Input parameters.</param>
         </member>
         <member name="T:FileCabinetApp.PurgeCommandHandler">
             <summary>
@@ -458,7 +458,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.PurgeCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -466,17 +466,17 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.PurgeCommandHandler.Purge(System.String)">
-            <summary>
-            Purge records.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
         <member name="M:FileCabinetApp.PurgeCommandHandler.PrintMissedCommandInfo(System.String)">
             <summary>
             Warning message.
             </summary>
             <param name="command">Command name.</param>
+        </member>
+        <member name="M:FileCabinetApp.PurgeCommandHandler.Purge(System.String)">
+            <summary>
+            Purge records.
+            </summary>
+            <param name="parameters">Input parameters.</param>
         </member>
         <member name="T:FileCabinetApp.RemoveCommandHandler">
             <summary>
@@ -487,7 +487,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.RemoveCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -501,6 +501,23 @@
             </summary>
             <param name="parameters">String parameter(id).</param>
         </member>
+        <member name="T:FileCabinetApp.ServiceCommandHandlerBase">
+            <summary>
+            Base class for all classes that
+            use fileCabinetService.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.ServiceCommandHandlerBase.fileCabinetService">
+            <summary>
+            Base file cabinet service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceCommandHandlerBase.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceCommandHandlerBase"/> class.
+            </summary>
+            <param name="fileCabinetService">Service object.</param>
+        </member>
         <member name="T:FileCabinetApp.StatCommandHandler">
             <summary>
             Class that handle stat command.
@@ -510,7 +527,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.StatCommandHandler"/> class.
             </summary>
-            <param name="cabinetService">Service object.</param>
+            <param name="fileCabinetService">Service object.</param>
         </member>
         <member name="M:FileCabinetApp.StatCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>

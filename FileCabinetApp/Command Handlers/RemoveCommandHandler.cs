@@ -3,17 +3,15 @@
     /// <summary>
     /// Class that handle remove command.
     /// </summary>
-    internal class RemoveCommandHandler : CommandHandlerBase
+    internal class RemoveCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public RemoveCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public RemoveCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -27,7 +25,7 @@
 
             if (command == "remove")
             {
-                Remove(parameters);
+                this.Remove(parameters);
             }
             else
             {
@@ -39,7 +37,7 @@
         /// Remove record by id.
         /// </summary>
         /// <param name="parameters">String parameter(id).</param>
-        private static void Remove(string parameters)
+        private void Remove(string parameters)
         {
             int id = 0;
 
@@ -53,7 +51,7 @@
                 throw new ArgumentException("wrond id (<1)", nameof(parameters));
             }
 
-            fileCabinetService.RemoveRecord(id);
+            this.fileCabinetService.RemoveRecord(id);
         }
     }
 }

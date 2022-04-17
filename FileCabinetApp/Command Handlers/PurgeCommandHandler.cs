@@ -3,17 +3,15 @@
     /// <summary>
     /// Class that handle purge command.
     /// </summary>
-    internal class PurgeCommandHandler : CommandHandlerBase
+    internal class PurgeCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public PurgeCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public PurgeCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -27,23 +25,12 @@
 
             if (command == "purge")
             {
-                Purge(parameters);
+                this.Purge(parameters);
             }
             else
             {
                 PrintMissedCommandInfo(command);
             }
-        }
-
-        /// <summary>
-        /// Purge records.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void Purge(string parameters)
-        {
-            int count = fileCabinetService.Purge();
-            var length = fileCabinetService.GetStat().Item1 + count;
-            Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
         }
 
         /// <summary>
@@ -54,6 +41,17 @@
         {
             Console.WriteLine($"There is no '{command}' command.");
             Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Purge records.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private void Purge(string parameters)
+        {
+            int count = this.fileCabinetService.Purge();
+            var length = this.fileCabinetService.GetStat().Item1 + count;
+            Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
         }
     }
 }

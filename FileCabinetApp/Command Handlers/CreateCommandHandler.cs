@@ -7,17 +7,15 @@ namespace FileCabinetApp
     /// <summary>
     /// Class that handle create command.
     /// </summary>
-    internal class CreateCommandHandler : CommandHandlerBase
+    internal class CreateCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public CreateCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public CreateCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -31,45 +29,12 @@ namespace FileCabinetApp
 
             if (command == "create")
             {
-                Create(parameters);
+                this.Create(parameters);
             }
             else
             {
                 base.Handle(request);
             }
-        }
-
-        /// <summary>
-        /// Create record.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void Create(string parameters)
-        {
-            bool check = true;
-
-            do
-            {
-                Console.Write("First name: ");
-                var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-                Console.Write("Last name: ");
-                var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-                Console.Write("Date of birth: ");
-                var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-                Console.Write("Income: ");
-                var income = ReadInput<short>(ShortConverter, ValidateIncome);
-                Console.Write("Tax: ");
-                decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-                Console.Write("Block: ");
-                char block = ReadInput<char>(CharConverter, ValidateBlock);
-                Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-                check = ValidateParameters(person, income, tax, block);
-
-                if (!check)
-                {
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
-                }
-            }
-            while (check);
         }
 
         /// <summary>
@@ -342,6 +307,39 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string, char>(true, nameof(strBlock), block);
+        }
+
+        /// <summary>
+        /// Create record.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private void Create(string parameters)
+        {
+            bool check = true;
+
+            do
+            {
+                Console.Write("First name: ");
+                var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
+                Console.Write("Last name: ");
+                var lastName = ReadInput<string>(StringConverter, ValidateLastName);
+                Console.Write("Date of birth: ");
+                var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
+                Console.Write("Income: ");
+                var income = ReadInput<short>(ShortConverter, ValidateIncome);
+                Console.Write("Tax: ");
+                decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
+                Console.Write("Block: ");
+                char block = ReadInput<char>(CharConverter, ValidateBlock);
+                Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
+                check = ValidateParameters(person, income, tax, block);
+
+                if (!check)
+                {
+                    Console.WriteLine($"Record #{this.fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
+                }
+            }
+            while (check);
         }
     }
 }

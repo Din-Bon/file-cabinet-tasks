@@ -5,17 +5,15 @@ namespace FileCabinetApp
     /// <summary>
     /// Class that handle edit command.
     /// </summary>
-    internal class EditCommandHandler : CommandHandlerBase
+    internal class EditCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public EditCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public EditCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -29,54 +27,11 @@ namespace FileCabinetApp
 
             if (command == "edit")
             {
-                Edit(parameters);
+                this.Edit(parameters);
             }
             else
             {
                 base.Handle(request);
-            }
-        }
-
-        /// <summary>
-        /// Modify existing records.
-        /// </summary>
-        /// <param name="parameters">Id of an existing record.</param>
-        private static void Edit(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "empty id");
-            }
-
-            int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
-
-            if (id < 0)
-            {
-                throw new ArgumentException("id value less than 0", nameof(parameters));
-            }
-
-            Console.Write("First name: ");
-            var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-            Console.Write("Last name: ");
-            var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-            Console.Write("Date of birth: ");
-            var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-            Console.Write("Income: ");
-            var income = ReadInput<short>(ShortConverter, ValidateIncome);
-            Console.Write("Tax: ");
-            decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-            Console.Write("Block: ");
-            char block = ReadInput<char>(CharConverter, ValidateBlock);
-            Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-
-            if (!ValidateParameters(person, income, tax, block))
-            {
-                fileCabinetService.EditRecord(id, person, income, tax, block);
-                Console.WriteLine($"record #{id} is updated.");
-            }
-            else
-            {
-                Console.WriteLine($"wrong parameters{Environment.NewLine}record #{id} isn't updated.");
             }
         }
 
@@ -350,6 +305,49 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string, char>(true, nameof(strBlock), block);
+        }
+
+        /// <summary>
+        /// Modify existing records.
+        /// </summary>
+        /// <param name="parameters">Id of an existing record.</param>
+        private void Edit(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "empty id");
+            }
+
+            int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
+
+            if (id < 0)
+            {
+                throw new ArgumentException("id value less than 0", nameof(parameters));
+            }
+
+            Console.Write("First name: ");
+            var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
+            Console.Write("Last name: ");
+            var lastName = ReadInput<string>(StringConverter, ValidateLastName);
+            Console.Write("Date of birth: ");
+            var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
+            Console.Write("Income: ");
+            var income = ReadInput<short>(ShortConverter, ValidateIncome);
+            Console.Write("Tax: ");
+            decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
+            Console.Write("Block: ");
+            char block = ReadInput<char>(CharConverter, ValidateBlock);
+            Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
+
+            if (!ValidateParameters(person, income, tax, block))
+            {
+                this.fileCabinetService.EditRecord(id, person, income, tax, block);
+                Console.WriteLine($"record #{id} is updated.");
+            }
+            else
+            {
+                Console.WriteLine($"wrong parameters{Environment.NewLine}record #{id} isn't updated.");
+            }
         }
     }
 }

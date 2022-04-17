@@ -3,17 +3,15 @@
     /// <summary>
     /// Class that handle export command.
     /// </summary>
-    internal class ExportCommandHandler : CommandHandlerBase
+    internal class ExportCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public ExportCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public ExportCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -27,48 +25,11 @@
 
             if (command == "export")
             {
-                Export(parameters);
+                this.Export(parameters);
             }
             else
             {
                 base.Handle(request);
-            }
-        }
-
-        /// <summary>
-        /// Export records in file.
-        /// </summary>
-        /// <param name="parameters">Array from property and value.</param>
-        private static void Export(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "wrong find command");
-            }
-
-            var commands = parameters.Split(' ', 2);
-            string fileName = commands[1];
-            string path = ParseExport(fileName);
-            string property = commands[0].ToUpperInvariant();
-            string[] formats = { "CSV", "XML" };
-
-            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
-            {
-                StreamWriter writer = new StreamWriter(path);
-                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
-
-                if (property == "CSV")
-                {
-                    serviceSnapshot.SaveToCsv(writer);
-                }
-                else if (property == "XML")
-                {
-                    serviceSnapshot.SaveToXml(writer);
-                }
-
-                writer.Flush();
-                writer.Close();
-                Console.WriteLine($"All records are exported to file {path}.");
             }
         }
 
@@ -105,6 +66,43 @@
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Export records in file.
+        /// </summary>
+        /// <param name="parameters">Array from property and value.</param>
+        private void Export(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            var commands = parameters.Split(' ', 2);
+            string fileName = commands[1];
+            string path = ParseExport(fileName);
+            string property = commands[0].ToUpperInvariant();
+            string[] formats = { "CSV", "XML" };
+
+            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
+            {
+                StreamWriter writer = new StreamWriter(path);
+                FileCabinetServiceSnapshot serviceSnapshot = this.fileCabinetService.MakeSnapshot();
+
+                if (property == "CSV")
+                {
+                    serviceSnapshot.SaveToCsv(writer);
+                }
+                else if (property == "XML")
+                {
+                    serviceSnapshot.SaveToXml(writer);
+                }
+
+                writer.Flush();
+                writer.Close();
+                Console.WriteLine($"All records are exported to file {path}.");
+            }
         }
     }
 }

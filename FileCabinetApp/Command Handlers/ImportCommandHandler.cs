@@ -3,17 +3,15 @@
     /// <summary>
     /// Class that handle import command.
     /// </summary>
-    internal class ImportCommandHandler : CommandHandlerBase
+    internal class ImportCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
         /// </summary>
-        /// <param name="cabinetService">Service object.</param>
-        public ImportCommandHandler(IFileCabinetService cabinetService)
+        /// <param name="fileCabinetService">Service object.</param>
+        public ImportCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            fileCabinetService = cabinetService;
         }
 
         /// <summary>
@@ -27,48 +25,11 @@
 
             if (command == "import")
             {
-                Import(parameters);
+                this.Import(parameters);
             }
             else
             {
                 base.Handle(request);
-            }
-        }
-
-        /// <summary>
-        /// Import records from file.
-        /// </summary>
-        /// <param name="parameters">Array from property and value.</param>
-        private static void Import(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "wrong find command");
-            }
-
-            var commands = parameters.Split(' ', 2);
-            string fileName = commands[1];
-            string path = ParseImport(fileName);
-            string property = commands[0].ToUpperInvariant();
-            string[] formats = { "CSV", "XML" };
-
-            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
-            {
-                StreamReader reader = new StreamReader(path);
-                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
-
-                if (property == "CSV")
-                {
-                    serviceSnapshot.LoadFromCsv(reader);
-                }
-                else if (property == "XML")
-                {
-                    serviceSnapshot.LoadFromXml(reader);
-                }
-
-                int count = fileCabinetService.Restore(serviceSnapshot);
-                reader.Close();
-                Console.WriteLine($"{count} records were imported from {path}.");
             }
         }
 
@@ -99,6 +60,43 @@
             }
 
             return input;
+        }
+
+        /// <summary>
+        /// Import records from file.
+        /// </summary>
+        /// <param name="parameters">Array from property and value.</param>
+        private void Import(string parameters)
+        {
+            if (string.IsNullOrEmpty(parameters))
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong find command");
+            }
+
+            var commands = parameters.Split(' ', 2);
+            string fileName = commands[1];
+            string path = ParseImport(fileName);
+            string property = commands[0].ToUpperInvariant();
+            string[] formats = { "CSV", "XML" };
+
+            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
+            {
+                StreamReader reader = new StreamReader(path);
+                FileCabinetServiceSnapshot serviceSnapshot = this.fileCabinetService.MakeSnapshot();
+
+                if (property == "CSV")
+                {
+                    serviceSnapshot.LoadFromCsv(reader);
+                }
+                else if (property == "XML")
+                {
+                    serviceSnapshot.LoadFromXml(reader);
+                }
+
+                int count = this.fileCabinetService.Restore(serviceSnapshot);
+                reader.Close();
+                Console.WriteLine($"{count} records were imported from {path}.");
+            }
         }
     }
 }
