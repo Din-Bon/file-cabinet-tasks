@@ -28,203 +28,6 @@
             </summary>
             <value>Parameters.</value>
         </member>
-        <member name="T:FileCabinetApp.CommandHandler">
-            <summary>
-            Class, that process request.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Passes the request further if
-            the next handler is specified.
-            </summary>
-            <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Create(System.String)">
-            <summary>
-            Create record.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Edit(System.String)">
-            <summary>
-            Modify existing records.
-            </summary>
-            <param name="parameters">Id of an existing record.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.List(System.String)">
-            <summary>
-            Shows list of records.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Stat(System.String)">
-            <summary>
-            Shows count of existing records.
-            </summary>
-            <param name="parameters">Input prameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Find(System.String)">
-            <summary>
-            Find record.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Import(System.String)">
-            <summary>
-            Import records from file.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Export(System.String)">
-            <summary>
-            Export records in file.
-            </summary>
-            <param name="parameters">Array from property and value.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ParseExport(System.String)">
-            <summary>
-            Parse string for export command.
-            </summary>
-            <param name="input">Array from property and value.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ParseImport(System.String)">
-            <summary>
-            Parse string for import command.
-            </summary>
-            <param name="input">Array from property and value.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Remove(System.String)">
-            <summary>
-            Remove record by id.
-            </summary>
-            <param name="parameters">String parameter(id).</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Purge(System.String)">
-            <summary>
-            Purge records.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.StringConverter(System.String)">
-            <summary>
-            Return tuple of parameters.
-            </summary>
-            <param name="name">String parameter(name).</param>
-            <returns>Tuple of parameters.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.DateTimeConverter(System.String)">
-            <summary>
-            Return tuple of parameters.
-            </summary>
-            <param name="strDateOfBirth">String parameter(date of birth).</param>
-            <returns>Tuple of parameters.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ShortConverter(System.String)">
-            <summary>
-            Return tuple of parameters.
-            </summary>
-            <param name="strIncome">String parameter(income).</param>
-            <returns>Tuple of parameters.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.DecimalConverter(System.String)">
-            <summary>
-            Return tuple of parameters.
-            </summary>
-            <param name="strTax">String parameter(tax).</param>
-            <returns>Tuple of parameters.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.CharConverter(System.String)">
-            <summary>
-            Return tuple of parameters.
-            </summary>
-            <param name="strBlock">String parameter(block).</param>
-            <returns>Tuple of parameters.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Validates input values.
-            </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
-            <returns>Is the data false.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateFirstName(System.String)">
-            <summary>
-            Checks first name for compliance with the validation rules.
-            </summary>
-            <param name="firstName">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateLastName(System.String)">
-            <summary>
-            Checks last name for compliance with the validation rules.
-            </summary>
-            <param name="lastName">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateDateOfBirth(System.DateTime)">
-            <summary>
-            Checks date of birth for compliance with the validation rules.
-            </summary>
-            <param name="dateOfBirth">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateIncome(System.Int16)">
-            <summary>
-            Checks income for compliance with the validation rules.
-            </summary>
-            <param name="income">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateTax(System.Decimal)">
-            <summary>
-            Checks tax for compliance with the validation rules.
-            </summary>
-            <param name="tax">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ValidateBlock(System.Char)">
-            <summary>
-            Checks block letter for compliance with the validation rules.
-            </summary>
-            <param name="block">Input data.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
-            <summary>
-            Main manipulation with the input parameters.
-            </summary>
-            <param name="converter">Convert input string in the right type.</param>
-            <param name="validator">Check input data for compliance with the validation rules.</param>
-            <returns>Test results.</returns>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records data on the console.
-            </summary>
-            <param name="records">Array of the records.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.PrintHelp(System.String)">
-            <summary>
-            Print lists of the command.
-            </summary>
-            <param name="parameters">Command name.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Exit(System.String)">
-            <summary>
-            Exit from the application.
-            </summary>
-            <param name="parameters">Input parameters.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.PrintMissedCommandInfo(System.String)">
-            <summary>
-            Warning message.
-            </summary>
-            <param name="command">Command name.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlerBase">
             <summary>
             Base command handler class.
@@ -243,6 +46,316 @@
             </summary>
             <param name="request">Request.</param>
         </member>
+        <member name="T:FileCabinetApp.CreateCommandHandler">
+            <summary>
+            Class that handle create command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute create command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Warning message.
+            </summary>
+            <param name="command">Command name.</param>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.Create(System.String)">
+            <summary>
+            Create record.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Is the data false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Main manipulation with the input parameters.
+            </summary>
+            <param name="converter">Convert input string in the right type.</param>
+            <param name="validator">Check input data for compliance with the validation rules.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateFirstName(System.String)">
+            <summary>
+            Checks first name for compliance with the validation rules.
+            </summary>
+            <param name="firstName">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateLastName(System.String)">
+            <summary>
+            Checks last name for compliance with the validation rules.
+            </summary>
+            <param name="lastName">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateDateOfBirth(System.DateTime)">
+            <summary>
+            Checks date of birth for compliance with the validation rules.
+            </summary>
+            <param name="dateOfBirth">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateIncome(System.Int16)">
+            <summary>
+            Checks income for compliance with the validation rules.
+            </summary>
+            <param name="income">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateTax(System.Decimal)">
+            <summary>
+            Checks tax for compliance with the validation rules.
+            </summary>
+            <param name="tax">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ValidateBlock(System.Char)">
+            <summary>
+            Checks block letter for compliance with the validation rules.
+            </summary>
+            <param name="block">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.StringConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="name">String parameter(name).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.DateTimeConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strDateOfBirth">String parameter(date of birth).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.ShortConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strIncome">String parameter(income).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.DecimalConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strTax">String parameter(tax).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CreateCommandHandler.CharConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strBlock">String parameter(block).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="T:FileCabinetApp.EditCommandHandler">
+            <summary>
+            Class that handle edit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute edit command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.Edit(System.String)">
+            <summary>
+            Modify existing records.
+            </summary>
+            <param name="parameters">Id of an existing record.</param>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Is the data false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Main manipulation with the input parameters.
+            </summary>
+            <param name="converter">Convert input string in the right type.</param>
+            <param name="validator">Check input data for compliance with the validation rules.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateFirstName(System.String)">
+            <summary>
+            Checks first name for compliance with the validation rules.
+            </summary>
+            <param name="firstName">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateLastName(System.String)">
+            <summary>
+            Checks last name for compliance with the validation rules.
+            </summary>
+            <param name="lastName">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateDateOfBirth(System.DateTime)">
+            <summary>
+            Checks date of birth for compliance with the validation rules.
+            </summary>
+            <param name="dateOfBirth">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateIncome(System.Int16)">
+            <summary>
+            Checks income for compliance with the validation rules.
+            </summary>
+            <param name="income">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateTax(System.Decimal)">
+            <summary>
+            Checks tax for compliance with the validation rules.
+            </summary>
+            <param name="tax">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ValidateBlock(System.Char)">
+            <summary>
+            Checks block letter for compliance with the validation rules.
+            </summary>
+            <param name="block">Input data.</param>
+            <returns>Test results.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.StringConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="name">String parameter(name).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.DateTimeConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strDateOfBirth">String parameter(date of birth).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.ShortConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strIncome">String parameter(income).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.DecimalConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strTax">String parameter(tax).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="M:FileCabinetApp.EditCommandHandler.CharConverter(System.String)">
+            <summary>
+            Return tuple of parameters.
+            </summary>
+            <param name="strBlock">String parameter(block).</param>
+            <returns>Tuple of parameters.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ExitCommandHandler">
+            <summary>
+            Class that handle exit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ExitCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute exit command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.ExitCommandHandler.Exit(System.String)">
+            <summary>
+            Exit from the application.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.ExportCommandHandler">
+            <summary>
+            Class that handle export command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute export command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.ExportCommandHandler.Export(System.String)">
+            <summary>
+            Export records in file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.ExportCommandHandler.ParseExport(System.String)">
+            <summary>
+            Parse string for export command.
+            </summary>
+            <param name="input">Array from property and value.</param>
+        </member>
+        <member name="T:FileCabinetApp.FindCommandHandler">
+            <summary>
+            Class that handle find command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute find command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.FindCommandHandler.Find(System.String)">
+            <summary>
+            Find record.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.FindCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records data on the console.
+            </summary>
+            <param name="records">Array of the records.</param>
+        </member>
+        <member name="T:FileCabinetApp.HelpCommandHandler">
+            <summary>
+            Class that handle help command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.HelpCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute help command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.HelpCommandHandler.PrintHelp(System.String)">
+            <summary>
+            Print lists of the command.
+            </summary>
+            <param name="parameters">Command name.</param>
+        </member>
         <member name="T:FileCabinetApp.ICommandHandler">
             <summary>
             Interface of command handlers.
@@ -259,6 +372,109 @@
             Handle with request.
             </summary>
             <param name="request">Request.</param>
+        </member>
+        <member name="T:FileCabinetApp.ImportCommandHandler">
+            <summary>
+            Class that handle import command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute import command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.ImportCommandHandler.Import(System.String)">
+            <summary>
+            Import records from file.
+            </summary>
+            <param name="parameters">Array from property and value.</param>
+        </member>
+        <member name="M:FileCabinetApp.ImportCommandHandler.ParseImport(System.String)">
+            <summary>
+            Parse string for import command.
+            </summary>
+            <param name="input">Array from property and value.</param>
+        </member>
+        <member name="T:FileCabinetApp.ListCommandHandler">
+            <summary>
+            Class that handle list command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute list command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.ListCommandHandler.List(System.String)">
+            <summary>
+            Shows list of records.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.ListCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records data on the console.
+            </summary>
+            <param name="records">Array of the records.</param>
+        </member>
+        <member name="T:FileCabinetApp.PurgeCommandHandler">
+            <summary>
+            Class that handle purge command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute purge command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.PurgeCommandHandler.Purge(System.String)">
+            <summary>
+            Purge records.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.PurgeCommandHandler.PrintMissedCommandInfo(System.String)">
+            <summary>
+            Warning message.
+            </summary>
+            <param name="command">Command name.</param>
+        </member>
+        <member name="T:FileCabinetApp.RemoveCommandHandler">
+            <summary>
+            Class that handle remove command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute remove command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.RemoveCommandHandler.Remove(System.String)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="parameters">String parameter(id).</param>
+        </member>
+        <member name="T:FileCabinetApp.StatCommandHandler">
+            <summary>
+            Class that handle stat command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.StatCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute stat command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.StatCommandHandler.Stat(System.String)">
+            <summary>
+            Shows count of existing records.
+            </summary>
+            <param name="parameters">Input prameters.</param>
         </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>

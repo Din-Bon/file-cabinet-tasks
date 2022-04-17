@@ -9,21 +9,6 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-        public static readonly string[][] HelpMessages = new string[][]
-        {
-            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
-            new string[] { "stat", "show stats", "The 'stat' show stats." },
-            new string[] { "create", "create new record", "The 'create' create new record." },
-            new string[] { "list", "show list of records", "The 'list' show list of records." },
-            new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
-            new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
-            new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
-            new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
-            new string[] { "remove", "remove record", "The 'remove' remove record by id." },
-            new string[] { "purge", "purge records", "The 'purge' purge removed records." },
-        };
-
         public static IFileCabinetService FileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
         public static bool IsRunning = true;
         private const string DeveloperName = "Artem Filimonov";
@@ -75,8 +60,28 @@ namespace FileCabinetApp
         /// <returns>Command handler.</returns>
         private static ICommandHandler CreateCommandHandlers()
         {
-            var commandHandler = new CommandHandler();
-            return commandHandler;
+            var helpHandler = new HelpCommandHandler();
+            var createHandler = new CreateCommandHandler();
+            var exitHandler = new ExitCommandHandler();
+            var statHandler = new StatCommandHandler();
+            var listHandler = new ListCommandHandler();
+            var editHandler = new EditCommandHandler();
+            var findHandler = new FindCommandHandler();
+            var exportHandler = new ExportCommandHandler();
+            var importHandler = new ImportCommandHandler();
+            var removeHandler = new RemoveCommandHandler();
+            var purgeHandler = new PurgeCommandHandler();
+            helpHandler.SetNext(createHandler);
+            createHandler.SetNext(exitHandler);
+            exitHandler.SetNext(statHandler);
+            statHandler.SetNext(listHandler);
+            listHandler.SetNext(editHandler);
+            editHandler.SetNext(findHandler);
+            findHandler.SetNext(exportHandler);
+            exportHandler.SetNext(importHandler);
+            importHandler.SetNext(removeHandler);
+            removeHandler.SetNext(purgeHandler);
+            return helpHandler;
         }
 
         /// <summary>
