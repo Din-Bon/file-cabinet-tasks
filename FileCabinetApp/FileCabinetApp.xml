@@ -537,118 +537,6 @@
             </summary>
             <param name="parameters">Input prameters.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            Custom validate system.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Validates input values.
-            </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateFirstName(FileCabinetApp.Person)">
-            <summary>
-            Validate first name.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Errors with name.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateLastName(FileCabinetApp.Person)">
-            <summary>
-            Validate last name.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Errors with name.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateDateOfBirth(FileCabinetApp.Person)">
-            <summary>
-            Validate date of birth.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateIncome(System.Int16)">
-            <summary>
-            Validate income.
-            </summary>
-            <param name="income">Short value, characterize persons income.</param>
-            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateTax(System.Decimal)">
-            <summary>
-            Validate tax.
-            </summary>
-            <param name="tax">Decimal, characterize tax for person.</param>
-            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateBlock(System.Char)">
-            <summary>
-            Validate block.
-            </summary>
-            <param name="block">Char, characterize persons living block.</param>
-            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            Default validate system.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Validates input values.
-            </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateFirstName(FileCabinetApp.Person)">
-            <summary>
-            Validate first name.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Errors with name.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateLastName(FileCabinetApp.Person)">
-            <summary>
-            Validate last name.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Errors with name.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateDateOfBirth(FileCabinetApp.Person)">
-            <summary>
-            Validate date of birth.
-            </summary>
-            <param name="person">Personal data.</param>
-            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateIncome(System.Int16)">
-            <summary>
-            Validate income.
-            </summary>
-            <param name="income">Short value, characterize persons income.</param>
-            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateTax(System.Decimal)">
-            <summary>
-            Validate tax.
-            </summary>
-            <param name="tax">Decimal, characterize tax for person.</param>
-            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateBlock(System.Char)">
-            <summary>
-            Validate block.
-            </summary>
-            <param name="block">Char, characterize persons living block.</param>
-            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetCustomService">
             <summary>
             Class, that working with the records(with custom validate system).
@@ -1259,20 +1147,6 @@
             </summary>
             <returns>Count of record and count of removed records.</returns>
         </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
-            <summary>
-            Vlidate system interface.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
-            <summary>
-            Validates input values.
-            </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
-        </member>
         <member name="T:FileCabinetApp.Person">
             <summary>
             Class describing a main persons data.
@@ -1359,6 +1233,192 @@
             Parse command line argumets string.
             </summary>
             <param name="cmdArguments">CL arguments.</param>
+        </member>
+        <member name="T:FileCabinetApp.CustomBlockValidator">
+            <summary>
+            Validate block by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomBlockValidator.ValidateParameters(System.Char)">
+            <summary>
+            Validate block.
+            </summary>
+            <param name="block">Char, characterize persons living block.</param>
+            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomDateOfBirthValidator">
+            <summary>
+            Validate date of birth by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomDateOfBirthValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validate date of birth.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomFirstNameValidator">
+            <summary>
+            Validate first name by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomFirstNameValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validate first name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomIncomeValidator">
+            <summary>
+            Validate income by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomIncomeValidator.ValidateParameters(System.Int16)">
+            <summary>
+            Validate income.
+            </summary>
+            <param name="income">Short value, characterize persons income.</param>
+            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomLastNameValidator">
+            <summary>
+            Validate last name by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomLastNameValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validate last name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomTaxValidator">
+            <summary>
+            Validate tax by custom ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomTaxValidator.ValidateParameters(System.Decimal)">
+            <summary>
+            Validate tax.
+            </summary>
+            <param name="tax">Decimal, characterize tax for person.</param>
+            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
+        </member>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Custom validate system.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.DefaultBlockValidator">
+            <summary>
+            Validate block by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultBlockValidator.ValidateParameters(System.Char)">
+            <summary>
+            Validate block.
+            </summary>
+            <param name="block">Char, characterize persons living block.</param>
+            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultDateOfBirthValidator">
+            <summary>
+            Validate date of birth by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultDateOfBirthValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validates date of birth.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultFirstNameValidator">
+            <summary>
+            Validate first name by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultFirstNameValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validates first name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultIncomeValidator">
+            <summary>
+            Validate income by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultIncomeValidator.ValidateParameters(System.Int16)">
+            <summary>
+            Validate income.
+            </summary>
+            <param name="income">Short value, characterize persons income.</param>
+            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultLastNameValidator">
+            <summary>
+            Validate last name by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultLastNameValidator.ValidateParameters(FileCabinetApp.Person)">
+            <summary>
+            Validates last name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultTaxValidator">
+            <summary>
+            Validate tax by default ruleset.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultTaxValidator.ValidateParameters(System.Decimal)">
+            <summary>
+            Validate tax.
+            </summary>
+            <param name="tax">Decimal, characterize tax for person.</param>
+            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Default validate system.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Vlidate system interface.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Validates input values.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
         </member>
     </members>
 </doc>
