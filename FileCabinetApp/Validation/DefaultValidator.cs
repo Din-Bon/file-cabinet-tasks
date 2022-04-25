@@ -3,35 +3,30 @@
     /// <summary>
     /// Default validate system.
     /// </summary>
-    public class DefaultValidator : IRecordValidator
+    public class DefaultValidator : CompositeValidator
     {
+        private const int MinLength = 2;
+        private const int MaxLength = 20;
+        private const short MinIncome = 100;
+        private const decimal MinTax = 0;
+        private const decimal MaxTax = 100;
+        private const int FirstAlphabet = 65;
+        private const int LastAlphabet = 90;
+
         /// <summary>
-        /// Validates input values.
+        /// Initializes a new instance of the <see cref="DefaultValidator"/> class.
         /// </summary>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's income.</param>
-        /// <param name="tax">Person's tax.</param>
-        /// <param name="block">Person's living block.</param>
-        public void ValidateParameters(Person person, short income, decimal tax, char block)
-        {
-            if (person == null)
+        public DefaultValidator()
+            : base(new IRecordValidator[]
             {
-                throw new ArgumentNullException(nameof(person), "empty personal data");
-            }
-
-            int minLength = 2, maxLength = 20;
-            DateTime from = new DateTime(1950, 01, 01);
-            DateTime to = new DateTime(2015, 01, 01);
-            short minIncome = 100;
-            decimal minTax = 0, maxTax = 100;
-            int firstAlphabet = 65, lastAlphabet = 90;
-
-            new FirstNameValidator(minLength, maxLength).ValidateParameters(person);
-            new LastNameValidator(minLength, maxLength).ValidateParameters(person);
-            new DateOfBirthValidator(from, to).ValidateParameters(person);
-            new IncomeValidator(minIncome).ValidateParameters(income);
-            new TaxValidator(minTax, maxTax).ValidateParameters(tax);
-            new BlockValidator(firstAlphabet, lastAlphabet).ValidateParameters(block);
+                new FirstNameValidator(MinLength, MaxLength),
+                new LastNameValidator(MinLength, MaxLength),
+                new DateOfBirthValidator(new DateTime(1950, 01, 01), new DateTime(2015, 01, 01)),
+                new IncomeValidator(MinIncome),
+                new TaxValidator(MinTax, MaxTax),
+                new BlockValidator(FirstAlphabet, LastAlphabet),
+            })
+        {
         }
     }
 }

@@ -1246,19 +1246,28 @@
             <param name="first">First alphabet letter.</param>
             <param name="last">Last alphabet letter.</param>
         </member>
-        <member name="M:FileCabinetApp.BlockValidator.ValidateParameters(System.Char)">
+        <member name="M:FileCabinetApp.BlockValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate block.
             </summary>
-            <param name="block">Char, characterize persons living block.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
+        <member name="T:FileCabinetApp.CompositeValidator">
             <summary>
-            Custom validate system.
+            Container for validators.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.CompositeValidator.#ctor(System.Collections.Generic.IEnumerable{FileCabinetApp.IRecordValidator})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CompositeValidator"/> class.
+            </summary>
+            <param name="validators">Collection of validators.</param>
+        </member>
+        <member name="M:FileCabinetApp.CompositeValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validates input values.
             </summary>
@@ -1266,6 +1275,16 @@
             <param name="income">Person's income.</param>
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
+        </member>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Custom validate system.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CustomValidator"/> class.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>
@@ -1279,11 +1298,14 @@
             <param name="min">Oldest users age.</param>
             <param name="max">Youngest users age.</param>
         </member>
-        <member name="M:FileCabinetApp.DateOfBirthValidator.ValidateParameters(FileCabinetApp.Person)">
+        <member name="M:FileCabinetApp.DateOfBirthValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate date of birth.
             </summary>
             <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
         </member>
         <member name="T:FileCabinetApp.DefaultValidator">
@@ -1291,14 +1313,10 @@
             Default validate system.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+        <member name="M:FileCabinetApp.DefaultValidator.#ctor">
             <summary>
-            Validates input values.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.DefaultValidator"/> class.
             </summary>
-            <param name="person">Personal data.</param>
-            <param name="income">Person's income.</param>
-            <param name="tax">Person's tax.</param>
-            <param name="block">Person's living block.</param>
         </member>
         <member name="T:FileCabinetApp.FirstNameValidator">
             <summary>
@@ -1312,11 +1330,14 @@
             <param name="min">Minimum first name length.</param>
             <param name="max">Maximum first name length.</param>
         </member>
-        <member name="M:FileCabinetApp.FirstNameValidator.ValidateParameters(FileCabinetApp.Person)">
+        <member name="M:FileCabinetApp.FirstNameValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate first name.
             </summary>
             <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Errors with name.</exception>
         </member>
         <member name="T:FileCabinetApp.IncomeValidator">
@@ -1330,11 +1351,14 @@
             </summary>
             <param name="min">Minimum income.</param>
         </member>
-        <member name="M:FileCabinetApp.IncomeValidator.ValidateParameters(System.Int16)">
+        <member name="M:FileCabinetApp.IncomeValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate income.
             </summary>
-            <param name="income">Short value, characterize persons income.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Value less than zero.</exception>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
@@ -1363,11 +1387,14 @@
             <param name="min">Minimum last name length.</param>
             <param name="max">Maximum last name length.</param>
         </member>
-        <member name="M:FileCabinetApp.LastNameValidator.ValidateParameters(FileCabinetApp.Person)">
+        <member name="M:FileCabinetApp.LastNameValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate last name.
             </summary>
             <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Errors with name.</exception>
         </member>
         <member name="T:FileCabinetApp.TaxValidator">
@@ -1382,11 +1409,14 @@
             <param name="min">Minimum tax.</param>
             <param name="max">Maximum tax.</param>
         </member>
-        <member name="M:FileCabinetApp.TaxValidator.ValidateParameters(System.Decimal)">
+        <member name="M:FileCabinetApp.TaxValidator.ValidateParameters(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Validate tax.
             </summary>
-            <param name="tax">Decimal, characterize tax for person.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Tax out of range.</exception>
         </member>
     </members>

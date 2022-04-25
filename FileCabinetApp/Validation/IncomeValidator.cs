@@ -3,7 +3,7 @@
     /// <summary>
     /// Validate income.
     /// </summary>
-    internal class IncomeValidator
+    internal class IncomeValidator : IRecordValidator
     {
         private short minInc;
 
@@ -19,9 +19,12 @@
         /// <summary>
         /// Validate income.
         /// </summary>
-        /// <param name="income">Short value, characterize persons income.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
         /// <exception cref="ArgumentException">Value less than zero.</exception>
-        public void ValidateParameters(short income)
+        public void ValidateParameters(Person person, short income, decimal tax, char block)
         {
             if (income < this.minInc)
             {

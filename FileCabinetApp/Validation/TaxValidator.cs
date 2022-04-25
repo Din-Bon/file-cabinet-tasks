@@ -3,7 +3,7 @@
     /// <summary>
     /// Validate tax.
     /// </summary>
-    internal class TaxValidator
+    internal class TaxValidator : IRecordValidator
     {
         private decimal min;
         private decimal max;
@@ -22,9 +22,12 @@
         /// <summary>
         /// Validate tax.
         /// </summary>
-        /// <param name="tax">Decimal, characterize tax for person.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
         /// <exception cref="ArgumentException">Tax out of range.</exception>
-        public void ValidateParameters(decimal tax)
+        public void ValidateParameters(Person person, short income, decimal tax, char block)
         {
             if (tax < this.min || tax > this.max)
             {

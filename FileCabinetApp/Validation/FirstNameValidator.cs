@@ -3,7 +3,7 @@
     /// <summary>
     /// Validate first name.
     /// </summary>
-    internal class FirstNameValidator
+    internal class FirstNameValidator : IRecordValidator
     {
         private int minNameLength;
         private int maxNameLength;
@@ -23,8 +23,11 @@
         /// Validate first name.
         /// </summary>
         /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
         /// <exception cref="ArgumentException">Errors with name.</exception>
-        public void ValidateParameters(Person person)
+        public void ValidateParameters(Person person, short income, decimal tax, char block)
         {
             if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < this.minNameLength || person.FirstName.Length > this.maxNameLength)
             {

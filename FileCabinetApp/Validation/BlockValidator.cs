@@ -3,7 +3,7 @@
     /// <summary>
     /// Validate block.
     /// </summary>
-    internal class BlockValidator
+    internal class BlockValidator : IRecordValidator
     {
         private int firstLetter;
         private int lastLetter;
@@ -22,9 +22,12 @@
         /// <summary>
         /// Validate block.
         /// </summary>
-        /// <param name="block">Char, characterize persons living block.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's income.</param>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="block">Person's living block.</param>
         /// <exception cref="ArgumentException">Block is not capital letter in english alphabet.</exception>
-        public void ValidateParameters(char block)
+        public void ValidateParameters(Person person, short income, decimal tax, char block)
         {
             if (block < this.firstLetter || block > this.lastLetter)
             {
