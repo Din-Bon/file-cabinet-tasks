@@ -60,14 +60,13 @@ namespace FileCabinetApp
         /// <returns>Command handler.</returns>
         private static ICommandHandler CreateCommandHandlers()
         {
-            var recordPrinter = new DefaultRecordPrinter();
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(obj => { IsRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, recordPrinter);
+            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
             var editHandler = new EditCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService, recordPrinter);
+            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
@@ -83,6 +82,18 @@ namespace FileCabinetApp
             importHandler.SetNext(removeHandler);
             removeHandler.SetNext(purgeHandler);
             return helpHandler;
+        }
+
+        /// <summary>
+        /// Default record printer.
+        /// </summary>
+        /// <param name="records">Source.</param>
+        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
+        {
+            foreach (var record in records)
+            {
+                Console.WriteLine(record.ToString());
+            }
         }
 
         /// <summary>

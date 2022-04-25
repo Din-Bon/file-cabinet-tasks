@@ -164,17 +164,6 @@
             </summary>
             <param name="parameters">Input parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.DefaultRecordPrinter">
-            <summary>
-            Print records in classic style.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Default record printer.
-            </summary>
-            <param name="records">Source.</param>
-        </member>
         <member name="T:FileCabinetApp.EditCommandHandler">
             <summary>
             Class that handle edit command.
@@ -350,7 +339,7 @@
             Class that handle find command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IRecordPrinter)">
+        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord}})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FindCommandHandler"/> class.
             </summary>
@@ -432,23 +421,12 @@
             </summary>
             <param name="parameters">Array from property and value.</param>
         </member>
-        <member name="T:FileCabinetApp.IRecordPrinter">
-            <summary>
-            Interface that print records.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records in some style.
-            </summary>
-            <param name="records">Record collection.</param>
-        </member>
         <member name="T:FileCabinetApp.ListCommandHandler">
             <summary>
             Class that handle list command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IRecordPrinter)">
+        <member name="M:FileCabinetApp.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord}})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.ListCommandHandler"/> class.
             </summary>
@@ -573,6 +551,48 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
         </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateFirstName(FileCabinetApp.Person)">
+            <summary>
+            Validate first name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateLastName(FileCabinetApp.Person)">
+            <summary>
+            Validate last name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateDateOfBirth(FileCabinetApp.Person)">
+            <summary>
+            Validate date of birth.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateIncome(System.Int16)">
+            <summary>
+            Validate income.
+            </summary>
+            <param name="income">Short value, characterize persons income.</param>
+            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateTax(System.Decimal)">
+            <summary>
+            Validate tax.
+            </summary>
+            <param name="tax">Decimal, characterize tax for person.</param>
+            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.ValidateBlock(System.Char)">
+            <summary>
+            Validate block.
+            </summary>
+            <param name="block">Char, characterize persons living block.</param>
+            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
+        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Default validate system.
@@ -586,6 +606,48 @@
             <param name="income">Person's income.</param>
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateFirstName(FileCabinetApp.Person)">
+            <summary>
+            Validate first name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateLastName(FileCabinetApp.Person)">
+            <summary>
+            Validate last name.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Errors with name.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateDateOfBirth(FileCabinetApp.Person)">
+            <summary>
+            Validate date of birth.
+            </summary>
+            <param name="person">Personal data.</param>
+            <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateIncome(System.Int16)">
+            <summary>
+            Validate income.
+            </summary>
+            <param name="income">Short value, characterize persons income.</param>
+            <exception cref="T:System.ArgumentException">Value less than zero.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateTax(System.Decimal)">
+            <summary>
+            Validate tax.
+            </summary>
+            <param name="tax">Decimal, characterize tax for person.</param>
+            <exception cref="T:System.ArgumentException">Tax out of range.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateBlock(System.Char)">
+            <summary>
+            Validate block.
+            </summary>
+            <param name="block">Char, characterize persons living block.</param>
+            <exception cref="T:System.ArgumentException">Block is not capital letter in english alphabet.</exception>
         </member>
         <member name="T:FileCabinetApp.FileCabinetCustomService">
             <summary>
@@ -1273,6 +1335,12 @@
             Create command handlers.
             </summary>
             <returns>Command handler.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Program.DefaultRecordPrint(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Default record printer.
+            </summary>
+            <param name="records">Source.</param>
         </member>
         <member name="M:FileCabinetApp.Program.ChangeValidationMode(System.String)">
             <summary>
