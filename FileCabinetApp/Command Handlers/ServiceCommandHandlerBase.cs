@@ -4,7 +4,7 @@
     /// Base class for all classes that
     /// use fileCabinetService.
     /// </summary>
-    abstract internal class ServiceCommandHandlerBase : CommandHandlerBase
+    internal abstract class ServiceCommandHandlerBase : CommandHandlerBase
     {
         /// <summary>
         /// Base file cabinet service.

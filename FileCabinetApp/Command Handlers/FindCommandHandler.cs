@@ -7,13 +7,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class FindCommandHandler : ServiceCommandHandlerBase
     {
+        private IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Service object.</param>
-        public FindCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printer">Print record in some style.</param>
+        public FindCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter printer)
             : base(fileCabinetService)
         {
+            this.printer = printer;
         }
 
         /// <summary>
@@ -36,18 +40,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Print records data on the console.
-        /// </summary>
-        /// <param name="records">Array of the records.</param>
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records)
-        {
-            for (int i = 0; i < records.Count; i++)
-            {
-                Console.WriteLine(records[i].ToString());
-            }
-        }
-
-        /// <summary>
         /// Find record.
         /// </summary>
         /// <param name="parameters">Array from property and value.</param>
@@ -65,13 +57,13 @@ namespace FileCabinetApp
             switch (property)
             {
                 case "FIRSTNAME":
-                    PrintRecords(this.fileCabinetService.FindByFirstName(parameter));
+                    this.printer.Print(this.fileCabinetService.FindByFirstName(parameter));
                     break;
                 case "LASTNAME":
-                    PrintRecords(this.fileCabinetService.FindByLastName(parameter));
+                    this.printer.Print(this.fileCabinetService.FindByLastName(parameter));
                     break;
                 case "DATEOFBIRTH":
-                    PrintRecords(this.fileCabinetService.FindByDateofbirth(parameter));
+                    this.printer.Print(this.fileCabinetService.FindByDateofbirth(parameter));
                     break;
             }
         }

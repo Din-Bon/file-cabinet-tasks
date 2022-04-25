@@ -7,13 +7,17 @@ namespace FileCabinetApp
     /// </summary>
     internal class ListCommandHandler : ServiceCommandHandlerBase
     {
+        private IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Service object.</param>
-        public ListCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printer">Print record in some style.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter printer)
             : base(fileCabinetService)
         {
+            this.printer = printer;
         }
 
         /// <summary>
@@ -36,25 +40,13 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Print records data on the console.
-        /// </summary>
-        /// <param name="records">Array of the records.</param>
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records)
-        {
-            for (int i = 0; i < records.Count; i++)
-            {
-                Console.WriteLine(records[i].ToString());
-            }
-        }
-
-        /// <summary>
         /// Shows list of records.
         /// </summary>
         /// <param name="parameters">Input parameters.</param>
         private void List(string parameters)
         {
             ReadOnlyCollection<FileCabinetRecord> records = this.fileCabinetService.GetRecords();
-            PrintRecords(records);
+            this.printer.Print(records);
         }
     }
 }

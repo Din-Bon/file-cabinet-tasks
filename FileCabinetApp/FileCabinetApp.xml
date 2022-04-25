@@ -164,6 +164,17 @@
             </summary>
             <param name="parameters">Input parameters.</param>
         </member>
+        <member name="T:FileCabinetApp.DefaultRecordPrinter">
+            <summary>
+            Print records in classic style.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Default record printer.
+            </summary>
+            <param name="records">Source.</param>
+        </member>
         <member name="T:FileCabinetApp.EditCommandHandler">
             <summary>
             Class that handle edit command.
@@ -339,23 +350,18 @@
             Class that handle find command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FindCommandHandler"/> class.
             </summary>
             <param name="fileCabinetService">Service object.</param>
+            <param name="printer">Print record in some style.</param>
         </member>
         <member name="M:FileCabinetApp.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute find command.
             </summary>
             <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.FindCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records data on the console.
-            </summary>
-            <param name="records">Array of the records.</param>
         </member>
         <member name="M:FileCabinetApp.FindCommandHandler.Find(System.String)">
             <summary>
@@ -426,28 +432,34 @@
             </summary>
             <param name="parameters">Array from property and value.</param>
         </member>
+        <member name="T:FileCabinetApp.IRecordPrinter">
+            <summary>
+            Interface that print records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records in some style.
+            </summary>
+            <param name="records">Record collection.</param>
+        </member>
         <member name="T:FileCabinetApp.ListCommandHandler">
             <summary>
             Class that handle list command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+        <member name="M:FileCabinetApp.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IRecordPrinter)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.ListCommandHandler"/> class.
             </summary>
             <param name="fileCabinetService">Service object.</param>
+            <param name="printer">Print record in some style.</param>
         </member>
         <member name="M:FileCabinetApp.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Execute list command.
             </summary>
             <param name="request">Request.</param>
-        </member>
-        <member name="M:FileCabinetApp.ListCommandHandler.PrintRecords(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print records data on the console.
-            </summary>
-            <param name="records">Array of the records.</param>
         </member>
         <member name="M:FileCabinetApp.ListCommandHandler.List(System.String)">
             <summary>
