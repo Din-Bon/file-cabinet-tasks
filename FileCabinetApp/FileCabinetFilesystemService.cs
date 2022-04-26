@@ -573,18 +573,9 @@ namespace FileCabinetApp
                         DateOfBirth = record.DateOfBirth,
                     };
 
-                    try
-                    {
-                        this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
-                        this.AddFirstNameDictionary(record.FirstName, record);
-                        this.AddLastNameDictionary(record.LastName, record);
-                        this.AddDateOfBirthDictionary(record.DateOfBirth, record);
-                    }
-                    catch (ArgumentException exception)
-                    {
-                        Console.WriteLine($"{exception.Message}. Record id - {record.Id}.");
-                        continue;
-                    }
+                    this.AddFirstNameDictionary(record.FirstName, record);
+                    this.AddLastNameDictionary(record.LastName, record);
+                    this.AddDateOfBirthDictionary(record.DateOfBirth, record);
                 }
             }
         }

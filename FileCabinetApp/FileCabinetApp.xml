@@ -537,26 +537,6 @@
             </summary>
             <param name="parameters">Input prameters.</param>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
-            <summary>
-            Class, that working with the records(with custom validate system).
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetDefaultService">
-            <summary>
-            Class, that working with the records(with default validate system).
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
             Class, that working with the records.
@@ -1222,7 +1202,7 @@
             </summary>
             <param name="mode">Validation mode.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String)">
+        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String)">
             <summary>
             Change storage system type.
             </summary>
@@ -1418,6 +1398,64 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Tax out of range.</exception>
+        </member>
+        <member name="T:FileCabinetApp.ValidatorBuilder">
+            <summary>
+            Class that create validator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateFirstName(System.Int32,System.Int32)">
+            <summary>
+            Add first name validator.
+            </summary>
+            <param name="min">Min length.</param>
+            <param name="max">Max length.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateLastName(System.Int32,System.Int32)">
+            <summary>
+            Add last name validator.
+            </summary>
+            <param name="min">Min length.</param>
+            <param name="max">Max length.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateDateOfBirth(System.DateTime,System.DateTime)">
+            <summary>
+            Add date of birth validator.
+            </summary>
+            <param name="from">Max date of birth.</param>
+            <param name="to">Min date of birth.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateIncome(System.Int16)">
+            <summary>
+            Add income validator.
+            </summary>
+            <param name="min">Min income.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateTax(System.Decimal,System.Decimal)">
+            <summary>
+            Add tax validator.
+            </summary>
+            <param name="min">Min tax.</param>
+            <param name="max">Max tax.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateBlock(System.Int32,System.Int32)">
+            <summary>
+            Add block validator.
+            </summary>
+            <param name="first">First accessible block letter.</param>
+            <param name="last">Last accessible block letter.</param>
+            <returns>This object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.Create">
+            <summary>
+            Create object of CompositeValidator type.
+            </summary>
+            <returns>CompositeValidator.</returns>
         </member>
     </members>
 </doc>

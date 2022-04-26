@@ -100,48 +100,49 @@ namespace FileCabinetApp
         /// Change validation mode.
         /// </summary>
         /// <param name="mode">Validation mode.</param>
-        private static void ChangeValidationMode(string mode)
+        private static IRecordValidator ChangeValidationMode(string mode)
         {
+            var validator = new ValidatorBuilder();
+
             if (mode == "CUSTOM")
             {
-                fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
+                validator
+                    .ValidateFirstName(2, 20)
+                    .ValidateLastName(2, 20)
+                    .ValidateDateOfBirth(new DateTime(1950, 01, 01), new DateTime(2015, 01, 01))
+                    .ValidateIncome(150)
+                    .ValidateTax(10, 70)
+                    .ValidateBlock(65, 90);
                 ValidationMode = mode;
             }
             else
             {
-                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                validator
+                    .ValidateFirstName(2, 100)
+                    .ValidateLastName(2, 100)
+                    .ValidateDateOfBirth(new DateTime(1950, 01, 01), new DateTime(2020, 01, 01))
+                    .ValidateIncome(0)
+                    .ValidateTax(0, 100)
+                    .ValidateBlock(65, 90);
             }
+
+            return validator.Create();
         }
 
         /// <summary>
         /// Change storage system type.
         /// </summary>
         /// <param name="mode">Storage mode.</param>
-        private static void ChangeStorage(string mode)
+        private static void ChangeStorage(string mode, string validationMode)
         {
             if (mode == "FILE")
             {
                 FileStream stream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
-
-                if (ValidationMode == "CUSTOM")
-                {
-                    fileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());
-                }
-                else
-                {
-                    fileCabinetService = new FileCabinetFilesystemService(stream, new DefaultValidator());
-                }
+                fileCabinetService = new FileCabinetFilesystemService(stream, ChangeValidationMode(validationMode));
             }
             else
             {
-                if (ValidationMode == "CUSTOM")
-                {
-                    fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
-                }
-                else
-                {
-                    fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-                }
+                fileCabinetService = new FileCabinetMemoryService(ChangeValidationMode(validationMode));
             }
         }
 
@@ -173,8 +174,6 @@ namespace FileCabinetApp
                     {
                         validationMode = cmdArguments[i + 1].ToUpperInvariant();
                     }
-
-                    ChangeValidationMode(validationMode);
                 }
                 else if (cmdArguments[i].Contains("-s", culture))
                 {
@@ -189,7 +188,7 @@ namespace FileCabinetApp
                 }
             }
 
-            ChangeStorage(storageMode);
+            ChangeStorage(storageMode, validationMode);
         }
     }
 }
