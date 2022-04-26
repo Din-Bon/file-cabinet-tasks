@@ -1256,16 +1256,6 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomValidator">
-            <summary>
-            Custom validate system.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CustomValidator"/> class.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.DateOfBirthValidator">
             <summary>
             Validate date of birth.
@@ -1287,16 +1277,6 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Date of birth out of range.</exception>
-        </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
-            <summary>
-            Default validate system.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.DefaultValidator"/> class.
-            </summary>
         </member>
         <member name="T:FileCabinetApp.FirstNameValidator">
             <summary>

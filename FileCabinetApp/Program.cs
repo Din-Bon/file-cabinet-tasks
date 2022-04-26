@@ -11,7 +11,7 @@ namespace FileCabinetApp
     {
         private const string DeveloperName = "Artem Filimonov";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private static bool IsRunning = true;
+        private static bool isRunning = true;
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace FileCabinetApp
                 AppCommandRequest request = new AppCommandRequest(command, parameters);
                 comandHandler.Handle(request);
             }
-            while (IsRunning);
+            while (isRunning);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler(obj => { IsRunning = false; });
+            var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
             var editHandler = new EditCommandHandler(fileCabinetService);
