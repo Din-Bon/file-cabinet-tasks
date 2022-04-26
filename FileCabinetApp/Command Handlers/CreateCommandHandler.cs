@@ -201,11 +201,6 @@ namespace FileCabinetApp
         {
             int minTax = 0, maxTax = 100;
 
-            if (Program.ValidationMode == "CUSTOM")
-            {
-                minTax = 10;
-            }
-
             if (tax < minTax || tax > maxTax)
             {
                 return new Tuple<bool, string>(false, nameof(tax));

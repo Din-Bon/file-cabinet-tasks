@@ -9,7 +9,7 @@
         /// <summary>
         /// Base file cabinet service.
         /// </summary>
-        protected IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        protected IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCommandHandlerBase"/> class.

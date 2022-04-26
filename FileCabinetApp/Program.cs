@@ -12,7 +12,7 @@ namespace FileCabinetApp
         private const string DeveloperName = "Artem Filimonov";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
         private static bool IsRunning = true;
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
 
         /// <summary>
         /// Gets and sets validation mode.
@@ -102,31 +102,19 @@ namespace FileCabinetApp
         /// <param name="mode">Validation mode.</param>
         private static IRecordValidator ChangeValidationMode(string mode)
         {
-            var validator = new ValidatorBuilder();
+            IRecordValidator validator;
 
             if (mode == "CUSTOM")
             {
-                validator
-                    .ValidateFirstName(2, 20)
-                    .ValidateLastName(2, 20)
-                    .ValidateDateOfBirth(new DateTime(1950, 01, 01), new DateTime(2015, 01, 01))
-                    .ValidateIncome(150)
-                    .ValidateTax(10, 70)
-                    .ValidateBlock(65, 90);
+                validator = new ValidatorBuilder().CreateCustom();
                 ValidationMode = mode;
             }
             else
             {
-                validator
-                    .ValidateFirstName(2, 100)
-                    .ValidateLastName(2, 100)
-                    .ValidateDateOfBirth(new DateTime(1950, 01, 01), new DateTime(2020, 01, 01))
-                    .ValidateIncome(0)
-                    .ValidateTax(0, 100)
-                    .ValidateBlock(65, 90);
+                validator = new ValidatorBuilder().CreateDefault();
             }
 
-            return validator.Create();
+            return validator;
         }
 
         /// <summary>

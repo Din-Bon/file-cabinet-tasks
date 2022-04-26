@@ -1399,6 +1399,28 @@
             <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Tax out of range.</exception>
         </member>
+        <member name="T:FileCabinetApp.ValidationTypes">
+            <summary>
+            In that class we can add some
+            validation type.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ValidationTypes.CreateDefault(FileCabinetApp.ValidatorBuilder)">
+            <summary>
+            Create validator with
+            default set of rules.
+            </summary>
+            <param name="validator">Builder for validator.</param>
+            <returns>Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidationTypes.CreateCustom(FileCabinetApp.ValidatorBuilder)">
+            <summary>
+            Create validator with
+            custom set of rules.
+            </summary>
+            <param name="validator">Builder for validator.</param>
+            <returns>Validator.</returns>
+        </member>
         <member name="T:FileCabinetApp.ValidatorBuilder">
             <summary>
             Class that create validator.
