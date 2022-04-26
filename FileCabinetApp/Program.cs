@@ -11,43 +11,14 @@ namespace FileCabinetApp
     {
         private const string DeveloperName = "Artem Filimonov";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private const int CommandHelpIndex = 0;
-        private const int DescriptionHelpIndex = 1;
-        private const int ExplanationHelpIndex = 2;
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-        private static string validationMode = "DEFAULT";
-
         private static bool isRunning = true;
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
 
-        private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
-        {
-            new Tuple<string, Action<string>>("help", PrintHelp),
-            new Tuple<string, Action<string>>("exit", Exit),
-            new Tuple<string, Action<string>>("stat", Stat),
-            new Tuple<string, Action<string>>("create", Create),
-            new Tuple<string, Action<string>>("list", List),
-            new Tuple<string, Action<string>>("edit", Edit),
-            new Tuple<string, Action<string>>("find", Find),
-            new Tuple<string, Action<string>>("export", Export),
-            new Tuple<string, Action<string>>("import", Import),
-            new Tuple<string, Action<string>>("remove", Remove),
-            new Tuple<string, Action<string>>("Purge", Purge),
-        };
-
-        private static string[][] helpMessages = new string[][]
-        {
-            new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
-            new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
-            new string[] { "stat", "show stats", "The 'stat' show stats." },
-            new string[] { "create", "create new record", "The 'create' create new record." },
-            new string[] { "list", "show list of records", "The 'list' show list of records." },
-            new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
-            new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
-            new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
-            new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
-            new string[] { "remove", "remove record", "The 'remove' remove record by id." },
-            new string[] { "purge", "purge records", "The 'purge' purge removed records." },
-        };
+        /// <summary>
+        /// Gets and sets validation mode.
+        /// </summary>
+        /// <value>Validation mode.</value>
+        public static string ValidationMode { get; private set; } = "DEFAULT";
 
         /// <summary>
         /// Program entry point.
@@ -66,7 +37,9 @@ namespace FileCabinetApp
                 var line = Console.ReadLine();
                 var inputs = line != null ? line.Split(' ', 2) : new string[] { string.Empty, string.Empty };
                 const int commandIndex = 0;
+                const int parametersIndex = 1;
                 var command = inputs[commandIndex];
+                var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
                 if (string.IsNullOrEmpty(command))
                 {
@@ -74,637 +47,90 @@ namespace FileCabinetApp
                     continue;
                 }
 
-#pragma warning disable CA1309 // Использование порядкового сравнения строк
-                var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
-#pragma warning restore CA1309 // Использование порядкового сравнения строк
-
-                if (index >= 0)
-                {
-                    const int parametersIndex = 1;
-                    var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-                    commands[index].Item2(parameters);
-                }
-                else
-                {
-                    PrintMissedCommandInfo(command);
-                }
+                var comandHandler = CreateCommandHandlers();
+                AppCommandRequest request = new AppCommandRequest(command, parameters);
+                comandHandler.Handle(request);
             }
             while (isRunning);
         }
 
         /// <summary>
-        /// Create record.
+        /// Create command handlers.
         /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void Create(string parameters)
+        /// <returns>Command handler.</returns>
+        private static ICommandHandler CreateCommandHandlers()
         {
-            bool check = true;
-
-            do
-            {
-                Console.Write("First name: ");
-                var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-                Console.Write("Last name: ");
-                var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-                Console.Write("Date of birth: ");
-                var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-                Console.Write("Income: ");
-                var income = ReadInput<short>(ShortConverter, ValidateIncome);
-                Console.Write("Tax: ");
-                decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-                Console.Write("Block: ");
-                char block = ReadInput<char>(CharConverter, ValidateBlock);
-                Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-                check = ValidateParameters(person, income, tax, block);
-
-                if (!check)
-                {
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
-                }
-            }
-            while (check);
+            var helpHandler = new HelpCommandHandler();
+            var createHandler = new CreateCommandHandler(fileCabinetService);
+            var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
+            var statHandler = new StatCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
+            var editHandler = new EditCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
+            var exportHandler = new ExportCommandHandler(fileCabinetService);
+            var importHandler = new ImportCommandHandler(fileCabinetService);
+            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            helpHandler.SetNext(createHandler);
+            createHandler.SetNext(exitHandler);
+            exitHandler.SetNext(statHandler);
+            statHandler.SetNext(listHandler);
+            listHandler.SetNext(editHandler);
+            editHandler.SetNext(findHandler);
+            findHandler.SetNext(exportHandler);
+            exportHandler.SetNext(importHandler);
+            importHandler.SetNext(removeHandler);
+            removeHandler.SetNext(purgeHandler);
+            return helpHandler;
         }
 
         /// <summary>
-        /// Modify existing records.
+        /// Default record printer.
         /// </summary>
-        /// <param name="parameters">Id of an existing record.</param>
-        private static void Edit(string parameters)
+        /// <param name="records">Source.</param>
+        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
         {
-            if (string.IsNullOrEmpty(parameters))
+            foreach (var record in records)
             {
-                throw new ArgumentNullException(nameof(parameters), "empty id");
+                Console.WriteLine(record.ToString());
             }
-
-            int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
-
-            if (id < 0)
-            {
-                throw new ArgumentException("id value less than 0", nameof(parameters));
-            }
-
-            Console.Write("First name: ");
-            var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-            Console.Write("Last name: ");
-            var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-            Console.Write("Date of birth: ");
-            var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-            Console.Write("Income: ");
-            var income = ReadInput<short>(ShortConverter, ValidateIncome);
-            Console.Write("Tax: ");
-            decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-            Console.Write("Block: ");
-            char block = ReadInput<char>(CharConverter, ValidateBlock);
-            Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-
-            if (!ValidateParameters(person, income, tax, block))
-            {
-                fileCabinetService.EditRecord(id, person, income, tax, block);
-                Console.WriteLine($"record #{id} is updated.");
-            }
-            else
-            {
-                Console.WriteLine($"wrong parameters{Environment.NewLine}record #{id} isn't updated.");
-            }
-        }
-
-        /// <summary>
-        /// Shows list of records.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void List(string parameters)
-        {
-            ReadOnlyCollection<FileCabinetRecord> records = fileCabinetService.GetRecords();
-            PrintRecords(records);
-        }
-
-        /// <summary>
-        /// Shows count of existing records.
-        /// </summary>
-        /// <param name="parameters">Input prameters.</param>
-        private static void Stat(string parameters)
-        {
-            var recordsCount = fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount.Item1} record(s). Removed - {recordsCount.Item2}");
-        }
-
-        /// <summary>
-        /// Find record.
-        /// </summary>
-        /// <param name="parameters">Array from property and value.</param>
-        private static void Find(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "wrong find command");
-            }
-
-            var commands = parameters.Split(' ', 2);
-            string property = commands[0].ToUpperInvariant();
-            string parameter = commands[1].Trim('"');
-
-            switch (property)
-            {
-                case "FIRSTNAME":
-                    PrintRecords(fileCabinetService.FindByFirstName(parameter));
-                    break;
-                case "LASTNAME":
-                    PrintRecords(fileCabinetService.FindByLastName(parameter));
-                    break;
-                case "DATEOFBIRTH":
-                    PrintRecords(fileCabinetService.FindByDateofbirth(parameter));
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Import records from file.
-        /// </summary>
-        /// <param name="parameters">Array from property and value.</param>
-        private static void Import(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "wrong find command");
-            }
-
-            var commands = parameters.Split(' ', 2);
-            string fileName = commands[1];
-            string path = ParseImport(fileName);
-            string property = commands[0].ToUpperInvariant();
-            string[] formats = { "CSV", "XML" };
-
-            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
-            {
-                StreamReader reader = new StreamReader(path);
-                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
-
-                if (property == "CSV")
-                {
-                    serviceSnapshot.LoadFromCsv(reader);
-                }
-                else if (property == "XML")
-                {
-                    serviceSnapshot.LoadFromXml(reader);
-                }
-
-                int count = fileCabinetService.Restore(serviceSnapshot);
-                reader.Close();
-                Console.WriteLine($"{count} records were imported from {path}.");
-            }
-        }
-
-        /// <summary>
-        /// Export records in file.
-        /// </summary>
-        /// <param name="parameters">Array from property and value.</param>
-        private static void Export(string parameters)
-        {
-            if (string.IsNullOrEmpty(parameters))
-            {
-                throw new ArgumentNullException(nameof(parameters), "wrong find command");
-            }
-
-            var commands = parameters.Split(' ', 2);
-            string fileName = commands[1];
-            string path = ParseExport(fileName);
-            string property = commands[0].ToUpperInvariant();
-            string[] formats = { "CSV", "XML" };
-
-            if (!string.IsNullOrEmpty(path) && formats.Contains(property))
-            {
-                StreamWriter writer = new StreamWriter(path);
-                FileCabinetServiceSnapshot serviceSnapshot = fileCabinetService.MakeSnapshot();
-
-                if (property == "CSV")
-                {
-                    serviceSnapshot.SaveToCsv(writer);
-                }
-                else if (property == "XML")
-                {
-                    serviceSnapshot.SaveToXml(writer);
-                }
-
-                writer.Flush();
-                writer.Close();
-                Console.WriteLine($"All records are exported to file {path}.");
-            }
-        }
-
-        /// <summary>
-        /// Parse string for export command.
-        /// </summary>
-        /// <param name="input">Array from property and value.</param>
-        private static string ParseExport(string input)
-        {
-            string fileName = input;
-            string path = fileName;
-            char rewrite = 'Y';
-
-            if (path.Contains('\\', StringComparison.InvariantCulture))
-            {
-                path = input.Substring(0, input.LastIndexOf('\\'));
-                fileName = input.Substring(input.LastIndexOf('\\'), input.Length - input.LastIndexOf('\\') - 1);
-                if (!Directory.Exists(path))
-                {
-                    Console.WriteLine($"Export failed: can't open file {path}.");
-                    return string.Empty;
-                }
-            }
-
-            if (File.Exists(input))
-            {
-                Console.Write($"File is exist - rewrite {input}? [Y/n] ");
-                rewrite = (char)Console.Read();
-            }
-
-            if (rewrite == 'Y')
-            {
-                return input;
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Parse string for import command.
-        /// </summary>
-        /// <param name="input">Array from property and value.</param>
-        private static string ParseImport(string input)
-        {
-            string fileName = input;
-            string path = fileName;
-
-            if (path.Contains('\\', StringComparison.InvariantCulture))
-            {
-                path = input.Substring(0, input.LastIndexOf('\\'));
-                fileName = input.Substring(input.LastIndexOf('\\'), input.Length - input.LastIndexOf('\\') - 1);
-                if (!Directory.Exists(path))
-                {
-                    Console.WriteLine($"Export failed: can't open file {path}.");
-                    return string.Empty;
-                }
-            }
-
-            if (!File.Exists(input))
-            {
-                Console.WriteLine($"File doesn't exist");
-                return string.Empty;
-            }
-
-            return input;
-        }
-
-        /// <summary>
-        /// Remove record by id.
-        /// </summary>
-        /// <param name="parameters">String parameter(id).</param>
-        private static void Remove(string parameters)
-        {
-            int id = 0;
-
-            if (string.IsNullOrEmpty(parameters) || !int.TryParse(parameters, out id))
-            {
-                throw new ArgumentNullException(nameof(parameters), "empty id");
-            }
-
-            if (id <= 0)
-            {
-                throw new ArgumentException("wrond id (<1)", nameof(parameters));
-            }
-
-            fileCabinetService.RemoveRecord(id);
-        }
-
-        /// <summary>
-        /// Purge records.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void Purge(string parameters)
-        {
-            int count = fileCabinetService.Purge();
-            var length = fileCabinetService.GetStat().Item1 + count;
-            Console.WriteLine($"Data file processing is completed: {count} of {length} records were purged.");
-        }
-
-        /// <summary>
-        /// Return tuple of parameters.
-        /// </summary>
-        /// <param name="name">String parameter(name).</param>
-        /// <returns>Tuple of parameters.</returns>
-        private static Tuple<bool, string, string> StringConverter(string name)
-        {
-            return new Tuple<bool, string, string>(true, nameof(name), name);
-        }
-
-        /// <summary>
-        /// Return tuple of parameters.
-        /// </summary>
-        /// <param name="strDateOfBirth">String parameter(date of birth).</param>
-        /// <returns>Tuple of parameters.</returns>
-        private static Tuple<bool, string, DateTime> DateTimeConverter(string strDateOfBirth)
-        {
-            DateTime dateOfBirth;
-
-            if (!DateTime.TryParseExact(strDateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
-            {
-                return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
-            }
-
-            return new Tuple<bool, string, DateTime>(true, nameof(strDateOfBirth), dateOfBirth);
-        }
-
-        /// <summary>
-        /// Return tuple of parameters.
-        /// </summary>
-        /// <param name="strIncome">String parameter(income).</param>
-        /// <returns>Tuple of parameters.</returns>
-        private static Tuple<bool, string, short> ShortConverter(string strIncome)
-        {
-            short income;
-
-            if (!short.TryParse(strIncome, out income))
-            {
-                return new Tuple<bool, string, short>(false, nameof(strIncome), 0);
-            }
-
-            return new Tuple<bool, string, short>(true, nameof(strIncome), income);
-        }
-
-        /// <summary>
-        /// Return tuple of parameters.
-        /// </summary>
-        /// <param name="strTax">String parameter(tax).</param>
-        /// <returns>Tuple of parameters.</returns>
-        private static Tuple<bool, string, decimal> DecimalConverter(string strTax)
-        {
-            decimal tax;
-
-            if (!decimal.TryParse(strTax, out tax))
-            {
-                return new Tuple<bool, string, decimal>(false, nameof(strTax), 0);
-            }
-
-            return new Tuple<bool, string, decimal>(true, nameof(strTax), tax);
-        }
-
-        /// <summary>
-        /// Return tuple of parameters.
-        /// </summary>
-        /// <param name="strBlock">String parameter(block).</param>
-        /// <returns>Tuple of parameters.</returns>
-        private static Tuple<bool, string, char> CharConverter(string strBlock)
-        {
-            char block;
-
-            if (!char.TryParse(strBlock, out block))
-            {
-                return new Tuple<bool, string, char>(false, nameof(strBlock), '\0');
-            }
-
-            return new Tuple<bool, string, char>(true, nameof(strBlock), block);
-        }
-
-        /// <summary>
-        /// Validates input values.
-        /// </summary>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's income.</param>
-        /// <param name="tax">Person's tax.</param>
-        /// <param name="block">Person's living block.</param>
-        /// <returns>Is the data false.</returns>
-        private static bool ValidateParameters(Person person, short income, decimal tax, char block)
-        {
-            int minNameLength = 2, maxNameLength = 60;
-            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
-            DateTime maxDateOfBirth = DateTime.Today;
-            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
-
-            if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
-            {
-                return true;
-            }
-
-            if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
-            {
-                return true;
-            }
-
-            if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
-            {
-                return true;
-            }
-
-            if (income < 0)
-            {
-                return true;
-            }
-
-            if (tax < 0 || tax > 100)
-            {
-                return true;
-            }
-
-            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Checks first name for compliance with the validation rules.
-        /// </summary>
-        /// <param name="firstName">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateFirstName(string firstName)
-        {
-            int minNameLength = 2, maxNameLength = 60;
-
-            if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < minNameLength || firstName.Length > maxNameLength)
-            {
-                return new Tuple<bool, string>(false, nameof(firstName));
-            }
-
-            return new Tuple<bool, string>(true, nameof(firstName));
-        }
-
-        /// <summary>
-        /// Checks last name for compliance with the validation rules.
-        /// </summary>
-        /// <param name="lastName">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateLastName(string lastName)
-        {
-            int minNameLength = 2, maxNameLength = 60;
-
-            if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < minNameLength || lastName.Length > maxNameLength)
-            {
-                return new Tuple<bool, string>(false, nameof(lastName));
-            }
-
-            return new Tuple<bool, string>(true, nameof(lastName));
-        }
-
-        /// <summary>
-        /// Checks date of birth for compliance with the validation rules.
-        /// </summary>
-        /// <param name="dateOfBirth">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
-        {
-            DateTime minDateOfBirth = new DateTime(1950, 01, 01);
-            DateTime maxDateOfBirth = DateTime.Today;
-
-            if (dateOfBirth < minDateOfBirth || dateOfBirth > maxDateOfBirth)
-            {
-                return new Tuple<bool, string>(false, nameof(dateOfBirth));
-            }
-
-            return new Tuple<bool, string>(true, nameof(dateOfBirth));
-        }
-
-        /// <summary>
-        /// Checks income for compliance with the validation rules.
-        /// </summary>
-        /// <param name="income">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateIncome(short income)
-        {
-            if (income < 0)
-            {
-                return new Tuple<bool, string>(false, nameof(income));
-            }
-
-            return new Tuple<bool, string>(true, nameof(income));
-        }
-
-        /// <summary>
-        /// Checks tax for compliance with the validation rules.
-        /// </summary>
-        /// <param name="tax">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateTax(decimal tax)
-        {
-            int minTax = 0, maxTax = 100;
-
-            if (validationMode == "CUSTOM")
-            {
-                minTax = 10;
-            }
-
-            if (tax < minTax || tax > maxTax)
-            {
-                return new Tuple<bool, string>(false, nameof(tax));
-            }
-
-            return new Tuple<bool, string>(true, nameof(tax));
-        }
-
-        /// <summary>
-        /// Checks block letter for compliance with the validation rules.
-        /// </summary>
-        /// <param name="block">Input data.</param>
-        /// <returns>Test results.</returns>
-        private static Tuple<bool, string> ValidateBlock(char block)
-        {
-            int firstAlphabetLetter = 65, lastAlphabetLetter = 90;
-
-            if (block < firstAlphabetLetter || block > lastAlphabetLetter)
-            {
-                return new Tuple<bool, string>(false, nameof(block));
-            }
-
-            return new Tuple<bool, string>(true, nameof(block));
-        }
-
-        /// <summary>
-        /// Main manipulation with the input parameters.
-        /// </summary>
-        /// <param name="converter">Convert input string in the right type.</param>
-        /// <param name="validator">Check input data for compliance with the validation rules.</param>
-        /// <returns>Test results.</returns>
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            do
-            {
-                T value;
-                var input = Console.ReadLine();
-
-                if (input == null)
-                {
-                    throw new ArgumentNullException("empty input", nameof(input));
-                }
-
-                var conversionResult = converter(input);
-
-                if (!conversionResult.Item1)
-                {
-                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                value = conversionResult.Item3;
-                var validationResult = validator(value);
-
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
-            }
-            while (true);
         }
 
         /// <summary>
         /// Change validation mode.
         /// </summary>
         /// <param name="mode">Validation mode.</param>
-        private static void ChangeValidationMode(string mode)
+        private static IRecordValidator ChangeValidationMode(string mode)
         {
+            IRecordValidator validator;
+
             if (mode == "CUSTOM")
             {
-                fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
-                validationMode = mode;
+                validator = new ValidatorBuilder().CreateCustom();
+                ValidationMode = mode;
             }
             else
             {
-                fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
+                validator = new ValidatorBuilder().CreateDefault();
             }
+
+            return validator;
         }
 
         /// <summary>
         /// Change storage system type.
         /// </summary>
         /// <param name="mode">Storage mode.</param>
-        private static void ChangeStorage(string mode)
+        private static void ChangeStorage(string mode, string validationMode)
         {
             if (mode == "FILE")
             {
                 FileStream stream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
-
-                if (validationMode == "CUSTOM")
-                {
-                    fileCabinetService = new FileCabinetFilesystemService(stream, new CustomValidator());
-                }
-                else
-                {
-                    fileCabinetService = new FileCabinetFilesystemService(stream, new DefaultValidator());
-                }
+                fileCabinetService = new FileCabinetFilesystemService(stream, ChangeValidationMode(validationMode));
             }
             else
             {
-                if (validationMode == "CUSTOM")
-                {
-                    fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
-                }
-                else
-                {
-                    fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
-                }
+                fileCabinetService = new FileCabinetMemoryService(ChangeValidationMode(validationMode));
             }
         }
 
@@ -736,8 +162,6 @@ namespace FileCabinetApp
                     {
                         validationMode = cmdArguments[i + 1].ToUpperInvariant();
                     }
-
-                    ChangeValidationMode(validationMode);
                 }
                 else if (cmdArguments[i].Contains("-s", culture))
                 {
@@ -752,73 +176,7 @@ namespace FileCabinetApp
                 }
             }
 
-            ChangeStorage(storageMode);
-        }
-
-        /// <summary>
-        /// Print records data on the console.
-        /// </summary>
-        /// <param name="records">Array of the records.</param>
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records)
-        {
-            for (int i = 0; i < records.Count; i++)
-            {
-                Console.WriteLine(records[i].ToString());
-            }
-        }
-
-        /// <summary>
-        /// Warning message.
-        /// </summary>
-        /// <param name="command">Comman name.</param>
-        private static void PrintMissedCommandInfo(string command)
-        {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Print lists of the command.
-        /// </summary>
-        /// <param name="parameters">Command name.</param>
-        private static void PrintHelp(string parameters)
-        {
-            if (!string.IsNullOrEmpty(parameters))
-            {
-#pragma warning disable CA1309 // Использование порядкового сравнения строк
-                var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[Program.CommandHelpIndex], parameters, StringComparison.InvariantCultureIgnoreCase));
-#pragma warning restore CA1309 // Использование порядкового сравнения строк
-
-                if (index >= 0)
-                {
-                    Console.WriteLine(helpMessages[index][Program.ExplanationHelpIndex]);
-                }
-                else
-                {
-                    Console.WriteLine($"There is no explanation for '{parameters}' command.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Available commands:");
-
-                foreach (var helpMessage in helpMessages)
-                {
-                    Console.WriteLine("\t{0}\t- {1}", helpMessage[Program.CommandHelpIndex], helpMessage[Program.DescriptionHelpIndex]);
-                }
-            }
-
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Exit from the application.
-        /// </summary>
-        /// <param name="parameters">Input parameters.</param>
-        private static void Exit(string parameters)
-        {
-            Console.WriteLine("Exiting an application...");
-            isRunning = false;
+            ChangeStorage(storageMode, validationMode);
         }
     }
 }

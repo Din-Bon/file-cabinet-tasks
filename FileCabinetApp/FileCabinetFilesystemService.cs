@@ -573,7 +573,6 @@ namespace FileCabinetApp
                         DateOfBirth = record.DateOfBirth,
                     };
 
-                    this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
                     this.AddFirstNameDictionary(record.FirstName, record);
                     this.AddLastNameDictionary(record.LastName, record);
                     this.AddDateOfBirthDictionary(record.DateOfBirth, record);

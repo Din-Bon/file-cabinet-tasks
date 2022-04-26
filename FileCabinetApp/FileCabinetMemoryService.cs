@@ -251,15 +251,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Purge records.
-        /// </summary>
-        /// <returns>Count of purged records.</returns>
-        public int Purge()
-        {
-            return 0;
-        }
-
-        /// <summary>
         /// Get array of records.
         /// </summary>
         /// <returns>Collection of records.</returns>
