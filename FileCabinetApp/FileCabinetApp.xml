@@ -537,6 +537,40 @@
             </summary>
             <param name="parameters">Input prameters.</param>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Class that create snapshot of records in csv format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Class that create snapshot of records in xml format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
             Class, that working with the records.
@@ -935,74 +969,6 @@
             </summary>
             <returns>Record string representation.</returns>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
-            <summary>
-            Class, that import csv.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
-            </summary>
-            <param name="stream">.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
-            <summary>
-            Read data from csv file.
-            </summary>
-            <returns>List of records.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
-            <summary>
-            Class that create snapshot of records in csv format.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
-            </summary>
-            <param name="writer">Stream to write data.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write data from record to stream.
-            </summary>
-            <param name="record">Record with data.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
-            <summary>
-            Class, that import xml.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
-            </summary>
-            <param name="stream">.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
-            <summary>
-            Read data from xml file.
-            </summary>
-            <returns>List of records.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
-            <summary>
-            Class that create snapshot of records in xml format.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
-            </summary>
-            <param name="writer">Stream to write data.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write data from record to stream.
-            </summary>
-            <param name="record">Record with data.</param>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
             Class that create snapshot of records.
@@ -1127,6 +1093,40 @@
             </summary>
             <returns>Count of record and count of removed records.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            Class, that import csv.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Read data from csv file.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
+            <summary>
+            Class, that import xml.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Read data from xml file.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.Person">
             <summary>
             Class describing a main persons data.
@@ -1202,7 +1202,7 @@
             </summary>
             <param name="mode">Validation mode.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String,System.Boolean)">
+        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Change storage system type.
             </summary>
@@ -1214,11 +1214,107 @@
             </summary>
             <param name="useStopwatch">Use timer?.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.UseLogger(System.Boolean)">
+            <summary>
+            Add log system to service.
+            </summary>
+            <param name="useLogger">Use logger?.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.ParseCLArguments(System.String[])">
             <summary>
             Parse command line argumets string.
             </summary>
             <param name="cmdArguments">CL arguments.</param>
+        </member>
+        <member name="T:FileCabinetApp.ServiceLogger">
+            <summary>
+            Decorator for service object
+            that write log.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceLogger"/> class.
+            </summary>
+            <param name="service">Instance of FileCabinetService class.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Count of record and count of removed records.</returns>
         </member>
         <member name="T:FileCabinetApp.ServiceMeter">
             <summary>

@@ -121,7 +121,7 @@ namespace FileCabinetApp
         /// Change storage system type.
         /// </summary>
         /// <param name="mode">Storage mode.</param>
-        private static void ChangeStorage(string mode, string validationMode, bool useStopwatch)
+        private static void ChangeStorage(string mode, string validationMode, bool useStopwatch, bool useLogger)
         {
             if (mode == "FILE")
             {
@@ -133,6 +133,7 @@ namespace FileCabinetApp
                 fileCabinetService = new FileCabinetMemoryService(ChangeValidationMode(validationMode));
             }
 
+            UseLogger(useLogger);
             UseStopwatch(useStopwatch);
         }
 
@@ -145,6 +146,19 @@ namespace FileCabinetApp
             if (useStopwatch)
             {
                 fileCabinetService = new ServiceMeter(fileCabinetService);
+            }
+        }
+
+        /// <summary>
+        /// Add log system to service.
+        /// </summary>
+        /// <param name="useLogger">Use logger?.</param>
+        private static void UseLogger(bool useLogger)
+        {
+            if (useLogger)
+            {
+                UseStopwatch(true);
+                fileCabinetService = new ServiceLogger(fileCabinetService);
             }
         }
 
@@ -162,6 +176,7 @@ namespace FileCabinetApp
 
             StringComparison culture = StringComparison.InvariantCulture;
             bool useStopwatch = cmdArguments.Contains("use-stopwatch");
+            bool useLogger = cmdArguments.Contains("use-logger");
             string validationMode = "DEFAULT";
             string storageMode = "MEMORY";
 
@@ -199,7 +214,7 @@ namespace FileCabinetApp
                 }
             }
 
-            ChangeStorage(storageMode, validationMode, useStopwatch);
+            ChangeStorage(storageMode, validationMode, useStopwatch, useLogger);
         }
     }
 }

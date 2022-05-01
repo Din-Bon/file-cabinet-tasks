@@ -328,10 +328,11 @@ namespace FileCabinetApp
                 char block = ReadInput<char>(CharConverter, ValidateBlock);
                 Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
                 check = ValidateParameters(person, income, tax, block);
+                int id = this.fileCabinetService.CreateRecord(person, income, tax, block);
 
-                if (!check)
+                if (!check && id > 0)
                 {
-                    Console.WriteLine($"Record #{this.fileCabinetService.CreateRecord(person, income, tax, block)} is created.");
+                    Console.WriteLine($"Record #{id} is created.");
                 }
             }
             while (check);
