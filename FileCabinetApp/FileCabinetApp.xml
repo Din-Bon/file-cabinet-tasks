@@ -537,6 +537,40 @@
             </summary>
             <param name="parameters">Input prameters.</param>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Class that create snapshot of records in csv format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Class that create snapshot of records in xml format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Stream to write data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write data from record to stream.
+            </summary>
+            <param name="record">Record with data.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
             Class, that working with the records.
@@ -935,74 +969,6 @@
             </summary>
             <returns>Record string representation.</returns>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
-            <summary>
-            Class, that import csv.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
-            </summary>
-            <param name="stream">.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
-            <summary>
-            Read data from csv file.
-            </summary>
-            <returns>List of records.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
-            <summary>
-            Class that create snapshot of records in csv format.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
-            </summary>
-            <param name="writer">Stream to write data.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write data from record to stream.
-            </summary>
-            <param name="record">Record with data.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
-            <summary>
-            Class, that import xml.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
-            </summary>
-            <param name="stream">.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
-            <summary>
-            Read data from xml file.
-            </summary>
-            <returns>List of records.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
-            <summary>
-            Class that create snapshot of records in xml format.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
-            </summary>
-            <param name="writer">Stream to write data.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write data from record to stream.
-            </summary>
-            <param name="record">Record with data.</param>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
             Class that create snapshot of records.
@@ -1127,6 +1093,40 @@
             </summary>
             <returns>Count of record and count of removed records.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvReader">
+            <summary>
+            Class, that import csv.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvReader.ReadAll">
+            <summary>
+            Read data from csv file.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlReader">
+            <summary>
+            Class, that import xml.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="stream">.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlReader.ReadAll">
+            <summary>
+            Read data from xml file.
+            </summary>
+            <returns>List of records.</returns>
+        </member>
         <member name="T:FileCabinetApp.Person">
             <summary>
             Class describing a main persons data.
@@ -1202,17 +1202,209 @@
             </summary>
             <param name="mode">Validation mode.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String)">
+        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Change storage system type.
             </summary>
             <param name="mode">Storage mode.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.UseStopwatch(System.Boolean)">
+            <summary>
+            Add timer to service methods.
+            </summary>
+            <param name="useStopwatch">Use timer?.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.UseLogger(System.Boolean)">
+            <summary>
+            Add log system to service.
+            </summary>
+            <param name="useLogger">Use logger?.</param>
         </member>
         <member name="M:FileCabinetApp.Program.ParseCLArguments(System.String[])">
             <summary>
             Parse command line argumets string.
             </summary>
             <param name="cmdArguments">CL arguments.</param>
+        </member>
+        <member name="T:FileCabinetApp.ServiceLogger">
+            <summary>
+            Decorator for service object
+            that write log.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceLogger"/> class.
+            </summary>
+            <param name="service">Instance of FileCabinetService class.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Count of record and count of removed records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ServiceMeter">
+            <summary>
+            Decorator for service object
+            that measure execution time.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceMeter"/> class.
+            </summary>
+            <param name="service">Instance of FileCabinetService class.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Count of record and count of removed records.</returns>
         </member>
         <member name="T:FileCabinetApp.BlockValidator">
             <summary>
@@ -1357,6 +1549,163 @@
             <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Errors with name.</exception>
         </member>
+        <member name="T:FileCabinetApp.BlockLetterRange">
+            <summary>
+            Contain restrictions for block.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.BlockLetterRange.FirstAlphabet">
+            <summary>
+            Gets or sets first alphabet letter (in ASCII).
+            </summary>
+            <value>Block restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.BlockLetterRange.LastAlphabet">
+            <summary>
+            Gets or sets last alphabet letter (in ASCII).
+            </summary>
+            <value>Block restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.DateOfBirthRange">
+            <summary>
+            Contain restrictions for date of birth.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.DateOfBirthRange.From">
+            <summary>
+            Gets or sets minimum date of birth.
+            </summary>
+            <value>Date of birth restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.DateOfBirthRange.To">
+            <summary>
+            Gets or sets maximum date of birth.
+            </summary>
+            <value>Date of birth restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.FirstNameLength">
+            <summary>
+            Contain retrictions for first name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FirstNameLength.MinFirstNameLength">
+            <summary>
+            Gets or sets min first name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.FirstNameLength.MaxFirstNameLength">
+            <summary>
+            Gets or sets max first name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.IncomeRange">
+            <summary>
+            Contain restrictions for income.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.IncomeRange.MinIncome">
+            <summary>
+            Gets or sets min income.
+            </summary>
+            <value>Income restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.LastNameLength">
+            <summary>
+            Contain restrictions for last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.LastNameLength.MinLastNameLength">
+            <summary>
+            Gets or sets min last name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.LastNameLength.MaxLastNameLength">
+            <summary>
+            Gets or sets max last name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.TaxRange">
+            <summary>
+            Contain restrictions for tax.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.TaxRange.MinTax">
+            <summary>
+            Gets or sets min tax.
+            </summary>
+            <value>Tax restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.TaxRange.MaxTax">
+            <summary>
+            Gets or sets max tax.
+            </summary>
+            <value>Tax restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationRestrictions">
+            <summary>
+            Class that describes validation
+            parameters.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.FirstNameLength">
+            <summary>
+            Gets or sets first name restrictions.
+            </summary>
+            <value>First name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.LastNameLength">
+            <summary>
+            Gets or sets last name restrictions.
+            </summary>
+            <value>Last name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.DateOfBirthRange">
+            <summary>
+            Gets or sets date of birth range.
+            </summary>
+            <value>Date of birth restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.IncomeRange">
+            <summary>
+            Gets or sets income range.
+            </summary>
+            <value>Income restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.TaxRange">
+            <summary>
+            Gets or sets tax range.
+            </summary>
+            <value>Tax restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.BlockLetterRange">
+            <summary>
+            Gets or sets block letter range.
+            </summary>
+            <value>Block restrictions.</value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationTypeArray">
+            <summary>
+            Contain existing type of validation.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationTypeArray.Default">
+            <summary>
+            Gets or sets array of restrictions
+            for some type of validation.
+            </summary>
+            <value>Array of validation rules.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationTypeArray.Custom">
+            <summary>
+            Gets or sets array of restrictions
+            for some type of validation.
+            </summary>
+            <value>Array of validation rules.</value>
+        </member>
         <member name="T:FileCabinetApp.TaxValidator">
             <summary>
             Validate tax.
@@ -1399,6 +1748,14 @@
             custom set of rules.
             </summary>
             <param name="validator">Builder for validator.</param>
+            <returns>Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidationTypes.ValidateParameters(FileCabinetApp.ValidatorBuilder,FileCabinetApp.ValidationRestrictions)">
+            <summary>
+            Validate parameters by selected ruleset.
+            </summary>
+            <param name="validator">Builder for validator.</param>
+            <param name="ruleset">Validation mode.</param>
             <returns>Validator.</returns>
         </member>
         <member name="T:FileCabinetApp.ValidatorBuilder">

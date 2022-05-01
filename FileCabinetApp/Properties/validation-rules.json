@@ -1,0 +1,52 @@
+{
+  "default": {
+    "firstName": {
+      "min": 2,
+      "max": 60
+    },
+    "lastName": {
+      "min": 2,
+      "max": 60
+    },
+    "dateOfBirth": {
+      "from": "1/1/1950",
+      "to": "10/8/2019"
+    },
+    "income": {
+      "min": 0
+    },
+    "tax": {
+      "min": 0,
+      "max": 100
+    },
+    "block": {
+      "first": 65,
+      "last": 90
+    }
+  },
+  "custom": {
+    "firstName": {
+      "min": 5,
+      "max": 80
+    },
+    "lastName": {
+      "min": 5,
+      "max": 80
+    },
+    "dateOfBirth": {
+      "from": "1/1/1980",
+      "to": "10/8/2019"
+    },
+    "income": {
+      "min": 300
+    },
+    "tax": {
+      "min": 15,
+      "max": 75
+    },
+    "block": {
+      "first": 65,
+      "last": 90
+    }
+  }
+}
