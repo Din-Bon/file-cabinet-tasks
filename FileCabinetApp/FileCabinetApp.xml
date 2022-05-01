@@ -1357,6 +1357,163 @@
             <param name="block">Person's living block.</param>
             <exception cref="T:System.ArgumentException">Errors with name.</exception>
         </member>
+        <member name="T:FileCabinetApp.BlockLetterRange">
+            <summary>
+            Contain restrictions for block.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.BlockLetterRange.FirstAlphabet">
+            <summary>
+            Gets or sets first alphabet letter (in ASCII).
+            </summary>
+            <value>Block restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.BlockLetterRange.LastAlphabet">
+            <summary>
+            Gets or sets last alphabet letter (in ASCII).
+            </summary>
+            <value>Block restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.DateOfBirthRange">
+            <summary>
+            Contain restrictions for date of birth.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.DateOfBirthRange.From">
+            <summary>
+            Gets or sets minimum date of birth.
+            </summary>
+            <value>Date of birth restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.DateOfBirthRange.To">
+            <summary>
+            Gets or sets maximum date of birth.
+            </summary>
+            <value>Date of birth restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.FirstNameLength">
+            <summary>
+            Contain retrictions for first name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FirstNameLength.MinFirstNameLength">
+            <summary>
+            Gets or sets min first name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.FirstNameLength.MaxFirstNameLength">
+            <summary>
+            Gets or sets max first name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.IncomeRange">
+            <summary>
+            Contain restrictions for income.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.IncomeRange.MinIncome">
+            <summary>
+            Gets or sets min income.
+            </summary>
+            <value>Income restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.LastNameLength">
+            <summary>
+            Contain restrictions for last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.LastNameLength.MinLastNameLength">
+            <summary>
+            Gets or sets min last name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.LastNameLength.MaxLastNameLength">
+            <summary>
+            Gets or sets max last name length.
+            </summary>
+            <value>Name restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.TaxRange">
+            <summary>
+            Contain restrictions for tax.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.TaxRange.MinTax">
+            <summary>
+            Gets or sets min tax.
+            </summary>
+            <value>Tax restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.TaxRange.MaxTax">
+            <summary>
+            Gets or sets max tax.
+            </summary>
+            <value>Tax restriction.</value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationRestrictions">
+            <summary>
+            Class that describes validation
+            parameters.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.FirstNameLength">
+            <summary>
+            Gets or sets first name restrictions.
+            </summary>
+            <value>First name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.LastNameLength">
+            <summary>
+            Gets or sets last name restrictions.
+            </summary>
+            <value>Last name restriction.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.DateOfBirthRange">
+            <summary>
+            Gets or sets date of birth range.
+            </summary>
+            <value>Date of birth restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.IncomeRange">
+            <summary>
+            Gets or sets income range.
+            </summary>
+            <value>Income restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.TaxRange">
+            <summary>
+            Gets or sets tax range.
+            </summary>
+            <value>Tax restrictions.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationRestrictions.BlockLetterRange">
+            <summary>
+            Gets or sets block letter range.
+            </summary>
+            <value>Block restrictions.</value>
+        </member>
+        <member name="T:FileCabinetApp.ValidationTypeArray">
+            <summary>
+            Contain existing type of validation.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ValidationTypeArray.Default">
+            <summary>
+            Gets or sets array of restrictions
+            for some type of validation.
+            </summary>
+            <value>Array of validation rules.</value>
+        </member>
+        <member name="P:FileCabinetApp.ValidationTypeArray.Custom">
+            <summary>
+            Gets or sets array of restrictions
+            for some type of validation.
+            </summary>
+            <value>Array of validation rules.</value>
+        </member>
         <member name="T:FileCabinetApp.TaxValidator">
             <summary>
             Validate tax.
@@ -1399,6 +1556,14 @@
             custom set of rules.
             </summary>
             <param name="validator">Builder for validator.</param>
+            <returns>Validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidationTypes.ValidateParameters(FileCabinetApp.ValidatorBuilder,FileCabinetApp.ValidationRestrictions)">
+            <summary>
+            Validate parameters by selected ruleset.
+            </summary>
+            <param name="validator">Builder for validator.</param>
+            <param name="ruleset">Validation mode.</param>
             <returns>Validator.</returns>
         </member>
         <member name="T:FileCabinetApp.ValidatorBuilder">
