@@ -121,7 +121,7 @@ namespace FileCabinetApp
         /// Change storage system type.
         /// </summary>
         /// <param name="mode">Storage mode.</param>
-        private static void ChangeStorage(string mode, string validationMode)
+        private static void ChangeStorage(string mode, string validationMode, bool useStopwatch)
         {
             if (mode == "FILE")
             {
@@ -131,6 +131,20 @@ namespace FileCabinetApp
             else
             {
                 fileCabinetService = new FileCabinetMemoryService(ChangeValidationMode(validationMode));
+            }
+
+            UseStopwatch(useStopwatch);
+        }
+
+        /// <summary>
+        /// Add timer to service methods.
+        /// </summary>
+        /// <param name="useStopwatch">Use timer?.</param>
+        private static void UseStopwatch(bool useStopwatch)
+        {
+            if (useStopwatch)
+            {
+                fileCabinetService = new ServiceMeter(fileCabinetService);
             }
         }
 
@@ -147,36 +161,45 @@ namespace FileCabinetApp
             };
 
             StringComparison culture = StringComparison.InvariantCulture;
+            bool useStopwatch = cmdArguments.Contains("use-stopwatch");
             string validationMode = "DEFAULT";
             string storageMode = "MEMORY";
 
-            for (int i = 0; i < cmdArguments.Length; i++)
+            var valmode = Array.Find(cmdArguments, argument => argument.Contains("--validation-rules=", culture));
+
+            if (valmode != null)
             {
-                if (cmdArguments[i].Contains("-v", culture))
+                validationMode = valmode.Split('=')[1].ToUpperInvariant();
+            }
+
+            if (cmdArguments.Contains("-v"))
+            {
+                var modeIndex = Array.IndexOf(cmdArguments, "-v");
+
+                if (modeIndex != -1)
                 {
-                    if (cmdArguments[i].Contains("--validation-rules=", culture))
-                    {
-                        validationMode = cmdArguments[i].Split('=')[1].ToUpperInvariant();
-                    }
-                    else if (cmdArguments[i] == "-v")
-                    {
-                        validationMode = cmdArguments[i + 1].ToUpperInvariant();
-                    }
-                }
-                else if (cmdArguments[i].Contains("-s", culture))
-                {
-                    if (cmdArguments[i].Contains("--storage=", culture))
-                    {
-                        storageMode = cmdArguments[i].Split('=')[1].ToUpperInvariant();
-                    }
-                    else if (cmdArguments[i] == "-s")
-                    {
-                        storageMode = cmdArguments[i + 1].ToUpperInvariant();
-                    }
+                    validationMode = cmdArguments[modeIndex + 1].ToUpperInvariant();
                 }
             }
 
-            ChangeStorage(storageMode, validationMode);
+            var stormode = Array.Find(cmdArguments, argument => argument.Contains("--storage=", culture));
+
+            if (stormode != null)
+            {
+                storageMode = stormode.Split('=')[1].ToUpperInvariant();
+            }
+
+            if (cmdArguments.Contains("-s"))
+            {
+                var modeIndex = Array.IndexOf(cmdArguments, "-s");
+
+                if (modeIndex != -1)
+                {
+                    storageMode = cmdArguments[modeIndex + 1].ToUpperInvariant();
+                }
+            }
+
+            ChangeStorage(storageMode, validationMode, useStopwatch);
         }
     }
 }

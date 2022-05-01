@@ -1202,17 +1202,113 @@
             </summary>
             <param name="mode">Validation mode.</param>
         </member>
-        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String)">
+        <member name="M:FileCabinetApp.Program.ChangeStorage(System.String,System.String,System.Boolean)">
             <summary>
             Change storage system type.
             </summary>
             <param name="mode">Storage mode.</param>
+        </member>
+        <member name="M:FileCabinetApp.Program.UseStopwatch(System.Boolean)">
+            <summary>
+            Add timer to service methods.
+            </summary>
+            <param name="useStopwatch">Use timer?.</param>
         </member>
         <member name="M:FileCabinetApp.Program.ParseCLArguments(System.String[])">
             <summary>
             Parse command line argumets string.
             </summary>
             <param name="cmdArguments">CL arguments.</param>
+        </member>
+        <member name="T:FileCabinetApp.ServiceMeter">
+            <summary>
+            Decorator for service object
+            that measure execution time.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceMeter"/> class.
+            </summary>
+            <param name="service">Instance of FileCabinetService class.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.CreateRecord(FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's income.</param>
+            <param name="tax">Person's tax.</param>
+            <param name="block">Person's living block.</param>
+            <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
+            <summary>
+            Create record from the input parameters.
+            </summary>
+            <param name="id">Person's id.</param>
+            <param name="person">Personal data.</param>
+            <param name="income">Person's new income.</param>
+            <param name="tax">Person's new tax.</param>
+            <param name="block">Person's new living block.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+            Remove record by id.
+            </summary>
+            <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+            Find persons by first name.
+            </summary>
+            <param name="firstName">Person's first name.</param>
+            <returns>Array of person with same first name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+            Find persons by last name.
+            </summary>
+            <param name="lastName">Person's last name.</param>
+            <returns>Array of person with same last name.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByDateofbirth(System.String)">
+            <summary>
+            Find persons by date of birth.
+            </summary>
+            <param name="strDateOfBirth">Person's date.</param>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
+            <summary>
+            Make snapshot of the current list of records.
+            </summary>
+            <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="snapshot">Records snapshot.</param>
+            <returns>Counts of imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Purge">
+            <summary>
+            Purge records.
+            </summary>
+            <returns>Count of purged records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetRecords">
+            <summary>
+            Get array of records.
+            </summary>
+            <returns>Collection of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.GetStat">
+            <summary>
+            Get records count.
+            </summary>
+            <returns>Count of record and count of removed records.</returns>
         </member>
         <member name="T:FileCabinetApp.BlockValidator">
             <summary>

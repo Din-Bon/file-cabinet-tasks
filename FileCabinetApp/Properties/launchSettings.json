@@ -2,7 +2,7 @@
   "profiles": {
     "FileCabinetApp": {
       "commandName": "Project",
-      "commandLineArgs": "--storage=file --validation-rules=custo"
+      "commandLineArgs": "--storage=file --validation-rules=custo use-stopwatch"
     }
   }
 }
