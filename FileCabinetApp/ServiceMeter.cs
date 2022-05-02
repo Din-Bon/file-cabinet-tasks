@@ -114,6 +114,51 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Find persons by income.
+        /// </summary>
+        /// <param name="income">Person's income.</param>
+        /// <returns>Array of person with same income.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByIncome(string income)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var incomeList = this.service.FindByIncome(income);
+            stopwatch.Stop();
+            Console.WriteLine($"Find by income method execution duration is {stopwatch.ElapsedTicks} ticks");
+            return incomeList;
+        }
+
+        /// <summary>
+        /// Find persons by tax.
+        /// </summary>
+        /// <param name="tax">Person's tax.</param>
+        /// <returns>Array of person with same tax.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByTax(string tax)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var taxList = this.service.FindByTax(tax);
+            stopwatch.Stop();
+            Console.WriteLine($"Find by tax method execution duration is {stopwatch.ElapsedTicks} ticks");
+            return taxList;
+        }
+
+        /// <summary>
+        /// Find persons by block.
+        /// </summary>
+        /// <param name="block">Person's block.</param>
+        /// <returns>Array of person with same block.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByBlock(string block)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var blockList = this.service.FindByBlock(block);
+            stopwatch.Stop();
+            Console.WriteLine($"Find by block method execution duration is {stopwatch.ElapsedTicks} ticks");
+            return blockList;
+        }
+
+        /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
         /// <returns>Array of person with same date of birth.</returns>

@@ -810,6 +810,27 @@
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByIncome(System.String)">
+            <summary>
+            Find persons by income.
+            </summary>
+            <param name="income">Person's income.</param>
+            <returns>Array of person with same income.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByTax(System.String)">
+            <summary>
+            Find persons by tax.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <returns>Array of person with same tax.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByBlock(System.String)">
+            <summary>
+            Find persons by block.
+            </summary>
+            <param name="block">Person's living block.</param>
+            <returns>Array of person with same block.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
             <summary>
             Make snapshot of the current list of records.
@@ -856,6 +877,33 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="record">Record of a person with that date of birth.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddIncomeDictionary(System.Int16,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add income as a key and the record as a value in dictionary.
+            </summary>
+            <param name="income">Person's income.</param>
+            <param name="record">Record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddTaxDictionary(System.Decimal,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add tax as a key and the record as a value in dictionary.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <param name="record">Record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddBlockDictionary(System.Char,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add block as a key and the record as a value in dictionary.
+            </summary>
+            <param name="block">Person's living block.</param>
+            <param name="record">Record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add in all dictionaries.
+            </summary>
+            <param name="record">Record of a person..</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.EditFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
             <summary>
             Edit value with that first name in dictionary.
@@ -880,6 +928,37 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditIncomeDictionary(System.Int16,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that income in dictionary.
+            </summary>
+            <param name="income">Person's income.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditTaxDictionary(System.Decimal,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that tax in dictionary.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditBlockDictionary(System.Char,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value with that block in dictionary.
+            </summary>
+            <param name="block">Person's living block.</param>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person with that date of birth.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditInDictionaries(FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Edit value everywhere.
+            </summary>
+            <param name="oldRecord">Old record of a person.</param>
+            <param name="newRecord">New record of a person.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInFirstNameDictionary(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Remove record from the firstNameDictionary.
@@ -895,6 +974,30 @@
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInDateOfBirthDictionary(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Remove record from the dateOfBirthDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInIncomeDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the incomeDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInTaxDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the taxDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInBlockDictionary(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from the blockDictionary.
+            </summary>
+            <param name="record">Record.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInDictionaries(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Remove record from everywhere.
             </summary>
             <param name="record">Record.</param>
         </member>
@@ -1061,6 +1164,27 @@
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByIncome(System.String)">
+            <summary>
+            Find persons by income.
+            </summary>
+            <param name="income">Person's income.</param>
+            <returns>Array of person with same income.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByTax(System.String)">
+            <summary>
+            Find persons by tax.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <returns>Array of person with same tax.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByBlock(System.String)">
+            <summary>
+            Find persons by block.
+            </summary>
+            <param name="block">Person's block.</param>
+            <returns>Array of person with same block.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
             <summary>
@@ -1285,6 +1409,27 @@
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
         </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByIncome(System.String)">
+            <summary>
+            Find persons by income.
+            </summary>
+            <param name="income">Person's income.</param>
+            <returns>Array of person with same income.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByTax(System.String)">
+            <summary>
+            Find persons by tax.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <returns>Array of person with same tax.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByBlock(System.String)">
+            <summary>
+            Find persons by block.
+            </summary>
+            <param name="block">Person's block.</param>
+            <returns>Array of person with same block.</returns>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
             <summary>
             Make snapshot of the current list of records.
@@ -1374,6 +1519,27 @@
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByIncome(System.String)">
+            <summary>
+            Find persons by income.
+            </summary>
+            <param name="income">Person's income.</param>
+            <returns>Array of person with same income.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByTax(System.String)">
+            <summary>
+            Find persons by tax.
+            </summary>
+            <param name="tax">Person's tax.</param>
+            <returns>Array of person with same tax.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.FindByBlock(System.String)">
+            <summary>
+            Find persons by block.
+            </summary>
+            <param name="block">Person's block.</param>
+            <returns>Array of person with same block.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
             <summary>

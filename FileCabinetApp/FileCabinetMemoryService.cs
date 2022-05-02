@@ -11,6 +11,9 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly Dictionary<short, List<FileCabinetRecord>> incomeDictionary = new Dictionary<short, List<FileCabinetRecord>>();
+        private readonly Dictionary<decimal, List<FileCabinetRecord>> taxDictionary = new Dictionary<decimal, List<FileCabinetRecord>>();
+        private readonly Dictionary<char, List<FileCabinetRecord>> blockDictionary = new Dictionary<char, List<FileCabinetRecord>>();
         private readonly IRecordValidator validator;
 
         /// <summary>
@@ -52,9 +55,7 @@ namespace FileCabinetApp
             };
 
             this.list.Add(record);
-            this.AddFirstNameDictionary(person.FirstName, record);
-            this.AddLastNameDictionary(person.LastName, record);
-            this.AddDateOfBirthDictionary(person.DateOfBirth, record);
+            this.AddToDictionaries(record);
             return record.Id;
         }
 
@@ -89,9 +90,7 @@ namespace FileCabinetApp
                     Block = block,
                 };
 
-                this.EditFirstNameDictionary(person.FirstName, oldRecord, this.list[index]);
-                this.EditLastNameDictionary(person.LastName, oldRecord, this.list[index]);
-                this.EditDateOfBirthDictionary(person.DateOfBirth, oldRecord, this.list[index]);
+                this.EditInDictionaries(oldRecord, this.list[index]);
             }
         }
 
@@ -111,9 +110,7 @@ namespace FileCabinetApp
             if (record != null)
             {
                 this.list.Remove(record);
-                this.RemoveInFirstNameDictionary(record);
-                this.RemoveInLastNameDictionary(record);
-                this.RemoveInDateOfBirthDictionary(record);
+                this.RemoveInDictionaries(record);
                 Console.WriteLine($"Record #{id} is removed");
             }
             else
@@ -174,6 +171,57 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Find persons by income.
+        /// </summary>
+        /// <param name="income">Person's income.</param>
+        /// <returns>Array of person with same income.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByIncome(string income)
+        {
+            short inc = short.Parse(income, System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!this.incomeDictionary.ContainsKey(inc))
+            {
+                throw new ArgumentException("wrong income", nameof(income));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.incomeDictionary[inc]);
+        }
+
+        /// <summary>
+        /// Find persons by tax.
+        /// </summary>
+        /// <param name="tax">Person's tax.</param>
+        /// <returns>Array of person with same tax.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByTax(string tax)
+        {
+            decimal personTax = Convert.ToDecimal(tax, System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!this.taxDictionary.ContainsKey(personTax))
+            {
+                throw new ArgumentException("wrong tax", nameof(tax));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.taxDictionary[personTax]);
+        }
+
+        /// <summary>
+        /// Find persons by block.
+        /// </summary>
+        /// <param name="block">Person's living block.</param>
+        /// <returns>Array of person with same block.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByBlock(string block)
+        {
+            char chrBlock = block[0];
+
+            if (!this.blockDictionary.ContainsKey(chrBlock))
+            {
+                throw new ArgumentException("wrong block", nameof(block));
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(this.blockDictionary[chrBlock]);
+        }
+
+        /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
         /// <returns>Snapshot of records.</returns>
@@ -210,9 +258,7 @@ namespace FileCabinetApp
                 try
                 {
                     this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
-                    this.AddFirstNameDictionary(record.FirstName, record);
-                    this.AddLastNameDictionary(record.LastName, record);
-                    this.AddDateOfBirthDictionary(record.DateOfBirth, record);
+                    this.AddToDictionaries(record);
                     importIds.Add(record.Id);
                     count++;
                 }
@@ -238,9 +284,7 @@ namespace FileCabinetApp
                         this.list.Remove(record);
                         index--;
                         deleted++;
-                        this.firstNameDictionary.Remove(record.FirstName);
-                        this.lastNameDictionary.Remove(record.LastName);
-                        this.dateOfBirthDictionary.Remove(record.DateOfBirth);
+                        this.RemoveInDictionaries(record);
                     }
                 }
 
@@ -324,6 +368,71 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Add income as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="income">Person's income.</param>
+        /// <param name="record">Record of a person with that date of birth.</param>
+        private void AddIncomeDictionary(short income, FileCabinetRecord record)
+        {
+            if (!this.incomeDictionary.ContainsKey(income))
+            {
+                this.incomeDictionary.Add(income, new List<FileCabinetRecord>() { record });
+            }
+            else
+            {
+                this.incomeDictionary[income].Add(record);
+            }
+        }
+
+        /// <summary>
+        /// Add tax as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="record">Record of a person with that date of birth.</param>
+        private void AddTaxDictionary(decimal tax, FileCabinetRecord record)
+        {
+            if (!this.taxDictionary.ContainsKey(tax))
+            {
+                this.taxDictionary.Add(tax, new List<FileCabinetRecord>() { record });
+            }
+            else
+            {
+                this.taxDictionary[tax].Add(record);
+            }
+        }
+
+        /// <summary>
+        /// Add block as a key and the record as a value in dictionary.
+        /// </summary>
+        /// <param name="block">Person's living block.</param>
+        /// <param name="record">Record of a person with that date of birth.</param>
+        private void AddBlockDictionary(char block, FileCabinetRecord record)
+        {
+            if (!this.blockDictionary.ContainsKey(block))
+            {
+                this.blockDictionary.Add(block, new List<FileCabinetRecord>() { record });
+            }
+            else
+            {
+                this.blockDictionary[block].Add(record);
+            }
+        }
+
+        /// <summary>
+        /// Add in all dictionaries.
+        /// </summary>
+        /// <param name="record">Record of a person..</param>
+        private void AddToDictionaries(FileCabinetRecord record)
+        {
+            this.AddFirstNameDictionary(record.FirstName, record);
+            this.AddLastNameDictionary(record.LastName, record);
+            this.AddDateOfBirthDictionary(record.DateOfBirth, record);
+            this.AddIncomeDictionary(record.Income, record);
+            this.AddBlockDictionary(record.Block, record);
+            this.AddTaxDictionary(record.Tax, record);
+        }
+
+        /// <summary>
         /// Edit value with that first name in dictionary.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
@@ -388,6 +497,81 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Edit value with that income in dictionary.
+        /// </summary>
+        /// <param name="income">Person's income.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that date of birth.</param>
+        private void EditIncomeDictionary(short income, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            if (!this.incomeDictionary.ContainsKey(income))
+            {
+                this.incomeDictionary.Add(income, new List<FileCabinetRecord>() { newRecord });
+            }
+            else
+            {
+                this.incomeDictionary[income].Add(newRecord);
+            }
+
+            this.RemoveInIncomeDictionary(oldRecord);
+        }
+
+        /// <summary>
+        /// Edit value with that tax in dictionary.
+        /// </summary>
+        /// <param name="tax">Person's tax.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that date of birth.</param>
+        private void EditTaxDictionary(decimal tax, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            if (!this.taxDictionary.ContainsKey(tax))
+            {
+                this.taxDictionary.Add(tax, new List<FileCabinetRecord>() { newRecord });
+            }
+            else
+            {
+                this.taxDictionary[tax].Add(newRecord);
+            }
+
+            this.RemoveInTaxDictionary(oldRecord);
+        }
+
+        /// <summary>
+        /// Edit value with that block in dictionary.
+        /// </summary>
+        /// <param name="block">Person's living block.</param>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person with that date of birth.</param>
+        private void EditBlockDictionary(char block, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            if (!this.blockDictionary.ContainsKey(block))
+            {
+                this.blockDictionary.Add(block, new List<FileCabinetRecord>() { newRecord });
+            }
+            else
+            {
+                this.blockDictionary[block].Add(newRecord);
+            }
+
+            this.RemoveInBlockDictionary(oldRecord);
+        }
+
+        /// <summary>
+        /// Edit value everywhere.
+        /// </summary>
+        /// <param name="oldRecord">Old record of a person.</param>
+        /// <param name="newRecord">New record of a person.</param>
+        private void EditInDictionaries(FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
+        {
+            this.EditFirstNameDictionary(newRecord.FirstName, oldRecord, newRecord);
+            this.EditLastNameDictionary(newRecord.LastName, oldRecord, newRecord);
+            this.EditDateOfBirthDictionary(newRecord.DateOfBirth, oldRecord, newRecord);
+            this.EditIncomeDictionary(newRecord.Income, oldRecord, newRecord);
+            this.EditTaxDictionary(newRecord.Tax, oldRecord, newRecord);
+            this.EditBlockDictionary(newRecord.Block, oldRecord, newRecord);
+        }
+
+        /// <summary>
         /// Remove record from the firstNameDictionary.
         /// </summary>
         /// <param name="record">Record.</param>
@@ -439,6 +623,74 @@ namespace FileCabinetApp
             {
                 this.dateOfBirthDictionary.Remove(dateOfBirth);
             }
+        }
+
+        /// <summary>
+        /// Remove record from the incomeDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInIncomeDictionary(FileCabinetRecord record)
+        {
+            short income = record.Income;
+
+            if (this.incomeDictionary[income].Count > 1)
+            {
+                this.incomeDictionary[income].Remove(record);
+            }
+            else
+            {
+                this.incomeDictionary.Remove(income);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from the taxDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInTaxDictionary(FileCabinetRecord record)
+        {
+            decimal tax = record.Tax;
+
+            if (this.taxDictionary[tax].Count > 1)
+            {
+                this.taxDictionary[tax].Remove(record);
+            }
+            else
+            {
+                this.taxDictionary.Remove(tax);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from the blockDictionary.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInBlockDictionary(FileCabinetRecord record)
+        {
+            char block = record.Block;
+
+            if (this.blockDictionary[block].Count > 1)
+            {
+                this.blockDictionary[block].Remove(record);
+            }
+            else
+            {
+                this.blockDictionary.Remove(block);
+            }
+        }
+
+        /// <summary>
+        /// Remove record from everywhere.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        private void RemoveInDictionaries(FileCabinetRecord record)
+        {
+            this.RemoveInFirstNameDictionary(record);
+            this.RemoveInLastNameDictionary(record);
+            this.RemoveInDateOfBirthDictionary(record);
+            this.RemoveInIncomeDictionary(record);
+            this.RemoveInTaxDictionary(record);
+            this.RemoveInBlockDictionary(record);
         }
     }
 }
