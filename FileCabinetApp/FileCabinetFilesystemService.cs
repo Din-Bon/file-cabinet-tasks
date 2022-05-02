@@ -187,7 +187,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
             firstName = firstName.ToUpperInvariant();
 
@@ -197,18 +197,7 @@ namespace FileCabinetApp
             }
 
             List<long> positionsList = this.firstNameDictionary[firstName];
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
-
-            foreach (var position in positionsList)
-            {
-                this.fileStream.Position = position;
-                byte[] recordInByte = new byte[RecordSize];
-                this.fileStream.Read(recordInByte, 0, RecordSize);
-                FileCabinetRecord record = BytesToRecord(recordInByte);
-                records.Add(record);
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records);
+            return new FilesystemIterator(positionsList, this.fileStream);
         }
 
         /// <summary>
@@ -216,7 +205,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
             lastName = lastName.ToUpperInvariant();
 
@@ -226,18 +215,7 @@ namespace FileCabinetApp
             }
 
             List<long> positionsList = this.lastNameDictionary[lastName];
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
-
-            foreach (var position in positionsList)
-            {
-                this.fileStream.Position = position;
-                byte[] recordInByte = new byte[RecordSize];
-                this.fileStream.Read(recordInByte, 0, RecordSize);
-                FileCabinetRecord record = BytesToRecord(recordInByte);
-                records.Add(record);
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records);
+            return new FilesystemIterator(positionsList, this.fileStream);
         }
 
         /// <summary>
@@ -245,7 +223,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
+        public IRecordIterator FindByDateofbirth(string strDateOfBirth)
         {
             var dateOfBirth = DateTime.ParseExact(strDateOfBirth, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -255,18 +233,7 @@ namespace FileCabinetApp
             }
 
             List<long> positionsList = this.dateOfBirthDictionary[dateOfBirth];
-            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
-
-            foreach (var position in positionsList)
-            {
-                this.fileStream.Position = position;
-                byte[] recordInByte = new byte[RecordSize];
-                this.fileStream.Read(recordInByte, 0, RecordSize);
-                FileCabinetRecord record = BytesToRecord(recordInByte);
-                records.Add(record);
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records);
+            return new FilesystemIterator(positionsList, this.fileStream);
         }
 
         /// <summary>
