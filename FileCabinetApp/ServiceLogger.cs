@@ -152,7 +152,7 @@ namespace FileCabinetApp
 
             try
             {
-                var lastNameList = this.service.FindByFirstName(lastName);
+                var lastNameList = this.service.FindByLastName(lastName);
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByLastName() returned '{lastNameList}'.");
                 return lastNameList;
             }
