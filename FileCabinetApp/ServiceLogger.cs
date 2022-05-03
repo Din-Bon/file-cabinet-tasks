@@ -115,7 +115,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByFirstName() " +
@@ -130,7 +130,7 @@ namespace FileCabinetApp
             catch (Exception ex)
             {
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return null;
             }
             finally
             {
@@ -144,7 +144,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByLastName() " +
@@ -152,14 +152,14 @@ namespace FileCabinetApp
 
             try
             {
-                var lastNameList = this.service.FindByFirstName(lastName);
+                var lastNameList = this.service.FindByLastName(lastName);
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByLastName() returned '{lastNameList}'.");
                 return lastNameList;
             }
             catch (Exception ex)
             {
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return null;
             }
             finally
             {
@@ -173,7 +173,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByDateOfBirth() " +
@@ -188,94 +188,7 @@ namespace FileCabinetApp
             catch (Exception ex)
             {
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by income.
-        /// </summary>
-        /// <param name="income">Person's income.</param>
-        /// <returns>Array of person with same income.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByIncome(string income)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByIncome() " +
-                $"for record with Income = {income}");
-
-            try
-            {
-                var incomeList = this.service.FindByIncome(income);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByIncome() returned '{incomeList}'.");
-                return incomeList;
-            }
-            catch (Exception ex)
-            {
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by tax.
-        /// </summary>
-        /// <param name="tax">Person's tax.</param>
-        /// <returns>Array of person with same tax.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByTax(string tax)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByTax() " +
-                $"for record with Tax = {tax}");
-
-            try
-            {
-                var taxList = this.service.FindByTax(tax);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByTax() returned '{taxList}'.");
-                return taxList;
-            }
-            catch (Exception ex)
-            {
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by block.
-        /// </summary>
-        /// <param name="block">Person's block.</param>
-        /// <returns>Array of person with same block.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByBlock(string block)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByBlock() " +
-                $"for record with Block = {block}");
-
-            try
-            {
-                var blockList = this.service.FindByBlock(block);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByBlock() returned '{blockList}'.");
-                return blockList;
-            }
-            catch (Exception ex)
-            {
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return null;
             }
             finally
             {

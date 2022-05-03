@@ -38,42 +38,21 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName) => throw new NotImplementedException();
 
         /// <summary>
         /// Find persons by last name.
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName) => throw new NotImplementedException();
 
         /// <summary>
         /// Find persons by date of birth.
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by income.
-        /// </summary>
-        /// <param name="income">Person's income.</param>
-        /// <returns>Array of person with same income.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByIncome(string income) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by tax.
-        /// </summary>
-        /// <param name="tax">Person's tax.</param>
-        /// <returns>Array of person with same tax.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByTax(string tax) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by block.
-        /// </summary>
-        /// <param name="block">Person's block.</param>
-        /// <returns>Array of person with same block.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByBlock(string block) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
 
         /// <summary>
         /// Make snapshot of the current list of records.

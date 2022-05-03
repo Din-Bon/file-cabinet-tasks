@@ -65,15 +65,6 @@ namespace FileCabinetApp
                 case "DATEOFBIRTH":
                     this.printer(this.fileCabinetService.FindByDateofbirth(parameter));
                     break;
-                case "INCOME":
-                    this.printer(this.fileCabinetService.FindByIncome(parameter));
-                    break;
-                case "TAX":
-                    this.printer(this.fileCabinetService.FindByTax(parameter));
-                    break;
-                case "BLOCK":
-                    this.printer(this.fileCabinetService.FindByBlock(parameter));
-                    break;
             }
         }
     }

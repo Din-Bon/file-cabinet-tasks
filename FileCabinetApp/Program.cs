@@ -97,6 +97,18 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Default record printer(if source is iterator).
+        /// </summary>
+        /// <param name="records">Source.</param>
+        private static void DefaultRecordPrint(IRecordIterator records)
+        {
+            while (records.HasMore())
+            {
+                Console.WriteLine(records.GetNext().ToString());
+            }
+        }
+
+        /// <summary>
         /// Change validation mode.
         /// </summary>
         /// <param name="mode">Validation mode.</param>

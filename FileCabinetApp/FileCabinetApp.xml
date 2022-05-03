@@ -4,6 +4,223 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FilesystemEnumerable">
+            <summary>
+            Collection for filesystem service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemEnumerable"/> class.
+            </summary>
+            <param name="positions">List of record positions in file.</param>
+            <param name="stream">File.</param>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.GetEnumerator">
+            <summary>
+            Get enumerator for filesystem collection.
+            </summary>
+            <returns>Enumerator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets default IEnumerable.
+            </summary>
+            <returns>none.</returns>
+            <exception cref="T:System.NotImplementedException">Nothing default should return.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.BytesToRecord(System.Byte[])">
+            <summary>
+            Convert bytes to record parameters.
+            </summary>
+            <param name="bytes">Bytes with data.</param>
+            <returns>Record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FilesystemEnumerator">
+            <summary>
+            Enumerator for filesystem service record collections.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemEnumerator"/> class.
+            </summary>
+            <param name="collection">Collection of record positions in file.</param>
+            <param name="stream">File.</param>
+        </member>
+        <member name="P:FileCabinetApp.FilesystemEnumerator.Current">
+            <summary>
+            Gets FileCabinetRecord from collection
+            by current position.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="P:FileCabinetApp.FilesystemEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets by default object from
+            IEnumerator FileCabinetRecord.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.MoveNext">
+            <summary>
+            Increment positions.
+            </summary>
+            <returns>Success of operation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.Reset">
+            <summary>
+            Set position at start.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.Dispose">
+            <summary>
+            Dispose enumerator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.BytesToRecord(System.Byte[])">
+            <summary>
+            Convert bytes to record parameters.
+            </summary>
+            <param name="bytes">Bytes with data.</param>
+            <returns>Record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FilesystemIterator">
+            <summary>
+            Iterator for file cabinet filesystem service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemIterator"/> class.
+            </summary>
+            <param name="positions">Collection of positions in file.</param>
+            <param name="stream">File.</param>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.GetNext">
+            <summary>
+            Gets next element from collection.
+            </summary>
+            <returns>Next element.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.HasMore">
+            <summary>
+            Gets true if collection still has elements.
+            </summary>
+            <returns>true/false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemIterator.BytesToRecord(System.Byte[])">
+            <summary>
+            Convert bytes to record parameters.
+            </summary>
+            <param name="bytes">Bytes with data.</param>
+            <returns>Record.</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordIterator">
+            <summary>
+            Iterator for file cabinet service objects.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.GetNext">
+            <summary>
+            Gets next element from collection.
+            </summary>
+            <returns>File cabinet record from collection.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IRecordIterator.HasMore">
+            <summary>
+            Check if collection has next element.
+            </summary>
+            <returns>Check.</returns>
+        </member>
+        <member name="T:FileCabinetApp.MemoryEnumerable">
+            <summary>
+            Collection for memory service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryEnumerable"/> class.
+            </summary>
+            <param name="records">Record collection.</param>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.GetEnumerator">
+            <summary>
+            Get enumerator for memory collection.
+            </summary>
+            <returns>Enumerator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets default IEnumerable.
+            </summary>
+            <returns>none.</returns>
+            <exception cref="T:System.NotImplementedException">Nothing default should return.</exception>
+        </member>
+        <member name="T:FileCabinetApp.MemoryEnumerator">
+            <summary>
+            Enumerator for memory service record collections.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryEnumerator"/> class.
+            </summary>
+            <param name="collection">Record collection.</param>
+        </member>
+        <member name="P:FileCabinetApp.MemoryEnumerator.Current">
+            <summary>
+            Gets FileCabinetRecord from collection
+            by current position.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="P:FileCabinetApp.MemoryEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets by default object from
+            IEnumerator FileCabinetRecord.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.MoveNext">
+            <summary>
+            Increment positions.
+            </summary>
+            <returns>Success of operation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.Reset">
+            <summary>
+            Set position at start.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.Dispose">
+            <summary>
+            Dispose enumerator.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.MemoryIterator">
+            <summary>
+            Iterator for file cabinet memory service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryIterator"/> class.
+            </summary>
+            <param name="records">Collection.</param>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.GetNext">
+            <summary>
+            Gets next element if it exists.
+            </summary>
+            <returns>Next element.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryIterator.HasMore">
+            <summary>
+            Gets true if collection still has elements.
+            </summary>
+            <returns>true/false.</returns>
+        </member>
         <member name="T:FileCabinetApp.AppCommandRequest">
             <summary>
             Class-request.
@@ -689,28 +906,28 @@
             <param name="id">Records id.</param>
             <returns>Records position.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddFirstNameDictionary(System.String,System.Int64)">
             <summary>
             Add first name as a key and the record as a value in dictionary.
             </summary>
             <param name="firstName">Person's first name.</param>
             <param name="record">Record of a person with that first name.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddLastNameDictionary(System.String,System.Int64)">
             <summary>
             Add last name as a key and the record as a value in dictionary.
             </summary>
             <param name="lastName">Person's last name.</param>
             <param name="record">Record of a person with that last name.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddDateOfBirthDictionary(System.DateTime,System.Int64)">
             <summary>
             Add date of birth as a key and the record as a value in dictionary.
             </summary>
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="record">Record of a person with that date of birth.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditFirstNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditFirstNameDictionary(System.String,System.Int64,System.Int64)">
             <summary>
             Edit value with that first name in dictionary.
             </summary>
@@ -718,7 +935,7 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that first name.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditLastNameDictionary(System.String,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditLastNameDictionary(System.String,System.Int64,System.Int64)">
             <summary>
             Edit value with that last name in dictionary.
             </summary>
@@ -726,7 +943,7 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that last name.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditDateOfBirthDictionary(System.DateTime,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditDateOfBirthDictionary(System.DateTime,System.Int64,System.Int64)">
             <summary>
             Edit value with that date of birth in dictionary.
             </summary>
@@ -734,19 +951,19 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInFirstNameDictionary(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInFirstNameDictionary(System.String,System.Int64)">
             <summary>
             Remove record from the firstNameDictionary.
             </summary>
             <param name="record">Record.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInLastNameDictionary(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInLastNameDictionary(System.String,System.Int64)">
             <summary>
             Remove record from the lastNameDictionary.
             </summary>
             <param name="record">Record.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInDateOfBirthDictionary(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.RemoveInDateOfBirthDictionary(System.DateTime,System.Int64)">
             <summary>
             Remove record from the dateOfBirthDictionary.
             </summary>
@@ -810,27 +1027,6 @@
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByIncome(System.String)">
-            <summary>
-            Find persons by income.
-            </summary>
-            <param name="income">Person's income.</param>
-            <returns>Array of person with same income.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByTax(System.String)">
-            <summary>
-            Find persons by tax.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <returns>Array of person with same tax.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByBlock(System.String)">
-            <summary>
-            Find persons by block.
-            </summary>
-            <param name="block">Person's living block.</param>
-            <returns>Array of person with same block.</returns>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
             <summary>
             Make snapshot of the current list of records.
@@ -877,27 +1073,6 @@
             <param name="dateOfBirth">Person's date of birth.</param>
             <param name="record">Record of a person with that date of birth.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddIncomeDictionary(System.Int16,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add income as a key and the record as a value in dictionary.
-            </summary>
-            <param name="income">Person's income.</param>
-            <param name="record">Record of a person with that date of birth.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddTaxDictionary(System.Decimal,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add tax as a key and the record as a value in dictionary.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <param name="record">Record of a person with that date of birth.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.AddBlockDictionary(System.Char,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Add block as a key and the record as a value in dictionary.
-            </summary>
-            <param name="block">Person's living block.</param>
-            <param name="record">Record of a person with that date of birth.</param>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.AddToDictionaries(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Add in all dictionaries.
@@ -928,30 +1103,6 @@
             <param name="oldRecord">Old record of a person.</param>
             <param name="newRecord">New record of a person with that date of birth.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditIncomeDictionary(System.Int16,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that income in dictionary.
-            </summary>
-            <param name="income">Person's income.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that date of birth.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditTaxDictionary(System.Decimal,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that tax in dictionary.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that date of birth.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditBlockDictionary(System.Char,FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Edit value with that block in dictionary.
-            </summary>
-            <param name="block">Person's living block.</param>
-            <param name="oldRecord">Old record of a person.</param>
-            <param name="newRecord">New record of a person with that date of birth.</param>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.EditInDictionaries(FileCabinetApp.FileCabinetRecord,FileCabinetApp.FileCabinetRecord)">
             <summary>
             Edit value everywhere.
@@ -974,24 +1125,6 @@
         <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInDateOfBirthDictionary(FileCabinetApp.FileCabinetRecord)">
             <summary>
             Remove record from the dateOfBirthDictionary.
-            </summary>
-            <param name="record">Record.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInIncomeDictionary(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Remove record from the incomeDictionary.
-            </summary>
-            <param name="record">Record.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInTaxDictionary(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Remove record from the taxDictionary.
-            </summary>
-            <param name="record">Record.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.RemoveInBlockDictionary(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Remove record from the blockDictionary.
             </summary>
             <param name="record">Record.</param>
         </member>
@@ -1165,27 +1298,6 @@
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByIncome(System.String)">
-            <summary>
-            Find persons by income.
-            </summary>
-            <param name="income">Person's income.</param>
-            <returns>Array of person with same income.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByTax(System.String)">
-            <summary>
-            Find persons by tax.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <returns>Array of person with same tax.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByBlock(System.String)">
-            <summary>
-            Find persons by block.
-            </summary>
-            <param name="block">Person's block.</param>
-            <returns>Array of person with same block.</returns>
-        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
             <summary>
             Make snapshot of the current list of records.
@@ -1320,6 +1432,12 @@
             </summary>
             <param name="records">Source.</param>
         </member>
+        <member name="M:FileCabinetApp.Program.DefaultRecordPrint(FileCabinetApp.IRecordIterator)">
+            <summary>
+            Default record printer(if source is iterator).
+            </summary>
+            <param name="records">Source.</param>
+        </member>
         <member name="M:FileCabinetApp.Program.ChangeValidationMode(System.String)">
             <summary>
             Change validation mode.
@@ -1408,27 +1526,6 @@
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByIncome(System.String)">
-            <summary>
-            Find persons by income.
-            </summary>
-            <param name="income">Person's income.</param>
-            <returns>Array of person with same income.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByTax(System.String)">
-            <summary>
-            Find persons by tax.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <returns>Array of person with same tax.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByBlock(System.String)">
-            <summary>
-            Find persons by block.
-            </summary>
-            <param name="block">Person's block.</param>
-            <returns>Array of person with same block.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
             <summary>
@@ -1519,27 +1616,6 @@
             </summary>
             <param name="strDateOfBirth">Person's date.</param>
             <returns>Array of person with same date of birth.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByIncome(System.String)">
-            <summary>
-            Find persons by income.
-            </summary>
-            <param name="income">Person's income.</param>
-            <returns>Array of person with same income.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByTax(System.String)">
-            <summary>
-            Find persons by tax.
-            </summary>
-            <param name="tax">Person's tax.</param>
-            <returns>Array of person with same tax.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByBlock(System.String)">
-            <summary>
-            Find persons by block.
-            </summary>
-            <param name="block">Person's block.</param>
-            <returns>Array of person with same block.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
             <summary>
