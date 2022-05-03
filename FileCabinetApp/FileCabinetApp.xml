@@ -339,7 +339,7 @@
             Class that handle find command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{FileCabinetApp.IRecordIterator})">
+        <member name="M:FileCabinetApp.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord}})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FindCommandHandler"/> class.
             </summary>
@@ -1029,6 +1029,80 @@
             </summary>
             <param name="stream">Stream that will contain records data.</param>
         </member>
+        <member name="T:FileCabinetApp.FilesystemEnumerable">
+            <summary>
+            Collection for filesystem service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemEnumerable"/> class.
+            </summary>
+            <param name="positions">List of record positions in file.</param>
+            <param name="stream">File.</param>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.GetEnumerator">
+            <summary>
+            Get enumerator for filesystem collection.
+            </summary>
+            <returns>Enumerator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets default IEnumerable.
+            </summary>
+            <returns>none.</returns>
+            <exception cref="T:System.NotImplementedException">Nothing default should return.</exception>
+        </member>
+        <member name="T:FileCabinetApp.FilesystemEnumerator">
+            <summary>
+            Enumerator for filesystem service record collections.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FilesystemEnumerator"/> class.
+            </summary>
+            <param name="collection">Collection of record positions in file.</param>
+            <param name="stream">File.</param>
+        </member>
+        <member name="P:FileCabinetApp.FilesystemEnumerator.Current">
+            <summary>
+            Gets FileCabinetRecord from collection
+            by current position.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="P:FileCabinetApp.FilesystemEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets by default object from
+            IEnumerator FileCabinetRecord.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.MoveNext">
+            <summary>
+            Increment positions.
+            </summary>
+            <returns>Success of operation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.Reset">
+            <summary>
+            Set position at start.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.Dispose">
+            <summary>
+            Dispose enumerator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FilesystemEnumerator.BytesToRecord(System.Byte[])">
+            <summary>
+            Convert bytes to record parameters.
+            </summary>
+            <param name="bytes">Bytes with data.</param>
+            <returns>Record.</returns>
+        </member>
         <member name="T:FileCabinetApp.FilesystemIterator">
             <summary>
             Iterator for file cabinet filesystem service.
@@ -1193,6 +1267,71 @@
             Check if collection has next element.
             </summary>
             <returns>Check.</returns>
+        </member>
+        <member name="T:FileCabinetApp.MemoryEnumerable">
+            <summary>
+            Collection for memory service.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryEnumerable"/> class.
+            </summary>
+            <param name="records">Record collection.</param>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.GetEnumerator">
+            <summary>
+            Get enumerator for memory collection.
+            </summary>
+            <returns>Enumerator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets default IEnumerable.
+            </summary>
+            <returns>none.</returns>
+            <exception cref="T:System.NotImplementedException">Nothing default should return.</exception>
+        </member>
+        <member name="T:FileCabinetApp.MemoryEnumerator">
+            <summary>
+            Enumerator for memory service record collections.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.MemoryEnumerator"/> class.
+            </summary>
+            <param name="collection">Record collection.</param>
+        </member>
+        <member name="P:FileCabinetApp.MemoryEnumerator.Current">
+            <summary>
+            Gets FileCabinetRecord from collection
+            by current position.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="P:FileCabinetApp.MemoryEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets by default object from
+            IEnumerator FileCabinetRecord.
+            </summary>
+            <value>Record.</value>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.MoveNext">
+            <summary>
+            Increment positions.
+            </summary>
+            <returns>Success of operation.</returns>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.Reset">
+            <summary>
+            Set position at start.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.MemoryEnumerator.Dispose">
+            <summary>
+            Dispose enumerator.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.MemoryIterator">
             <summary>

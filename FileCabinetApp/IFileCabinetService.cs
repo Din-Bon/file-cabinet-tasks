@@ -38,21 +38,21 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        IRecordIterator FindByFirstName(string firstName) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName) => throw new NotImplementedException();
 
         /// <summary>
         /// Find persons by last name.
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        IRecordIterator FindByLastName(string lastName) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName) => throw new NotImplementedException();
 
         /// <summary>
         /// Find persons by date of birth.
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        IRecordIterator FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
+        IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
 
         /// <summary>
         /// Make snapshot of the current list of records.

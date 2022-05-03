@@ -121,7 +121,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             firstName = firstName.ToUpperInvariant();
 
@@ -131,7 +131,8 @@ namespace FileCabinetApp
             }
 
             ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName]);
-            return new MemoryIterator(collection);
+            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
+            return records;
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             lastName = lastName.ToUpperInvariant();
 
@@ -149,7 +150,8 @@ namespace FileCabinetApp
             }
 
             ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName]);
-            return new MemoryIterator(collection);
+            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
+            return records;
         }
 
         /// <summary>
@@ -157,7 +159,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public IRecordIterator FindByDateofbirth(string strDateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
         {
             var dateOfBirth = DateTime.ParseExact(strDateOfBirth, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
 
@@ -167,7 +169,8 @@ namespace FileCabinetApp
             }
 
             ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
-            return new MemoryIterator(collection);
+            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
+            return records;
         }
 
         /// <summary>

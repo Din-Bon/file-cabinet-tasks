@@ -115,7 +115,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
         /// <returns>Array of person with same first name.</returns>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByFirstName() " +
@@ -144,7 +144,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Person's last name.</param>
         /// <returns>Array of person with same last name.</returns>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByLastName() " +
@@ -173,7 +173,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="strDateOfBirth">Person's date.</param>
         /// <returns>Array of person with same date of birth.</returns>
-        public IRecordIterator FindByDateofbirth(string strDateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByDateOfBirth() " +
