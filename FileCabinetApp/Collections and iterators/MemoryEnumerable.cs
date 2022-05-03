@@ -23,7 +23,13 @@ namespace FileCabinetApp
         /// Get enumerator for memory collection.
         /// </summary>
         /// <returns>Enumerator.</returns>
-        public IEnumerator<FileCabinetRecord> GetEnumerator() => new MemoryEnumerator(this.records);
+        public IEnumerator<FileCabinetRecord> GetEnumerator()
+        {
+            for (int i = 0; i < this.records.Count; i++)
+            {
+                yield return this.records[i];
+            }
+        }
 
         /// <summary>
         /// Gets default IEnumerable.
