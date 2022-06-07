@@ -37,7 +37,7 @@ namespace FileCabinetApp
             this.writer.WriteAttributeString("last", record.LastName);
             this.writer.WriteEndElement();
             this.writer.WriteStartElement("dateOfBirth");
-            this.writer.WriteString(record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+            this.writer.WriteString(record.DateOfBirth.ToString("M/dd/yyyy", CultureInfo.InvariantCulture));
             this.writer.WriteEndElement();
             this.writer.WriteStartElement("income");
             this.writer.WriteString(record.Income.ToString(CultureInfo.InvariantCulture));

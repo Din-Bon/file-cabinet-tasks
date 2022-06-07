@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class that handle create command.
+    /// Class that handle insert command.
     /// </summary>
-    internal class CreateCommandHandler : ServiceCommandHandlerBase
+    internal class InsertCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// Initializes a new instance of the <see cref="InsertCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Service object.</param>
-        public CreateCommandHandler(IFileCabinetService fileCabinetService)
+        public InsertCommandHandler(IFileCabinetService fileCabinetService)
             : base(fileCabinetService)
         {
         }
 
         /// <summary>
-        /// Execute create command.
+        /// Execute insert command.
         /// </summary>
         /// <param name="request">Request.</param>
         public override void Handle(AppCommandRequest request)
@@ -27,9 +30,9 @@ namespace FileCabinetApp
             var command = request.Command;
             var parameters = request.Parameters;
 
-            if (command == "create")
+            if (command == "insert")
             {
-                this.Create(parameters);
+                this.Insert(parameters);
             }
             else
             {
@@ -91,16 +94,15 @@ namespace FileCabinetApp
         /// <param name="converter">Convert input string in the right type.</param>
         /// <param name="validator">Check input data for compliance with the validation rules.</param>
         /// <returns>Test results.</returns>
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        private static T ReadInput<T>(string input, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
         {
             do
             {
                 T value;
-                var input = Console.ReadLine();
 
                 if (input == null)
                 {
-                    throw new ArgumentNullException("empty input", nameof(input));
+                    throw new ArgumentNullException(nameof(input), "empty input");
                 }
 
                 var conversionResult = converter(input);
@@ -123,6 +125,21 @@ namespace FileCabinetApp
                 return value;
             }
             while (true);
+        }
+
+        /// <summary>
+        /// Checks id for compliance with the validation rules.
+        /// </summary>
+        /// <param name="id">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateId(int id)
+        {
+            if (id <= 0)
+            {
+                return new Tuple<bool, string>(false, nameof(id));
+            }
+
+            return new Tuple<bool, string>(true, nameof(id));
         }
 
         /// <summary>
@@ -245,7 +262,7 @@ namespace FileCabinetApp
         {
             DateTime dateOfBirth;
 
-            if (!DateTime.TryParseExact(strDateOfBirth, "M/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
+            if (!DateTime.TryParseExact(strDateOfBirth, "M/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateOfBirth))
             {
                 return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
             }
@@ -305,37 +322,54 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Create record.
+        /// Return tuple of parameters.
+        /// </summary>
+        /// <param name="strid">String parameter(id).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, int> IntConverter(string strid)
+        {
+            int id;
+
+            if (!int.TryParse(strid, out id))
+            {
+                return new Tuple<bool, string, int>(false, nameof(strid), '\0');
+            }
+
+            return new Tuple<bool, string, int>(true, nameof(strid), id);
+        }
+
+        /// <summary>
+        /// Insert record to the list.
         /// </summary>
         /// <param name="parameters">Input parameters.</param>
-        private void Create(string parameters)
+        private void Insert(string parameters)
         {
-            bool check = true;
+            string[] args = parameters.Split(" values ");
+            string[] paramNames = args[0].Trim('(', ')').Split(", ", ',');
+            string[] paramValues = args[1].Trim('(', ')').Split(", ", ',');
+            string[] names = { "id", "firstname", "lastname", "dateofbirth", "income", "tax", "block" };
+            string[] values = new string[7];
 
-            do
+            if (paramNames.Length != paramValues.Length || paramValues.Length > 7)
             {
-                Console.Write("First name: ");
-                var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-                Console.Write("Last name: ");
-                var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-                Console.Write("Date of birth: ");
-                var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-                Console.Write("Income: ");
-                var income = ReadInput<short>(ShortConverter, ValidateIncome);
-                Console.Write("Tax: ");
-                decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-                Console.Write("Block: ");
-                char block = ReadInput<char>(CharConverter, ValidateBlock);
-                Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-                check = ValidateParameters(person, income, tax, block);
-                int id = this.fileCabinetService.CreateRecord(person, income, tax, block);
-
-                if (!check && id > 0)
-                {
-                    Console.WriteLine($"Record #{id} is created.");
-                }
+                throw new ArgumentException("wrong parameters", parameters);
             }
-            while (check);
+
+            for (int i = 0; i < paramNames.Length; i++)
+            {
+                int index = Array.IndexOf(names, paramNames[i]);
+                values[index] = paramValues[i].Trim('\'');
+            }
+
+            int id = ReadInput<int>(values[0], IntConverter, ValidateId);
+            var firstName = ReadInput<string>(values[1], StringConverter, ValidateFirstName);
+            var lastName = ReadInput<string>(values[2], StringConverter, ValidateLastName);
+            var dateOfBirth = ReadInput<DateTime>(values[3], DateTimeConverter, ValidateDateOfBirth);
+            var income = ReadInput<short>(values[4], ShortConverter, ValidateIncome);
+            decimal tax = ReadInput<decimal>(values[5], DecimalConverter, ValidateTax);
+            char block = ReadInput<char>(values[6], CharConverter, ValidateBlock);
+            Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
+            this.fileCabinetService.InsertRecord(id, person, income, tax, block);
         }
     }
 }

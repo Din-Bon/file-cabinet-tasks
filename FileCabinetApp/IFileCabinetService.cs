@@ -18,6 +18,16 @@ namespace FileCabinetApp
         int CreateRecord(Person person, short income, decimal tax, char block) => throw new NotImplementedException();
 
         /// <summary>
+        /// Insert record to the file cabinet service.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
+        void InsertRecord(int id, Person person, short income, decimal tax, char block) => throw new NotImplementedException();
+
+        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>

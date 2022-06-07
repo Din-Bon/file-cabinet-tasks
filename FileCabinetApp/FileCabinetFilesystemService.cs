@@ -73,6 +73,56 @@ namespace FileCabinetApp
         /// <param name="income">Person's new income.</param>
         /// <param name="tax">Person's new tax.</param>
         /// <param name="block">Person's new living block.</param>
+        public void InsertRecord(int id, Person person, short income, decimal tax, char block)
+        {
+            this.validator.ValidateParameters(person, income, tax, block);
+            long position = this.FindPositionById(id);
+            FileCabinetRecord record = new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
+                Income = income,
+                Tax = tax,
+                Block = block,
+            };
+            byte[] recordInByte = RecordToBytes(record, 0);
+
+            if (position == -1)
+            {
+                this.fileStream.Position = this.fileStream.Length;
+                this.fileStream.Write(recordInByte, 0, recordInByte.Length);
+                this.fileStream.Flush();
+                this.AddFirstNameDictionary(record.FirstName, position);
+                this.AddLastNameDictionary(record.LastName, position);
+                this.AddDateOfBirthDictionary(record.DateOfBirth, position);
+            }
+            else
+            {
+                this.fileStream.Position = position;
+                byte[] oldRecordInByte = new byte[RecordSize];
+                this.fileStream.Read(oldRecordInByte, 0, RecordSize);
+                FileCabinetRecord oldRecord = BytesToRecord(oldRecordInByte);
+                long itemToDelete = this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].
+                    Where(pos => pos == position).Select(record => record).First();
+                this.fileStream.Position = position;
+                this.fileStream.Write(recordInByte, 0, recordInByte.Length);
+                this.fileStream.Flush();
+                this.EditFirstNameDictionary(person.FirstName, itemToDelete, position);
+                this.EditLastNameDictionary(person.LastName, itemToDelete, position);
+                this.EditDateOfBirthDictionary(person.DateOfBirth, itemToDelete, position);
+            }
+        }
+
+        /// <summary>
+        /// Create record from the input parameters.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
         public void EditRecord(int id, Person person, short income, decimal tax, char block)
         {
             this.validator.ValidateParameters(person, income, tax, block);
@@ -90,7 +140,7 @@ namespace FileCabinetApp
                 FileCabinetRecord oldRecord = BytesToRecord(oldRecordInByte);
                 long itemToDelete = this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].
                     Where(pos => pos == position).Select(record => record).First();
-                this.fileStream.Position = (id - 1) * RecordSize;
+                this.fileStream.Position = position;
 
                 FileCabinetRecord newRecord = new FileCabinetRecord
                 {

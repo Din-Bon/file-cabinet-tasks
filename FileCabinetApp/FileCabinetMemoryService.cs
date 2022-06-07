@@ -57,6 +57,42 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Insert record to the file cabinet service list.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
+        public void InsertRecord(int id, Person person, short income, decimal tax, char block)
+        {
+            this.validator.ValidateParameters(person, income, tax, block);
+            int index = this.list.FindIndex(record => record.Id == id);
+            FileCabinetRecord record = new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
+                LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
+                DateOfBirth = person.DateOfBirth,
+                Income = income,
+                Tax = tax,
+                Block = block,
+            };
+
+            if (index == -1)
+            {
+                this.list.Add(record);
+                this.AddToDictionaries(record);
+            }
+            else
+            {
+                FileCabinetRecord oldRecord = this.list[index];
+                this.list[index] = record;
+                this.EditInDictionaries(oldRecord, this.list[index]);
+            }
+        }
+
+        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>

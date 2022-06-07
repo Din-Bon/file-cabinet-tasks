@@ -39,6 +39,23 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Insert record from the input parameters.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
+        public void InsertRecord(int id, Person person, short income, decimal tax, char block)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            this.service.InsertRecord(id, person, income, tax, block);
+            stopwatch.Stop();
+            Console.WriteLine($"Insert method execution duration is {stopwatch.ElapsedTicks} ticks");
+        }
+
+        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>

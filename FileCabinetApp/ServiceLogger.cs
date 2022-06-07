@@ -55,6 +55,37 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Insert record from the input parameters.
+        /// </summary>
+        /// <param name="id">Person's id.</param>
+        /// <param name="person">Personal data.</param>
+        /// <param name="income">Person's new income.</param>
+        /// <param name="tax">Person's new tax.</param>
+        /// <param name="block">Person's new living block.</param>
+        public void InsertRecord(int id, Person person, short income, decimal tax, char block)
+        {
+            TextWriter writer = new StreamWriter(FileName, true);
+            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Insert() for record with id = {id}. Parameters - " +
+                $"FirstName = {person.FirstName}, LastName = {person.LastName}, DateOfBirth = {person.DateOfBirth}, " +
+                $"Income = {income}, Tax = {tax}, Block = {block}.");
+
+            try
+            {
+                this.service.InsertRecord(id, person, income, tax, block);
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Insert() completed seccessfully.");
+            }
+            catch (Exception ex)
+            {
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>

@@ -36,7 +36,7 @@ namespace FileCabinetGenerator
         [XmlElement("dateOfBirth")]
         public string DateString
         {
-            get { return this.DateOfBirth.ToString("MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture); }
+            get { return this.DateOfBirth.ToString("M/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture); }
             set { this.DateOfBirth = DateTime.Parse(value, System.Globalization.CultureInfo.InvariantCulture); }
         }
 

@@ -34,7 +34,7 @@ namespace FileCabinetApp
             builder.Append(',');
             builder.Append(record.FirstName + ',');
             builder.Append(record.LastName + ',');
-            builder.Append(record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) + ',');
+            builder.Append(record.DateOfBirth.ToString("M/dd/yyyy", CultureInfo.InvariantCulture) + ',');
             builder.Append(record.Income);
             builder.Append(',');
             builder.Append(record.Tax);

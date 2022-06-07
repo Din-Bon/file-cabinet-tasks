@@ -30,7 +30,7 @@ namespace FileCabinetGenerator
             builder.Append(',');
             builder.Append(record.Name.FirstName + ',');
             builder.Append(record.Name.LastName + ',');
-            builder.Append(record.DateOfBirth.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) + ',');
+            builder.Append(record.DateOfBirth.ToString("M/dd/yyyy", CultureInfo.InvariantCulture) + ',');
             builder.Append(record.Income);
             builder.Append(',');
             builder.Append(Math.Round(record.Tax, 2));
