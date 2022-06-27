@@ -381,6 +381,37 @@
             </summary>
             <param name="parameters">Input parameters.</param>
         </member>
+        <member name="T:FileCabinetApp.DeleteCommandHandler">
+            <summary>
+            Class that handle delete command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DeleteCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.DeleteCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Service object.</param>
+        </member>
+        <member name="M:FileCabinetApp.DeleteCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute insert command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.DeleteCommandHandler.ParameterValidation(System.String)">
+            <summary>
+            Check if file cabinet record have
+            parameter with this name.
+            </summary>
+            <param name="parameter">Input parameter name.</param>
+            <exception cref="T:System.ArgumentException">File cabinet record doesn't have parameter with that name.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DeleteCommandHandler.Delete(System.String)">
+            <summary>
+            Delete record from list.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.EditCommandHandler">
             <summary>
             Class that handle edit command.
@@ -968,6 +999,30 @@
             </summary>
             <param name="id">Person's id.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.DeleteRecord(System.String,System.String)">
+            <summary>
+            Delete record by parameter name.
+            </summary>
+            <param name="fieldName">Record parameter.</param>
+            <param name="value">Parameter value.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.ParseAndDelete(System.String,System.String,System.Int64)">
+            <summary>
+            Parse record in file and delete if input value
+            match records value.
+            </summary>
+            <param name="field">Field name.</param>
+            <param name="value">Field parameter.</param>
+            <param name="position">Record position in file.</param>
+            <returns>Deleted record id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.DeleteInFile(FileCabinetApp.FileCabinetRecord,System.Int64)">
+            <summary>
+            Delete record by its position.
+            </summary>
+            <param name="record">Record.</param>
+            <param name="position">Position in file.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
             <summary>
             Purge records.
@@ -1157,6 +1212,13 @@
             Remove record by id.
             </summary>
             <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.DeleteRecord(System.String,System.String)">
+            <summary>
+            Delete record by parameter name.
+            </summary>
+            <param name="fieldName">Record parameter.</param>
+            <param name="value">Parameter value.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -1439,6 +1501,13 @@
             </summary>
             <param name="id">Person's id.</param>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.DeleteRecord(System.String,System.String)">
+            <summary>
+            Delete record by parameter name.
+            </summary>
+            <param name="fieldName">Record parameter.</param>
+            <param name="value">Parameter value.</param>
+        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
             Find persons by first name.
@@ -1678,6 +1747,13 @@
             </summary>
             <param name="id">Person's id.</param>
         </member>
+        <member name="M:FileCabinetApp.ServiceLogger.DeleteRecord(System.String,System.String)">
+            <summary>
+            Delete record by parameter name.
+            </summary>
+            <param name="fieldName">Record parameter.</param>
+            <param name="value">Parameter value.</param>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
             <summary>
             Find persons by first name.
@@ -1777,6 +1853,13 @@
             Remove record by id.
             </summary>
             <param name="id">Person's id.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.DeleteRecord(System.String,System.String)">
+            <summary>
+            Delete record by parameter name.
+            </summary>
+            <param name="fieldName">Record parameter.</param>
+            <param name="value">Parameter value.</param>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
             <summary>

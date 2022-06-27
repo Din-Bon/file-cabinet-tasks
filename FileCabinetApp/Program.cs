@@ -30,7 +30,7 @@ namespace FileCabinetApp
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
             ParseCLArguments(args);
-            //insert (id, firstname, lastname, dateofbirth, income, tax, block) values ('2', 'jimm', 'jhonna', '5/18/1996', '1500', '70', 'G')
+
             do
             {
                 Console.Write("> ");
@@ -71,6 +71,7 @@ namespace FileCabinetApp
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(insertHandler);
@@ -82,7 +83,8 @@ namespace FileCabinetApp
             findHandler.SetNext(exportHandler);
             exportHandler.SetNext(importHandler);
             importHandler.SetNext(removeHandler);
-            removeHandler.SetNext(purgeHandler);
+            removeHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(purgeHandler);
             return helpHandler;
         }
 

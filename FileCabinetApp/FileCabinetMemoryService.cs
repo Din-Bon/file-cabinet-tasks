@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace FileCabinetApp
 {
@@ -150,6 +151,45 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Record #{id} doesn't exists");
             }
+        }
+
+        /// <summary>
+        /// Delete record by parameter name.
+        /// </summary>
+        /// <param name="fieldName">Record parameter.</param>
+        /// <param name="value">Parameter value.</param>
+        public void DeleteRecord(string fieldName, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException(value, "can not delete record: value is empty");
+            }
+
+            List<FileCabinetRecord>? records = fieldName switch
+            {
+                "id" => this.list.FindAll(record => record.Id == int.Parse(value, CultureInfo.InvariantCulture)),
+                "firstname" => this.list.FindAll(record => record.FirstName == value),
+                "lastname" => this.list.FindAll(record => record.LastName == value),
+                "dateofbirth" => this.list.FindAll(record => record.DateOfBirth == DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture)),
+                "income" => this.list.FindAll(record => record.Income == short.Parse(value, CultureInfo.InvariantCulture)),
+                "tax" => this.list.FindAll(record => record.Tax == decimal.Parse(value, CultureInfo.InvariantCulture)),
+                "block" => this.list.FindAll(record => record.Block == value[0]),
+                _ => null
+            }
+
+                ?? throw new ArgumentNullException(nameof(value), "wrong parameter: can't find record with this parameter in list");
+
+            int i = 0;
+            Console.Write("Deleted records:");
+            while (i < records.Count)
+            {
+                this.list.Remove(records[i]);
+                this.RemoveInDictionaries(records[i]);
+                Console.Write($" #{records[i].Id}");
+                i++;
+            }
+
+            Console.WriteLine();
         }
 
         /// <summary>

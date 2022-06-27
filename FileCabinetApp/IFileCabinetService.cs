@@ -44,6 +44,13 @@ namespace FileCabinetApp
         void RemoveRecord(int id) => throw new NotImplementedException();
 
         /// <summary>
+        /// Delete record by parameter name.
+        /// </summary>
+        /// <param name="fieldName">Record parameter.</param>
+        /// <param name="value">Parameter value.</param>
+        public void DeleteRecord(string fieldName, string value) => throw new NotImplementedException();
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>

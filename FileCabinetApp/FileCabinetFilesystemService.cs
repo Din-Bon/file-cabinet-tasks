@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -175,7 +176,6 @@ namespace FileCabinetApp
 
             int length = (int)(this.fileStream.Length / (long)RecordSize);
             byte[] recordInByte = new byte[RecordSize];
-            byte[] reservedBytes = new byte[16];
             byte isDeleted = 0;
 
             for (int i = 0; i < length; i++)
@@ -208,6 +208,36 @@ namespace FileCabinetApp
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Delete record by parameter name.
+        /// </summary>
+        /// <param name="fieldName">Record parameter.</param>
+        /// <param name="value">Parameter value.</param>
+        public void DeleteRecord(string fieldName, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException(value, "can not delete record: value is empty");
+            }
+
+            int length = (int)(this.fileStream.Length / (long)RecordSize);
+            Console.Write("Deleted records:");
+
+            for (int i = 0; i < length; i++)
+            {
+                this.fileStream.Position = RecordSize * i;
+                long position = this.fileStream.Position;
+                int deletedId = this.ParseAndDelete(fieldName, value, position);
+
+                if (deletedId != 0)
+                {
+                    Console.Write($" #{deletedId}");
+                }
+            }
+
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -609,6 +639,106 @@ namespace FileCabinetApp
             }
 
             return position;
+        }
+
+        /// <summary>
+        /// Parse record in file and delete if input value
+        /// match records value.
+        /// </summary>
+        /// <param name="field">Field name.</param>
+        /// <param name="value">Field parameter.</param>
+        /// <param name="position">Record position in file.</param>
+        /// <returns>Deleted record id.</returns>
+        private int ParseAndDelete(string field, string value, long position)
+        {
+            byte[] recordInByte = new byte[RecordSize];
+            this.fileStream.Position = position;
+            this.fileStream.Read(recordInByte, 0, RecordSize);
+            byte isDeleted = recordInByte[13];
+            FileCabinetRecord? record = BytesToRecord(recordInByte);
+            int deletedId = 0;
+            this.fileStream.Position = position;
+
+            switch (field)
+            {
+                case "id":
+                    if (record.Id == int.Parse(value, CultureInfo.InvariantCulture))
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "firstname":
+                    if (record.FirstName == value)
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "lastname":
+                    if (record.LastName == value)
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "dateofbirth":
+                    if (record.DateOfBirth == DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture))
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "income":
+                    if (record.Income == short.Parse(value, CultureInfo.InvariantCulture))
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "tax":
+                    if (record.Tax == decimal.Parse(value, CultureInfo.InvariantCulture))
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                case "block":
+                    if (record.Block == value[0])
+                    {
+                        this.DeleteInFile(record, position);
+                        deletedId = record.Id;
+                    }
+
+                    break;
+                default:
+                    Console.WriteLine($"Wrong field: record doesn't contain {field}");
+                    break;
+            }
+
+            return deletedId;
+        }
+
+        /// <summary>
+        /// Delete record by its position.
+        /// </summary>
+        /// <param name="record">Record.</param>
+        /// <param name="position">Position in file.</param>
+        private void DeleteInFile(FileCabinetRecord record, long position)
+        {
+            byte isDeleted = 1;
+            byte[] deleteRecord = RecordToBytes(record, isDeleted);
+            this.RemoveInFirstNameDictionary(record.FirstName, position);
+            this.RemoveInLastNameDictionary(record.LastName, position);
+            this.RemoveInDateOfBirthDictionary(record.DateOfBirth, position);
+            this.fileStream.Write(deleteRecord, 0, deleteRecord.Length);
+            this.fileStream.Flush();
         }
 
         private void FillDictionaries()

@@ -86,6 +86,20 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Delete record by parameter name.
+        /// </summary>
+        /// <param name="fieldName">Record parameter.</param>
+        /// <param name="value">Parameter value.</param>
+        public void DeleteRecord(string fieldName, string value)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            this.service.DeleteRecord(fieldName, value);
+            stopwatch.Stop();
+            Console.WriteLine($"Delete method execution duration is {stopwatch.ElapsedTicks} ticks");
+        }
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>

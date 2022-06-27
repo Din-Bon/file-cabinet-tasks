@@ -345,19 +345,19 @@ namespace FileCabinetApp
         private void Insert(string parameters)
         {
             string[] args = parameters.Split(" values ");
-            string[] paramNames = args[0].Trim('(', ')').Split(", ", ',');
+            string[] fieldNames = args[0].Trim('(', ')').Split(", ", ',');
             string[] paramValues = args[1].Trim('(', ')').Split(", ", ',');
             string[] names = { "id", "firstname", "lastname", "dateofbirth", "income", "tax", "block" };
             string[] values = new string[7];
 
-            if (paramNames.Length != paramValues.Length || paramValues.Length > 7)
+            if (fieldNames.Length != paramValues.Length || paramValues.Length > 7)
             {
                 throw new ArgumentException("wrong parameters", parameters);
             }
 
-            for (int i = 0; i < paramNames.Length; i++)
+            for (int i = 0; i < fieldNames.Length; i++)
             {
-                int index = Array.IndexOf(names, paramNames[i]);
+                int index = Array.IndexOf(names, fieldNames[i]);
                 values[index] = paramValues[i].Trim('\'');
             }
 

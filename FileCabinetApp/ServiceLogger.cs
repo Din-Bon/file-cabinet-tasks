@@ -142,6 +142,33 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Delete record by parameter name.
+        /// </summary>
+        /// <param name="fieldName">Record parameter.</param>
+        /// <param name="value">Parameter value.</param>
+        public void DeleteRecord(string fieldName, string value)
+        {
+            TextWriter writer = new StreamWriter(FileName, true);
+            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Delete() for record with parameter field = {fieldName}," +
+                $"value = {value}");
+
+            try
+            {
+                this.service.DeleteRecord(fieldName, value);
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Delete() completed seccessfully.");
+            }
+            catch (Exception ex)
+            {
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        /// <summary>
         /// Find persons by first name.
         /// </summary>
         /// <param name="firstName">Person's first name.</param>
