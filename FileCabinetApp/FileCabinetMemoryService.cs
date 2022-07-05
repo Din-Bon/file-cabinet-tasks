@@ -129,6 +129,53 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Update record by input parameters.
+        /// </summary>
+        /// <param name="oldRecordParameters">Old records data.</param>
+        /// <param name="newRecordParameters">New records data.</param>
+        public void UpdateRecords(string[] oldRecordParameters, string[] newRecordParameters)
+        {
+            if (oldRecordParameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(oldRecordParameters), "wrong data: empty old records data array");
+            }
+
+            if (newRecordParameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(newRecordParameters), "wrong data: empty new records data array");
+            }
+
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+
+            for (int i = 0; i < oldRecordParameters.Length; i++)
+            {
+                string? parameter = oldRecordParameters[i];
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    records.AddRange(this.FindByParameter(parameter, i));
+                }
+            }
+
+            records = records.GroupBy(record => record).Select(record => record.Key).ToList();
+            Console.Write("Update record:");
+
+            for (int i = 0; i < newRecordParameters.Length; i++)
+            {
+                string? parameter = newRecordParameters[i];
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    foreach (FileCabinetRecord record in records)
+                    {
+                        this.RemoveInDictionaries(record);
+                        this.ChangeRecordParameters(record, parameter, i);
+                        this.AddToDictionaries(record);
+                        Console.Write($" #{record.Id}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Remove record by id.
         /// </summary>
         /// <param name="id">Person's id.</param>
@@ -177,7 +224,7 @@ namespace FileCabinetApp
                 _ => null
             }
 
-                ?? throw new ArgumentNullException(nameof(value), "wrong parameter: can't find record with this parameter in list");
+            ?? throw new ArgumentNullException(nameof(value), "wrong parameter: can't find record with this parameter in list");
 
             int i = 0;
             Console.Write("Deleted records:");
@@ -338,6 +385,59 @@ namespace FileCabinetApp
         public Tuple<int, int> GetStat()
         {
             return new Tuple<int, int>(this.list.Count, 0);
+        }
+
+        private void ChangeRecordParameters(FileCabinetRecord record, string value, int index)
+        {
+            switch (index)
+            {
+                case 1:
+                    record.FirstName = value;
+                    break;
+                case 2:
+                    record.LastName = value;
+                    break;
+                case 3:
+                    record.DateOfBirth = DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture);
+                    break;
+                case 4:
+                    record.Income = short.Parse(value, CultureInfo.InvariantCulture);
+                    break;
+                case 5:
+                    record.Tax = short.Parse(value, CultureInfo.InvariantCulture);
+                    break;
+                case 6:
+                    record.Block = value[0];
+                    break;
+                default:
+                    break;
+            }
+
+            Person personalData = new Person
+            {
+                FirstName = record.FirstName,
+                LastName = record.LastName,
+                DateOfBirth = record.DateOfBirth,
+            };
+            this.validator.ValidateParameters(personalData, record.Income, record.Tax, record.Block);
+        }
+
+        private List<FileCabinetRecord> FindByParameter(string value, int index)
+        {
+            List<FileCabinetRecord>? records = index switch
+            {
+                0 => this.list.FindAll(record => record.Id == int.Parse(value, CultureInfo.InvariantCulture)),
+                1 => this.list.FindAll(record => record.FirstName == value),
+                2 => this.list.FindAll(record => record.LastName == value),
+                3 => this.list.FindAll(record => record.DateOfBirth == DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture)),
+                4 => this.list.FindAll(record => record.Income == short.Parse(value, CultureInfo.InvariantCulture)),
+                5 => this.list.FindAll(record => record.Tax == short.Parse(value, CultureInfo.InvariantCulture)),
+                6 => this.list.FindAll(record => record.Block == value[0]),
+                _ => null
+            }
+
+            ?? throw new ArgumentNullException(nameof(value), "wrong parameter: can't find record with this parameter in list");
+            return records;
         }
 
         /// <summary>

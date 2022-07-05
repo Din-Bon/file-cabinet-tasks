@@ -110,9 +110,9 @@ namespace FileCabinetApp
                 this.fileStream.Position = position;
                 this.fileStream.Write(recordInByte, 0, recordInByte.Length);
                 this.fileStream.Flush();
-                this.EditFirstNameDictionary(person.FirstName, itemToDelete, position);
-                this.EditLastNameDictionary(person.LastName, itemToDelete, position);
-                this.EditDateOfBirthDictionary(person.DateOfBirth, itemToDelete, position);
+                this.EditFirstNameDictionary(oldRecord.FirstName, person.FirstName, itemToDelete, position);
+                this.EditLastNameDictionary(oldRecord.LastName, person.LastName, itemToDelete, position);
+                this.EditDateOfBirthDictionary(oldRecord.DateOfBirth, person.DateOfBirth, itemToDelete, position);
             }
         }
 
@@ -157,9 +157,61 @@ namespace FileCabinetApp
                 byte[] newRecordInByte = RecordToBytes(newRecord, 0);
                 this.fileStream.Write(newRecordInByte, 0, newRecordInByte.Length);
                 this.fileStream.Flush();
-                this.EditFirstNameDictionary(person.FirstName, itemToDelete, position);
-                this.EditLastNameDictionary(person.LastName, itemToDelete, position);
-                this.EditDateOfBirthDictionary(person.DateOfBirth, itemToDelete, position);
+                this.EditFirstNameDictionary(oldRecord.FirstName, person.FirstName, itemToDelete, position);
+                this.EditLastNameDictionary(oldRecord.LastName, person.LastName, itemToDelete, position);
+                this.EditDateOfBirthDictionary(oldRecord.DateOfBirth, person.DateOfBirth, itemToDelete, position);
+            }
+        }
+
+        /// <summary>
+        /// Update record by input parameters.
+        /// </summary>
+        /// <param name="oldRecordParameters">Old records data.</param>
+        /// <param name="newRecordParameters">New records data.</param>
+        public void UpdateRecords(string[] oldRecordParameters, string[] newRecordParameters)
+        {
+            if (oldRecordParameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(oldRecordParameters), "wrong data: empty old records data array");
+            }
+
+            if (newRecordParameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(newRecordParameters), "wrong data: empty new records data array");
+            }
+
+            int length = (int)(this.fileStream.Length / (long)RecordSize);
+            byte[] recordInByte = new byte[RecordSize];
+            byte isDeleted;
+
+            for (int i = 0; i < length; i++)
+            {
+                long position = RecordSize * i;
+                this.fileStream.Position = position;
+                this.fileStream.Read(recordInByte, 0, RecordSize);
+                isDeleted = recordInByte[13];
+                FileCabinetRecord? record = BytesToRecord(recordInByte);
+                this.fileStream.Position = position;
+
+                if (isDeleted == 0 && CheckRecordToUpdate(record, oldRecordParameters))
+                {
+                    // Get old parameters that we will delete in dictionaries.
+                    long itemToDelete = this.firstNameDictionary[record.FirstName.ToUpperInvariant()].
+                        Where(pos => pos == position).Select(record => record).First();
+                    string oldFirstName = record.FirstName,
+                        oldLastName = record.LastName;
+                    DateTime oldDateOfBirth = record.DateOfBirth;
+
+                    // Update record parameters.
+                    this.UpdateOneRecord(record, newRecordParameters);
+                    byte[] newRecordInByte = RecordToBytes(record, 0);
+                    this.fileStream.Write(newRecordInByte, 0, newRecordInByte.Length);
+                    this.fileStream.Flush();
+
+                    this.EditFirstNameDictionary(oldFirstName, record.FirstName, itemToDelete, position);
+                    this.EditLastNameDictionary(oldLastName, record.LastName, itemToDelete, position);
+                    this.EditDateOfBirthDictionary(oldDateOfBirth, record.DateOfBirth, itemToDelete, position);
+                }
             }
         }
 
@@ -176,7 +228,7 @@ namespace FileCabinetApp
 
             int length = (int)(this.fileStream.Length / (long)RecordSize);
             byte[] recordInByte = new byte[RecordSize];
-            byte isDeleted = 0;
+            byte isDeleted;
 
             for (int i = 0; i < length; i++)
             {
@@ -571,6 +623,116 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Check if current record match the conditions.
+        /// </summary>
+        /// <param name="record">Current record from file.</param>
+        /// <param name="oldRecordParameters">Check if record has such parameters.</param>
+        /// <returns>Record has oldRecordParameters or not?.</returns>
+        private static bool CheckRecordToUpdate(FileCabinetRecord record, string[] oldRecordParameters)
+        {
+            List<bool> checkList = new List<bool>();
+            for (int i = 0; i < oldRecordParameters.Length; i++)
+            {
+                string parameter = oldRecordParameters[i];
+
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    checkList.Add(CheckOldParameter(record, parameter, i));
+                }
+            }
+
+            if (!checkList.Contains(false))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Helps to check if a record has such a parameter.
+        /// </summary>
+        /// <param name="record">Current record.</param>
+        /// <param name="value">Field value.</param>
+        /// <param name="index">By index we can find out what field we check now.</param>
+        /// <returns>Record has value or not?.</returns>
+        private static bool CheckOldParameter(FileCabinetRecord record, string value, int index)
+        {
+            bool check = index switch
+            {
+                0 => record.Id == int.Parse(value, CultureInfo.InvariantCulture),
+                1 => record.FirstName == value,
+                2 => record.LastName == value,
+                3 => record.DateOfBirth == DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture),
+                4 => record.Income == short.Parse(value, CultureInfo.InvariantCulture),
+                5 => record.Tax == decimal.Parse(value, CultureInfo.InvariantCulture),
+                6 => record.Block == value[0],
+                _ => false,
+            };
+
+            return check;
+        }
+
+        /// <summary>
+        /// Help to update record one by one.
+        /// </summary>
+        /// <param name="record">Record that we update.</param>
+        /// <param name="newRecordParameters">New parameters.</param>
+        private void UpdateOneRecord(FileCabinetRecord record, string[] newRecordParameters)
+        {
+            for (int i = 0; i < newRecordParameters.Length; i++)
+            {
+                string parameter = newRecordParameters[i];
+
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    this.UpdateOneParameter(record, parameter, i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update parameter by its position in the array.
+        /// </summary>
+        /// <param name="record">Record for update.</param>
+        /// <param name="value">New record value.</param>
+        /// <param name="index">Index that show whar field we update.</param>
+        private void UpdateOneParameter(FileCabinetRecord record, string value, int index)
+        {
+            switch (index)
+            {
+                case 1:
+                    record.FirstName = value;
+                    break;
+                case 2:
+                    record.LastName = value;
+                    break;
+                case 3:
+                    record.DateOfBirth = DateTime.ParseExact(value, "M/dd/yyyy", CultureInfo.InvariantCulture);
+                    break;
+                case 4:
+                    record.Income = short.Parse(value, CultureInfo.InvariantCulture);
+                    break;
+                case 5:
+                    record.Tax = short.Parse(value, CultureInfo.InvariantCulture);
+                    break;
+                case 6:
+                    record.Block = value[0];
+                    break;
+                default:
+                    break;
+            }
+
+            Person personalData = new Person
+            {
+                FirstName = record.FirstName,
+                LastName = record.LastName,
+                DateOfBirth = record.DateOfBirth,
+            };
+            this.validator.ValidateParameters(personalData, record.Income, record.Tax, record.Block);
+        }
+
+        /// <summary>
         /// Find last id in the file.
         /// </summary>
         /// <returns>Last id.</returns>
@@ -827,65 +989,68 @@ namespace FileCabinetApp
         /// <summary>
         /// Edit value with that first name in dictionary.
         /// </summary>
-        /// <param name="firstName">Person's first name.</param>
+        /// <param name="oldFirstName">Person's old first name.</param>
+        /// <param name="newFirstName">Person's new first name.</param>
         /// <param name="oldRecord">Old record of a person.</param>
         /// <param name="newRecord">New record of a person with that first name.</param>
-        private void EditFirstNameDictionary(string firstName, long oldRecord, long newRecord)
+        private void EditFirstNameDictionary(string oldFirstName, string newFirstName, long oldRecord, long newRecord)
         {
-            firstName = firstName.ToUpperInvariant();
+            newFirstName = newFirstName.ToUpperInvariant();
 
-            if (!this.firstNameDictionary.ContainsKey(firstName))
+            if (!this.firstNameDictionary.ContainsKey(newFirstName))
             {
-                this.firstNameDictionary.Add(firstName, new List<long>() { newRecord });
+                this.firstNameDictionary.Add(newFirstName, new List<long>() { newRecord });
             }
             else
             {
-                this.firstNameDictionary[firstName].Add(newRecord);
+                this.firstNameDictionary[newFirstName].Add(newRecord);
             }
 
-            this.RemoveInFirstNameDictionary(firstName, oldRecord);
+            this.RemoveInFirstNameDictionary(oldFirstName, oldRecord);
         }
 
         /// <summary>
         /// Edit value with that last name in dictionary.
         /// </summary>
-        /// <param name="lastName">Person's last name.</param>
+        /// <param name="oldLastName">Person's old last name.</param>
+        /// <param name="newLastName">Person's new last name.</param>
         /// <param name="oldRecord">Old record of a person.</param>
         /// <param name="newRecord">New record of a person with that last name.</param>
-        private void EditLastNameDictionary(string lastName, long oldRecord, long newRecord)
+        private void EditLastNameDictionary(string oldLastName, string newLastName, long oldRecord, long newRecord)
         {
-            lastName = lastName.ToUpperInvariant();
+            newLastName = newLastName.ToUpperInvariant();
 
-            if (!this.lastNameDictionary.ContainsKey(lastName))
+            if (!this.lastNameDictionary.ContainsKey(newLastName))
             {
-                this.lastNameDictionary.Add(lastName, new List<long>() { newRecord });
+                this.lastNameDictionary.Add(newLastName, new List<long>() { newRecord });
             }
             else
             {
-                this.lastNameDictionary[lastName].Add(newRecord);
+                this.lastNameDictionary[newLastName].Add(newRecord);
             }
 
-            this.RemoveInLastNameDictionary(lastName, oldRecord);
+            this.RemoveInLastNameDictionary(oldLastName, oldRecord);
         }
 
         /// <summary>
         /// Edit value with that date of birth in dictionary.
         /// </summary>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="oldDateOfBirth">Person's old date of birth.</param>
+        /// <param name="newDateOfBirth">Person's new date of birth.</param>
         /// <param name="oldRecord">Old record of a person.</param>
         /// <param name="newRecord">New record of a person with that date of birth.</param>
-        private void EditDateOfBirthDictionary(DateTime dateOfBirth, long oldRecord, long newRecord)
+        private void EditDateOfBirthDictionary(DateTime oldDateOfBirth, DateTime newDateOfBirth, long oldRecord, long newRecord)
         {
-            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            if (!this.dateOfBirthDictionary.ContainsKey(newDateOfBirth))
             {
-                this.dateOfBirthDictionary.Add(dateOfBirth, new List<long>() { newRecord });
+                this.dateOfBirthDictionary.Add(newDateOfBirth, new List<long>() { newRecord });
             }
             else
             {
-                this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
+                this.dateOfBirthDictionary[newDateOfBirth].Add(newRecord);
             }
 
-            this.RemoveInDateOfBirthDictionary(dateOfBirth, oldRecord);
+            this.RemoveInDateOfBirthDictionary(oldDateOfBirth, oldRecord);
         }
 
         /// <summary>

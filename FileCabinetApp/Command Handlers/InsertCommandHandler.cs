@@ -369,7 +369,11 @@ namespace FileCabinetApp
             decimal tax = ReadInput<decimal>(values[5], DecimalConverter, ValidateTax);
             char block = ReadInput<char>(values[6], CharConverter, ValidateBlock);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
-            this.fileCabinetService.InsertRecord(id, person, income, tax, block);
+
+            if (ValidateParameters(person, income, tax, block))
+            {
+                this.fileCabinetService.InsertRecord(id, person, income, tax, block);
+            }
         }
     }
 }

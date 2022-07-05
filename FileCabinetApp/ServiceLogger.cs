@@ -44,6 +44,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Create failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return -1;
             }
@@ -76,6 +77,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Insert failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
             }
             finally
@@ -107,6 +109,34 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Edit failed: {ex.Message}");
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        /// <summary>
+        /// Update record by input parameters.
+        /// </summary>
+        /// <param name="oldRecordParameters">Person's old data.</param>
+        /// <param name="newRecordParameters">Personal new data.</param>
+        public void UpdateRecords(string[] oldRecordParameters, string[] newRecordParameters)
+        {
+            TextWriter writer = new StreamWriter(FileName, true);
+            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Update().");
+
+            try
+            {
+                this.service.UpdateRecords(oldRecordParameters, newRecordParameters);
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Update() completed seccessfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Update failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
             }
             finally
@@ -132,6 +162,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Remove failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
             }
             finally
@@ -159,6 +190,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Delete failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
             }
             finally
@@ -187,6 +219,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"FindByFirstName failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return null;
             }
@@ -216,6 +249,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"FindByLastName failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return null;
             }
@@ -245,6 +279,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"FindByDateofbirth failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return null;
             }
@@ -272,6 +307,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"MakeSnapshot failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return new FileCabinetServiceSnapshot(Array.Empty<FileCabinetRecord>());
             }
@@ -300,6 +336,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Restore failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return 0;
             }
@@ -327,6 +364,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Purge failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return 0;
             }
@@ -354,6 +392,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"GetRecords failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
             }
@@ -381,6 +420,7 @@ namespace FileCabinetApp
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"GetStat failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
                 return new Tuple<int, int>(0, 0);
             }

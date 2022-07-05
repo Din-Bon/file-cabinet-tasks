@@ -38,6 +38,13 @@ namespace FileCabinetApp
         void EditRecord(int id, Person person, short income, decimal tax, char block) => throw new NotImplementedException();
 
         /// <summary>
+        /// Update record by input parameters.
+        /// </summary>
+        /// <param name="oldRecordParameters">Person's old data.</param>
+        /// <param name="newRecordParameters">Personal new data.</param>
+        void UpdateRecords(string[] oldRecordParameters, string[] newRecordParameters) => throw new NotImplementedException();
+
+        /// <summary>
         /// Remove record by id.
         /// </summary>
         /// <param name="id">Person's id.</param>

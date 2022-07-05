@@ -18,6 +18,7 @@
             new string[] { "insert", "insert new record", "The 'insert' insert new record to the list with all records." },
             new string[] { "list", "show list of records", "The 'list' show list of records." },
             new string[] { "edit", "edit existing record", "The 'edit' edit existing record." },
+            new string[] { "update", "update record", "The 'update' update existing record." },
             new string[] { "find", "finds a record by its property", "The 'find' finds record by property." },
             new string[] { "export", "export records in file(csv/xml))", "The 'export' export records in file(csv/xml)." },
             new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },

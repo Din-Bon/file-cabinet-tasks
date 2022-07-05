@@ -73,6 +73,20 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Update record by input parameters.
+        /// </summary>
+        /// <param name="oldRecordParameters">Person's old data.</param>
+        /// <param name="newRecordParameters">Personal new data.</param>
+        public void UpdateRecords(string[] oldRecordParameters, string[] newRecordParameters)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            this.service.UpdateRecords(oldRecordParameters, newRecordParameters);
+            stopwatch.Stop();
+            Console.WriteLine($"Update method execution duration is {stopwatch.ElapsedTicks} ticks");
+        }
+
+        /// <summary>
         /// Remove record by id.
         /// </summary>
         /// <param name="id">Person's id.</param>

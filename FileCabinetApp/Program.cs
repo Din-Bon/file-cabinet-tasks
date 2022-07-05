@@ -67,6 +67,7 @@ namespace FileCabinetApp
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
             var editHandler = new EditCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
@@ -76,7 +77,8 @@ namespace FileCabinetApp
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(insertHandler);
             insertHandler.SetNext(exitHandler);
-            exitHandler.SetNext(statHandler);
+            exitHandler.SetNext(updateHandler);
+            updateHandler.SetNext(statHandler);
             statHandler.SetNext(listHandler);
             listHandler.SetNext(editHandler);
             editHandler.SetNext(findHandler);
