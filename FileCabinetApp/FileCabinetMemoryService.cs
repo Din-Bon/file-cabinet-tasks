@@ -94,41 +94,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Create record from the input parameters.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's new income.</param>
-        /// <param name="tax">Person's new tax.</param>
-        /// <param name="block">Person's new living block.</param>
-        public void EditRecord(int id, Person person, short income, decimal tax, char block)
-        {
-            this.validator.ValidateParameters(person, income, tax, block);
-            int index = this.list.FindIndex(record => record.Id == id);
-
-            if (index == -1)
-            {
-                Console.WriteLine($"record with #{id} doesn't exists");
-            }
-            else
-            {
-                FileCabinetRecord oldRecord = this.list[index];
-                this.list[index] = new FileCabinetRecord
-                {
-                    Id = id,
-                    FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
-                    LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
-                    DateOfBirth = person.DateOfBirth,
-                    Income = income,
-                    Tax = tax,
-                    Block = block,
-                };
-
-                this.EditInDictionaries(oldRecord, this.list[index]);
-            }
-        }
-
-        /// <summary>
         /// Update record by input parameters.
         /// </summary>
         /// <param name="oldRecordParameters">Old records data.</param>
@@ -172,31 +137,6 @@ namespace FileCabinetApp
                         Console.Write($" #{record.Id}");
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Remove record by id.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        public void RemoveRecord(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("wrong id(<1)", nameof(id));
-            }
-
-            FileCabinetRecord? record = this.list.Find(record => record.Id == id);
-
-            if (record != null)
-            {
-                this.list.Remove(record);
-                this.RemoveInDictionaries(record);
-                Console.WriteLine($"Record #{id} is removed");
-            }
-            else
-            {
-                Console.WriteLine($"Record #{id} doesn't exists");
             }
         }
 

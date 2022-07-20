@@ -88,38 +88,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Create record from the input parameters.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's new income.</param>
-        /// <param name="tax">Person's new tax.</param>
-        /// <param name="block">Person's new living block.</param>
-        public void EditRecord(int id, Person person, short income, decimal tax, char block)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Edit() for record with id = {id}. New parameters - " +
-                $"FirstName = {person.FirstName}, LastName = {person.LastName}, DateOfBirth = {person.DateOfBirth}, " +
-                $"Income = {income}, Tax = {tax}, Block = {block}.");
-
-            try
-            {
-                this.service.EditRecord(id, person, income, tax, block);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Edit() completed seccessfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Edit failed: {ex.Message}");
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
         /// Update record by input parameters.
         /// </summary>
         /// <param name="oldRecordParameters">Person's old data.</param>
@@ -137,32 +105,6 @@ namespace FileCabinetApp
             catch (Exception ex)
             {
                 Console.WriteLine($"Update failed: {ex.Message}");
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Remove record by id.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        public void RemoveRecord(int id)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Remove() for record with id = {id}");
-
-            try
-            {
-                this.service.RemoveRecord(id);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Remove() completed seccessfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Remove failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
             }
             finally

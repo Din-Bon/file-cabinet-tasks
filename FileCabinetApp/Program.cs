@@ -66,12 +66,10 @@ namespace FileCabinetApp
             var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
-            var editHandler = new EditCommandHandler(fileCabinetService);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
@@ -80,12 +78,10 @@ namespace FileCabinetApp
             exitHandler.SetNext(updateHandler);
             updateHandler.SetNext(statHandler);
             statHandler.SetNext(listHandler);
-            listHandler.SetNext(editHandler);
-            editHandler.SetNext(findHandler);
+            listHandler.SetNext(findHandler);
             findHandler.SetNext(exportHandler);
             exportHandler.SetNext(importHandler);
-            importHandler.SetNext(removeHandler);
-            removeHandler.SetNext(deleteHandler);
+            importHandler.SetNext(deleteHandler);
             deleteHandler.SetNext(purgeHandler);
             return helpHandler;
         }

@@ -57,35 +57,35 @@ namespace FileCabinetApp
 
             if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
             {
-                return true;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
             {
-                return true;
+                return false;
             }
 
             if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
             {
-                return true;
+                return false;
             }
 
             if (income < 0)
             {
-                return true;
+                return false;
             }
 
             if (tax < 0 || tax > 100)
             {
-                return true;
+                return false;
             }
 
             if (block < firstAlphabetLetter || block > lastAlphabetLetter)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -344,9 +344,10 @@ namespace FileCabinetApp
         /// <param name="parameters">Input parameters.</param>
         private void Insert(string parameters)
         {
-            string[] args = parameters.Split(" values ");
-            string[] fieldNames = args[0].Trim('(', ')').Split(", ", ',');
-            string[] paramValues = args[1].Trim('(', ')').Split(", ", ',');
+            parameters = parameters.Replace(" ", string.Empty, StringComparison.InvariantCulture);
+            string[] args = parameters.Split("values");
+            string[] fieldNames = args[0].Trim('(', ')').Split(',');
+            string[] paramValues = args[1].Trim('(', ')').Split(',');
             string[] names = { "id", "firstname", "lastname", "dateofbirth", "income", "tax", "block" };
             string[] values = new string[7];
 

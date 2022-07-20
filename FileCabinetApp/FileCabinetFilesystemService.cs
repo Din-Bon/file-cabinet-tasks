@@ -117,53 +117,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Create record from the input parameters.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's new income.</param>
-        /// <param name="tax">Person's new tax.</param>
-        /// <param name="block">Person's new living block.</param>
-        public void EditRecord(int id, Person person, short income, decimal tax, char block)
-        {
-            this.validator.ValidateParameters(person, income, tax, block);
-            long position = this.FindPositionById(id);
-
-            if (position == -1)
-            {
-                Console.WriteLine($"record with #{id} doesn't exists");
-            }
-            else
-            {
-                this.fileStream.Position = position;
-                byte[] oldRecordInByte = new byte[RecordSize];
-                this.fileStream.Read(oldRecordInByte, 0, RecordSize);
-                FileCabinetRecord oldRecord = BytesToRecord(oldRecordInByte);
-                long itemToDelete = this.firstNameDictionary[oldRecord.FirstName.ToUpperInvariant()].
-                    Where(pos => pos == position).Select(record => record).First();
-                this.fileStream.Position = position;
-
-                FileCabinetRecord newRecord = new FileCabinetRecord
-                {
-                    Id = id,
-                    FirstName = person.FirstName ?? throw new ArgumentNullException(nameof(person)),
-                    LastName = person.LastName ?? throw new ArgumentNullException(nameof(person)),
-                    DateOfBirth = person.DateOfBirth,
-                    Income = income,
-                    Tax = tax,
-                    Block = block,
-                };
-
-                byte[] newRecordInByte = RecordToBytes(newRecord, 0);
-                this.fileStream.Write(newRecordInByte, 0, newRecordInByte.Length);
-                this.fileStream.Flush();
-                this.EditFirstNameDictionary(oldRecord.FirstName, person.FirstName, itemToDelete, position);
-                this.EditLastNameDictionary(oldRecord.LastName, person.LastName, itemToDelete, position);
-                this.EditDateOfBirthDictionary(oldRecord.DateOfBirth, person.DateOfBirth, itemToDelete, position);
-            }
-        }
-
-        /// <summary>
         /// Update record by input parameters.
         /// </summary>
         /// <param name="oldRecordParameters">Old records data.</param>
@@ -211,53 +164,6 @@ namespace FileCabinetApp
                     this.EditFirstNameDictionary(oldFirstName, record.FirstName, itemToDelete, position);
                     this.EditLastNameDictionary(oldLastName, record.LastName, itemToDelete, position);
                     this.EditDateOfBirthDictionary(oldDateOfBirth, record.DateOfBirth, itemToDelete, position);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Remove record by id.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        public void RemoveRecord(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("wrong id(<1)", nameof(id));
-            }
-
-            int length = (int)(this.fileStream.Length / (long)RecordSize);
-            byte[] recordInByte = new byte[RecordSize];
-            byte isDeleted;
-
-            for (int i = 0; i < length; i++)
-            {
-                this.fileStream.Position = RecordSize * i;
-                this.fileStream.Read(recordInByte, 0, RecordSize);
-                isDeleted = recordInByte[13];
-                FileCabinetRecord? record = BytesToRecord(recordInByte);
-                if (record.Id == id)
-                {
-                    if (isDeleted == 0)
-                    {
-                        isDeleted = 1;
-                        this.fileStream.Position = RecordSize * i;
-                        long position = this.fileStream.Position;
-                        byte[] deleteRecord = RecordToBytes(record, isDeleted);
-                        this.RemoveInFirstNameDictionary(record.FirstName, position);
-                        this.RemoveInLastNameDictionary(record.LastName, position);
-                        this.RemoveInDateOfBirthDictionary(record.DateOfBirth, position);
-                        this.fileStream.Write(deleteRecord, 0, deleteRecord.Length);
-                        this.fileStream.Flush();
-                        Console.WriteLine($"Record #{id} is removed.");
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Record #{id} doesn't exists.");
-                        isDeleted = 0;
-                        break;
-                    }
                 }
             }
         }

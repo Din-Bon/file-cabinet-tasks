@@ -56,23 +56,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Create record from the input parameters.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        /// <param name="person">Personal data.</param>
-        /// <param name="income">Person's new income.</param>
-        /// <param name="tax">Person's new tax.</param>
-        /// <param name="block">Person's new living block.</param>
-        public void EditRecord(int id, Person person, short income, decimal tax, char block)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            this.service.EditRecord(id, person, income, tax, block);
-            stopwatch.Stop();
-            Console.WriteLine($"Edit method execution duration is {stopwatch.ElapsedTicks} ticks");
-        }
-
-        /// <summary>
         /// Update record by input parameters.
         /// </summary>
         /// <param name="oldRecordParameters">Person's old data.</param>
@@ -84,19 +67,6 @@ namespace FileCabinetApp
             this.service.UpdateRecords(oldRecordParameters, newRecordParameters);
             stopwatch.Stop();
             Console.WriteLine($"Update method execution duration is {stopwatch.ElapsedTicks} ticks");
-        }
-
-        /// <summary>
-        /// Remove record by id.
-        /// </summary>
-        /// <param name="id">Person's id.</param>
-        public void RemoveRecord(int id)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            this.service.RemoveRecord(id);
-            stopwatch.Stop();
-            Console.WriteLine($"Remove method execution duration is {stopwatch.ElapsedTicks} ticks");
         }
 
         /// <summary>
