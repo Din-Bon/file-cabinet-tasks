@@ -72,6 +72,7 @@ namespace FileCabinetApp
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            var similarHandler = new SimilarCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
             createHandler.SetNext(insertHandler);
             insertHandler.SetNext(exitHandler);
@@ -83,6 +84,7 @@ namespace FileCabinetApp
             exportHandler.SetNext(importHandler);
             importHandler.SetNext(deleteHandler);
             deleteHandler.SetNext(purgeHandler);
+            purgeHandler.SetNext(similarHandler);
             return helpHandler;
         }
 

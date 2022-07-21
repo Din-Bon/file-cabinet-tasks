@@ -724,12 +724,6 @@
             </summary>
             <param name="request">Request.</param>
         </member>
-        <member name="M:FileCabinetApp.PurgeCommandHandler.PrintMissedCommandInfo(System.String)">
-            <summary>
-            Warning message.
-            </summary>
-            <param name="command">Command name.</param>
-        </member>
         <member name="M:FileCabinetApp.PurgeCommandHandler.Purge(System.String)">
             <summary>
             Purge records.
@@ -752,6 +746,30 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceCommandHandlerBase"/> class.
             </summary>
             <param name="fileCabinetService">Service object.</param>
+        </member>
+        <member name="T:FileCabinetApp.SimilarCommandHandler">
+            <summary>
+            The last handler, that give user
+            similar commands with input.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.SimilarCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.SimilarCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Service object.</param>
+        </member>
+        <member name="M:FileCabinetApp.SimilarCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute purge command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.SimilarCommandHandler.Similar(System.String)">
+            <summary>
+            Write on the console similar command with input string.
+            </summary>
+            <param name="input">Input string.</param>
         </member>
         <member name="T:FileCabinetApp.StatCommandHandler">
             <summary>
