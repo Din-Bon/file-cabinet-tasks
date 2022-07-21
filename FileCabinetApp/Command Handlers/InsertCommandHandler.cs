@@ -1,23 +1,28 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class that handle edit command.
+    /// Class that handle insert command.
     /// </summary>
-    internal class EditCommandHandler : ServiceCommandHandlerBase
+    internal class InsertCommandHandler : ServiceCommandHandlerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
+        /// Initializes a new instance of the <see cref="InsertCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Service object.</param>
-        public EditCommandHandler(IFileCabinetService fileCabinetService)
+        public InsertCommandHandler(IFileCabinetService fileCabinetService)
             : base(fileCabinetService)
         {
         }
 
         /// <summary>
-        /// Execute edit command.
+        /// Execute insert command.
         /// </summary>
         /// <param name="request">Request.</param>
         public override void Handle(AppCommandRequest request)
@@ -25,9 +30,9 @@ namespace FileCabinetApp
             var command = request.Command;
             var parameters = request.Parameters;
 
-            if (command == "edit")
+            if (command == "insert")
             {
-                this.Edit(parameters);
+                this.Insert(parameters);
             }
             else
             {
@@ -52,35 +57,35 @@ namespace FileCabinetApp
 
             if (string.IsNullOrWhiteSpace(person.FirstName) || person.FirstName.Length < minNameLength || person.FirstName.Length > maxNameLength)
             {
-                return true;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(person.LastName) || person.LastName.Length < minNameLength || person.LastName.Length > maxNameLength)
             {
-                return true;
+                return false;
             }
 
             if (person.DateOfBirth < minDateOfBirth || person.DateOfBirth > maxDateOfBirth)
             {
-                return true;
+                return false;
             }
 
             if (income < 0)
             {
-                return true;
+                return false;
             }
 
             if (tax < 0 || tax > 100)
             {
-                return true;
+                return false;
             }
 
             if (block < firstAlphabetLetter || block > lastAlphabetLetter)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -89,16 +94,15 @@ namespace FileCabinetApp
         /// <param name="converter">Convert input string in the right type.</param>
         /// <param name="validator">Check input data for compliance with the validation rules.</param>
         /// <returns>Test results.</returns>
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        private static T ReadInput<T>(string input, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
         {
             do
             {
                 T value;
-                var input = Console.ReadLine();
 
                 if (input == null)
                 {
-                    throw new ArgumentNullException("empty input", nameof(input));
+                    throw new ArgumentNullException(nameof(input), "empty input");
                 }
 
                 var conversionResult = converter(input);
@@ -121,6 +125,21 @@ namespace FileCabinetApp
                 return value;
             }
             while (true);
+        }
+
+        /// <summary>
+        /// Checks id for compliance with the validation rules.
+        /// </summary>
+        /// <param name="id">Input data.</param>
+        /// <returns>Test results.</returns>
+        private static Tuple<bool, string> ValidateId(int id)
+        {
+            if (id <= 0)
+            {
+                return new Tuple<bool, string>(false, nameof(id));
+            }
+
+            return new Tuple<bool, string>(true, nameof(id));
         }
 
         /// <summary>
@@ -243,7 +262,7 @@ namespace FileCabinetApp
         {
             DateTime dateOfBirth;
 
-            if (!DateTime.TryParseExact(strDateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
+            if (!DateTime.TryParseExact(strDateOfBirth, "M/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateOfBirth))
             {
                 return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
             }
@@ -303,45 +322,58 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Modify existing records.
+        /// Return tuple of parameters.
         /// </summary>
-        /// <param name="parameters">Id of an existing record.</param>
-        private void Edit(string parameters)
+        /// <param name="strid">String parameter(id).</param>
+        /// <returns>Tuple of parameters.</returns>
+        private static Tuple<bool, string, int> IntConverter(string strid)
         {
-            if (string.IsNullOrEmpty(parameters))
+            int id;
+
+            if (!int.TryParse(strid, out id))
             {
-                throw new ArgumentNullException(nameof(parameters), "empty id");
+                return new Tuple<bool, string, int>(false, nameof(strid), '\0');
             }
 
-            int id = Convert.ToInt32(parameters, CultureInfo.CurrentCulture);
+            return new Tuple<bool, string, int>(true, nameof(strid), id);
+        }
 
-            if (id < 0)
+        /// <summary>
+        /// Insert record to the list.
+        /// </summary>
+        /// <param name="parameters">Input parameters.</param>
+        private void Insert(string parameters)
+        {
+            parameters = parameters.Replace(" ", string.Empty, StringComparison.InvariantCulture);
+            string[] args = parameters.Split("values");
+            string[] fieldNames = args[0].Trim('(', ')').Split(',');
+            string[] paramValues = args[1].Trim('(', ')').Split(',');
+            string[] names = { "id", "firstname", "lastname", "dateofbirth", "income", "tax", "block" };
+            string[] values = new string[7];
+
+            if (fieldNames.Length != paramValues.Length || paramValues.Length > 7)
             {
-                throw new ArgumentException("id value less than 0", nameof(parameters));
+                throw new ArgumentException("wrong parameters", parameters);
             }
 
-            Console.Write("First name: ");
-            var firstName = ReadInput<string>(StringConverter, ValidateFirstName);
-            Console.Write("Last name: ");
-            var lastName = ReadInput<string>(StringConverter, ValidateLastName);
-            Console.Write("Date of birth: ");
-            var dateOfBirth = ReadInput<DateTime>(DateTimeConverter, ValidateDateOfBirth);
-            Console.Write("Income: ");
-            var income = ReadInput<short>(ShortConverter, ValidateIncome);
-            Console.Write("Tax: ");
-            decimal tax = ReadInput<decimal>(DecimalConverter, ValidateTax);
-            Console.Write("Block: ");
-            char block = ReadInput<char>(CharConverter, ValidateBlock);
+            for (int i = 0; i < fieldNames.Length; i++)
+            {
+                int index = Array.IndexOf(names, fieldNames[i]);
+                values[index] = paramValues[i].Trim('\'');
+            }
+
+            int id = ReadInput<int>(values[0], IntConverter, ValidateId);
+            var firstName = ReadInput<string>(values[1], StringConverter, ValidateFirstName);
+            var lastName = ReadInput<string>(values[2], StringConverter, ValidateLastName);
+            var dateOfBirth = ReadInput<DateTime>(values[3], DateTimeConverter, ValidateDateOfBirth);
+            var income = ReadInput<short>(values[4], ShortConverter, ValidateIncome);
+            decimal tax = ReadInput<decimal>(values[5], DecimalConverter, ValidateTax);
+            char block = ReadInput<char>(values[6], CharConverter, ValidateBlock);
             Person person = new Person() { FirstName = firstName, LastName = lastName, DateOfBirth = dateOfBirth };
 
-            if (!ValidateParameters(person, income, tax, block))
+            if (ValidateParameters(person, income, tax, block))
             {
-                this.fileCabinetService.EditRecord(id, person, income, tax, block);
-                Console.WriteLine($"record #{id} is updated.");
-            }
-            else
-            {
-                Console.WriteLine($"wrong parameters{Environment.NewLine}record #{id} isn't updated.");
+                this.fileCabinetService.InsertRecord(id, person, income, tax, block);
             }
         }
     }

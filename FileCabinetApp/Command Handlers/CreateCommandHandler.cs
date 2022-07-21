@@ -245,7 +245,7 @@ namespace FileCabinetApp
         {
             DateTime dateOfBirth;
 
-            if (!DateTime.TryParseExact(strDateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
+            if (!DateTime.TryParseExact(strDateOfBirth, "M/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirth))
             {
                 return new Tuple<bool, string, DateTime>(false, nameof(strDateOfBirth), DateTime.Today);
             }

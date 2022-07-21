@@ -62,25 +62,29 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
-            var editHandler = new EditCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            var similarHandler = new SimilarCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(exitHandler);
-            exitHandler.SetNext(statHandler);
+            createHandler.SetNext(insertHandler);
+            insertHandler.SetNext(exitHandler);
+            exitHandler.SetNext(updateHandler);
+            updateHandler.SetNext(statHandler);
             statHandler.SetNext(listHandler);
-            listHandler.SetNext(editHandler);
-            editHandler.SetNext(findHandler);
+            listHandler.SetNext(findHandler);
             findHandler.SetNext(exportHandler);
             exportHandler.SetNext(importHandler);
-            importHandler.SetNext(removeHandler);
-            removeHandler.SetNext(purgeHandler);
+            importHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(purgeHandler);
+            purgeHandler.SetNext(similarHandler);
             return helpHandler;
         }
 

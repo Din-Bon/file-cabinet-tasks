@@ -29,18 +29,8 @@
             }
             else
             {
-                PrintMissedCommandInfo(command);
+                base.Handle(request);
             }
-        }
-
-        /// <summary>
-        /// Warning message.
-        /// </summary>
-        /// <param name="command">Command name.</param>
-        private static void PrintMissedCommandInfo(string command)
-        {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
         }
 
         /// <summary>
