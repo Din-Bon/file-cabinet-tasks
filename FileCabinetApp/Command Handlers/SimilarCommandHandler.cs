@@ -22,6 +22,7 @@ namespace FileCabinetApp
             "import",
             "delete",
             "purge",
+            "select",
         };
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace FileCabinetApp
                 string inp = new string(input.Distinct().ToArray());
                 inp = string.Concat(inp.OrderBy(x => x).ToArray());
                 bool hasChars = inp.All(x => comm.Contains(x, StringComparison.InvariantCultureIgnoreCase));
+
                 if (hasChars && count < 5)
                 {
                     Console.WriteLine("\t" + Commands[i]);

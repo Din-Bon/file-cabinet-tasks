@@ -56,6 +56,33 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        public void SelectRecord(bool[] fields, string[] parameters)
+        {
+            TextWriter writer = new StreamWriter(FileName, true);
+            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Select.");
+
+            try
+            {
+                this.service.SelectRecord(fields, parameters);
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Select completed successfully'.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Select failed: {ex.Message}");
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        /// <summary>
         /// Insert record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>
@@ -73,7 +100,7 @@ namespace FileCabinetApp
             try
             {
                 this.service.InsertRecord(id, person, income, tax, block);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Insert() completed seccessfully.");
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Insert() completed successfully.");
             }
             catch (Exception ex)
             {

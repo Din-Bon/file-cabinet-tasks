@@ -18,6 +18,13 @@ namespace FileCabinetApp
         int CreateRecord(Person person, short income, decimal tax, char block) => throw new NotImplementedException();
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        void SelectRecord(bool[] fields, string[] parameters) => throw new NotImplementedException();
+
+        /// <summary>
         /// Insert record to the file cabinet service.
         /// </summary>
         /// <param name="id">Person's id.</param>

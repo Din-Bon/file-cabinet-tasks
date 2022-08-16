@@ -67,6 +67,150 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        public void SelectRecord(bool[] fields, string[] parameters)
+        {
+            if (fields.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(fields), "wrong fields: array doesn't contain value");
+            }
+
+            if (parameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong parameters: array doesn't contain value");
+            }
+
+            ReadOnlyCollection<FileCabinetRecord> allRecords = this.GetRecords();
+            List<FileCabinetRecord> outputRecords = new List<FileCabinetRecord>();
+            bool noParameters = true;
+
+            for (int i = 0; i < allRecords.Count; i++)
+            {
+                if (CompareRecordFields(allRecords[i], parameters))
+                {
+                    outputRecords.Add(allRecords[i]);
+                    noParameters = false;
+                }
+            }
+
+            if (noParameters)
+            {
+                outputRecords.AddRange(allRecords);
+            }
+
+            SelectPrinter(fields, outputRecords);
+        }
+
+        private static void SelectPrinter(bool[] fields, List<FileCabinetRecord> records)
+        {
+            Func<FileCabinetRecord, string>[] printRecordsPart = new Func<FileCabinetRecord, string>[]
+            {
+                record => record.Id.ToString(CultureInfo.InvariantCulture),
+                record => record.FirstName,
+                record => record.LastName,
+                record => record.DateString,
+                record => record.Income.ToString(CultureInfo.InvariantCulture),
+                record => record.Tax.ToString(CultureInfo.InvariantCulture),
+                record => record.StringBlock,
+            };
+
+            int[] lengths = PrintHeader(fields, records);
+            int[] numericTypesIndexes = { 0, 4, 5 };
+
+            foreach (var record in records)
+            {
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    bool leftAlignment = fields[i];
+                    bool rightAlignment = fields[i] && numericTypesIndexes.Contains(i);
+
+                    if (rightAlignment)
+                    {
+                        string field = printRecordsPart[i](record).PadLeft(lengths[i]);
+                        Console.Write(" | " + field);
+                    }
+                    else if (leftAlignment)
+                    {
+                        string field = printRecordsPart[i](record).PadRight(lengths[i]);
+                        Console.Write(" | " + field);
+                    }
+                }
+
+                Console.Write(" |" + Environment.NewLine);
+            }
+
+            PrintDividingLine(lengths, fields);
+        }
+
+        /// <summary>
+        /// Print head of the table for select command.
+        /// </summary>
+        /// <param name="fields">Array of bool value, index mean records field.</param>
+        /// <param name="records">Help to find the optimal column size.</param>
+        private static int[] PrintHeader(bool[] fields, List<FileCabinetRecord> records)
+        {
+            int[] lengths = new int[]
+            {
+                records.Max(rec => rec.Id.ToString(CultureInfo.InvariantCulture).Length),
+                records.Max(rec => rec.FirstName.Length),
+                records.Max(rec => rec.LastName.Length),
+                records[0].DateString.Length,
+                records.Max(rec => rec.Income.ToString(CultureInfo.InvariantCulture).Length),
+                records.Max(rec => rec.Tax.ToString(CultureInfo.InvariantCulture).Length),
+                records[0].StringBlock.Length,
+            };
+
+            string[] names = { "Id", "Firstname", "Lastname", "DateOfBirth", "Income", "Tax", "Block" };
+
+            for (int i = 0; i < lengths.Length; i++)
+            {
+                lengths[i] = lengths[i] > names[i].Length ? lengths[i] : names[i].Length;
+            }
+
+            PrintDividingLine(lengths, fields);
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i])
+                {
+                    int space = (lengths[i] - names[i].Length) / 2;
+                    int leftPadding = space + names[i].Length;
+                    int rightPadding = leftPadding + space;
+                    rightPadding = lengths[i] - names[i].Length == space * 2 ? rightPadding : rightPadding + 1;
+                    Console.Write(" | " + names[i].PadLeft(leftPadding).PadRight(rightPadding));
+                }
+            }
+
+            Console.Write(" |" + Environment.NewLine);
+            PrintDividingLine(lengths, fields);
+            return lengths;
+        }
+
+        /// <summary>
+        /// Print dividing line between rows in tabular output.
+        /// </summary>
+        /// <param name="lengths">Column widths.</param>
+        private static void PrintDividingLine(int[] lengths, bool[] fields)
+        {
+            Console.Write(" +");
+
+            for (int i = 0; i < lengths.Length; i++)
+            {
+                if (fields[i])
+                {
+                    int separatorLength = 3;
+                    int length = lengths[i] + separatorLength;
+                    Console.Write("+".PadLeft(length, '-'));
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        /// <summary>
         /// Create record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>
@@ -146,7 +290,7 @@ namespace FileCabinetApp
                 FileCabinetRecord? record = BytesToRecord(recordInByte);
                 this.fileStream.Position = position;
 
-                if (isDeleted == 0 && CheckRecordToUpdate(record, oldRecordParameters))
+                if (isDeleted == 0 && CompareRecordFields(record, oldRecordParameters))
                 {
                     // Get old parameters that we will delete in dictionaries.
                     long itemToDelete = this.firstNameDictionary[record.FirstName.ToUpperInvariant()].
@@ -534,7 +678,7 @@ namespace FileCabinetApp
         /// <param name="record">Current record from file.</param>
         /// <param name="oldRecordParameters">Check if record has such parameters.</param>
         /// <returns>Record has oldRecordParameters or not?.</returns>
-        private static bool CheckRecordToUpdate(FileCabinetRecord record, string[] oldRecordParameters)
+        private static bool CompareRecordFields(FileCabinetRecord record, string[] oldRecordParameters)
         {
             List<bool> checkList = new List<bool>();
             for (int i = 0; i < oldRecordParameters.Length; i++)
@@ -543,7 +687,7 @@ namespace FileCabinetApp
 
                 if (!string.IsNullOrEmpty(parameter))
                 {
-                    checkList.Add(CheckOldParameter(record, parameter, i));
+                    checkList.Add(CompareOneField(record, parameter, i));
                 }
             }
 
@@ -562,7 +706,7 @@ namespace FileCabinetApp
         /// <param name="value">Field value.</param>
         /// <param name="index">By index we can find out what field we check now.</param>
         /// <returns>Record has value or not?.</returns>
-        private static bool CheckOldParameter(FileCabinetRecord record, string value, int index)
+        private static bool CompareOneField(FileCabinetRecord record, string value, int index)
         {
             bool check = index switch
             {

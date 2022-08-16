@@ -23,6 +23,7 @@
             new string[] { "import", "import records from file(csv/xml))", "The 'import' import records in file(csv/xml)." },
             new string[] { "delete", "delete record", "The 'delete' delete record by any parameter." },
             new string[] { "purge", "purge records", "The 'purge' purge removed records." },
+            new string[] { "select", "select records", "The 'select' select records by some parameters." },
         };
 
         /// <summary>

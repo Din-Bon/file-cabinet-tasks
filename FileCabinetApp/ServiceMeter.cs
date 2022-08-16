@@ -39,6 +39,20 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        public void SelectRecord(bool[] fields, string[] parameters)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            this.service.SelectRecord(fields, parameters);
+            stopwatch.Stop();
+            Console.WriteLine($"Select method execution duration is {stopwatch.ElapsedTicks} ticks");
+        }
+
+        /// <summary>
         /// Insert record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>

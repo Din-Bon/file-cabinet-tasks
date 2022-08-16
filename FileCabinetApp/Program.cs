@@ -62,6 +62,7 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
+            var selectHandler = new SelectCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
@@ -74,7 +75,8 @@ namespace FileCabinetApp
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var similarHandler = new SimilarCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(insertHandler);
+            createHandler.SetNext(selectHandler);
+            selectHandler.SetNext(insertHandler);
             insertHandler.SetNext(exitHandler);
             exitHandler.SetNext(updateHandler);
             updateHandler.SetNext(statHandler);

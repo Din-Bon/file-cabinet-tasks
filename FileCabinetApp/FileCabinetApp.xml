@@ -730,6 +730,30 @@
             </summary>
             <param name="parameters">Input parameters.</param>
         </member>
+        <member name="T:FileCabinetApp.SelectCommandHandler">
+            <summary>
+            Class that handle select command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.SelectCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.SelectCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Service object.</param>
+        </member>
+        <member name="M:FileCabinetApp.SelectCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Execute export command.
+            </summary>
+            <param name="request">Request.</param>
+        </member>
+        <member name="M:FileCabinetApp.SelectCommandHandler.Select(System.String)">
+            <summary>
+            Parse input string and pass parameters to
+            the method in fileCabinetService class.
+            </summary>
+            <param name="parameters">Input parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.ServiceCommandHandlerBase">
             <summary>
             Base class for all classes that
@@ -873,6 +897,26 @@
             <param name="block">Person's living block.</param>
             <returns>Records id.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.SelectRecord(System.Boolean[],System.String[])">
+            <summary>
+            Select records by input parameters.
+            </summary>
+            <param name="fields">Select these records fields.</param>
+            <param name="parameters">Records parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PrintHeader(System.Boolean[],System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print head of the table for select command.
+            </summary>
+            <param name="fields">Array of bool value, index mean records field.</param>
+            <param name="records">Help to find the optimal column size.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PrintDividingLine(System.Int32[],System.Boolean[])">
+            <summary>
+            Print dividing line between rows in tabular output.
+            </summary>
+            <param name="lengths">Column widths.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Create record from the input parameters.
@@ -964,7 +1008,7 @@
             <param name="bytes">Bytes with data.</param>
             <returns>Record.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CheckRecordToUpdate(FileCabinetApp.FileCabinetRecord,System.String[])">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CompareRecordFields(FileCabinetApp.FileCabinetRecord,System.String[])">
             <summary>
             Check if current record match the conditions.
             </summary>
@@ -972,7 +1016,7 @@
             <param name="oldRecordParameters">Check if record has such parameters.</param>
             <returns>Record has oldRecordParameters or not?.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CheckOldParameter(FileCabinetApp.FileCabinetRecord,System.String,System.Int32)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CompareOneField(FileCabinetApp.FileCabinetRecord,System.String,System.Int32)">
             <summary>
             Helps to check if a record has such a parameter.
             </summary>
@@ -1112,6 +1156,26 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
             <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.SelectRecord(System.Boolean[],System.String[])">
+            <summary>
+            Select records by input parameters.
+            </summary>
+            <param name="fields">Select these records fields.</param>
+            <param name="parameters">Records parameters.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.PrintHeader(System.Boolean[],System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print head of the table for select command.
+            </summary>
+            <param name="fields">Array of bool value, index mean records field.</param>
+            <param name="records">Help to find the optimal column size.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.PrintDividingLine(System.Int32[],System.Boolean[])">
+            <summary>
+            Print dividing line between rows in tabular output.
+            </summary>
+            <param name="lengths">Column widths.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -1392,6 +1456,13 @@
             <param name="block">Person's living block.</param>
             <returns>Records id.</returns>
         </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.SelectRecord(System.Boolean[],System.String[])">
+            <summary>
+            Select records by input parameters.
+            </summary>
+            <param name="fields">Select these records fields.</param>
+            <param name="parameters">Records parameters.</param>
+        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Insert record to the file cabinet service.
@@ -1629,6 +1700,13 @@
             <param name="block">Person's living block.</param>
             <returns>Records id.</returns>
         </member>
+        <member name="M:FileCabinetApp.ServiceLogger.SelectRecord(System.Boolean[],System.String[])">
+            <summary>
+            Select records by input parameters.
+            </summary>
+            <param name="fields">Select these records fields.</param>
+            <param name="parameters">Records parameters.</param>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
             Insert record from the input parameters.
@@ -1726,6 +1804,13 @@
             <param name="tax">Person's tax.</param>
             <param name="block">Person's living block.</param>
             <returns>Records id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.SelectRecord(System.Boolean[],System.String[])">
+            <summary>
+            Select records by input parameters.
+            </summary>
+            <param name="fields">Select these records fields.</param>
+            <param name="parameters">Records parameters.</param>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>

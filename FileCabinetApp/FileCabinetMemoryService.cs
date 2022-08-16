@@ -58,6 +58,153 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        public void SelectRecord(bool[] fields, string[] parameters)
+        {
+            if (fields.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(fields), "wrong fields: array doesn't contain value");
+            }
+
+            if (parameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong parameters: array doesn't contain value");
+            }
+
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            bool noParameters = true;
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                string? parameter = parameters[i];
+
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    records.AddRange(this.FindByParameter(parameter, i));
+                    noParameters = false;
+                }
+            }
+
+            records = records.GroupBy(record => record).Select(record => record.Key).ToList();
+
+            if (noParameters)
+            {
+                records = this.list;
+            }
+
+            SelectPrinter(fields, records);
+        }
+
+        private static void SelectPrinter(bool[] fields, List<FileCabinetRecord> records)
+        {
+            Func<FileCabinetRecord, string>[] printRecordsPart = new Func<FileCabinetRecord, string>[]
+            {
+                record => record.Id.ToString(CultureInfo.InvariantCulture),
+                record => record.FirstName,
+                record => record.LastName,
+                record => record.DateString,
+                record => record.Income.ToString(CultureInfo.InvariantCulture),
+                record => record.Tax.ToString(CultureInfo.InvariantCulture),
+                record => record.StringBlock,
+            };
+
+            int[] lengths = PrintHeader(fields, records);
+            int[] numericTypesIndexes = { 0, 4, 5 };
+
+            foreach (var record in records)
+            {
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    bool leftAlignment = fields[i];
+                    bool rightAlignment = fields[i] && numericTypesIndexes.Contains(i);
+
+                    if (rightAlignment)
+                    {
+                        string field = printRecordsPart[i](record).PadLeft(lengths[i]);
+                        Console.Write(" | " + field);
+                    }
+                    else if (leftAlignment)
+                    {
+                        string field = printRecordsPart[i](record).PadRight(lengths[i]);
+                        Console.Write(" | " + field);
+                    }
+                }
+
+                Console.Write(" |" + Environment.NewLine);
+            }
+
+            PrintDividingLine(lengths, fields);
+        }
+
+        /// <summary>
+        /// Print head of the table for select command.
+        /// </summary>
+        /// <param name="fields">Array of bool value, index mean records field.</param>
+        /// <param name="records">Help to find the optimal column size.</param>
+        private static int[] PrintHeader(bool[] fields, List<FileCabinetRecord> records)
+        {
+            int[] lengths = new int[]
+            {
+                records.Max(rec => rec.Id.ToString(CultureInfo.InvariantCulture).Length),
+                records.Max(rec => rec.FirstName.Length),
+                records.Max(rec => rec.LastName.Length),
+                records[0].DateString.Length,
+                records.Max(rec => rec.Income.ToString(CultureInfo.InvariantCulture).Length),
+                records.Max(rec => rec.Tax.ToString(CultureInfo.InvariantCulture).Length),
+                records[0].StringBlock.Length,
+            };
+
+            string[] names = { "Id", "Firstname", "Lastname", "DateOfBirth", "Income", "Tax", "Block" };
+
+            for (int i = 0; i < lengths.Length; i++)
+            {
+                lengths[i] = lengths[i] > names[i].Length ? lengths[i] : names[i].Length;
+            }
+
+            PrintDividingLine(lengths, fields);
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i])
+                {
+                    int space = (lengths[i] - names[i].Length) / 2;
+                    int leftPadding = space + names[i].Length;
+                    int rightPadding = leftPadding + space;
+                    rightPadding = lengths[i] - names[i].Length == space * 2 ? rightPadding : rightPadding + 1;
+                    Console.Write(" | " + names[i].PadLeft(leftPadding).PadRight(rightPadding));
+                }
+            }
+            
+            Console.Write(" |" + Environment.NewLine);
+            PrintDividingLine(lengths, fields);
+            return lengths;
+        }
+
+        /// <summary>
+        /// Print dividing line between rows in tabular output.
+        /// </summary>
+        /// <param name="lengths">Column widths.</param>
+        private static void PrintDividingLine(int[] lengths, bool[] fields)
+        {
+            Console.Write(" +");
+
+            for (int i = 0; i < lengths.Length; i++)
+            {
+                if (fields[i])
+                {
+                    int separatorLength = 3;
+                    int length = lengths[i] + separatorLength;
+                    Console.Write("+".PadLeft(length, '-'));
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        /// <summary>
         /// Insert record to the file cabinet service list.
         /// </summary>
         /// <param name="id">Person's id.</param>
