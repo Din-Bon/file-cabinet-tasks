@@ -98,51 +98,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Find persons by first name.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <returns>Array of person with same first name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var firstNameList = this.service.FindByFirstName(firstName);
-            stopwatch.Stop();
-            Console.WriteLine($"Find by first name method execution duration is {stopwatch.ElapsedTicks} ticks");
-            return firstNameList;
-        }
-
-        /// <summary>
-        /// Find persons by last name.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <returns>Array of person with same last name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var lastNameList = this.service.FindByLastName(lastName);
-            stopwatch.Stop();
-            Console.WriteLine($"Find by last name method execution duration is {stopwatch.ElapsedTicks} ticks");
-            return lastNameList;
-        }
-
-        /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var dateOfBirthList = this.service.FindByDateofbirth(strDateOfBirth);
-            stopwatch.Stop();
-            Console.WriteLine($"Find by date of birth method execution duration is {stopwatch.ElapsedTicks} ticks");
-            return dateOfBirthList;
-        }
-
-        /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
         /// <returns>Array of person with same date of birth.</returns>

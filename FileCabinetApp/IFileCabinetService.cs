@@ -49,27 +49,6 @@ namespace FileCabinetApp
         public void DeleteRecord(string fieldName, string value) => throw new NotImplementedException();
 
         /// <summary>
-        /// Find persons by first name.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <returns>Array of person with same first name.</returns>
-        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by last name.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <returns>Array of person with same last name.</returns>
-        IEnumerable<FileCabinetRecord> FindByLastName(string lastName) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
-
-        /// <summary>
         /// Make snapshot of the current list of records.
         /// </summary>
         /// <returns>Array of person with same date of birth.</returns>
