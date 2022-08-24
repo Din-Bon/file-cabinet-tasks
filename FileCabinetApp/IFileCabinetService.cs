@@ -18,6 +18,14 @@ namespace FileCabinetApp
         int CreateRecord(Person person, short income, decimal tax, char block) => throw new NotImplementedException();
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        /// <returns>Record collection.</returns>
+        ReadOnlyCollection<FileCabinetRecord> SelectRecord(bool[] fields, string[] parameters) => throw new NotImplementedException();
+
+        /// <summary>
         /// Insert record to the file cabinet service.
         /// </summary>
         /// <param name="id">Person's id.</param>
@@ -40,27 +48,6 @@ namespace FileCabinetApp
         /// <param name="fieldName">Record parameter.</param>
         /// <param name="value">Parameter value.</param>
         public void DeleteRecord(string fieldName, string value) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by first name.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <returns>Array of person with same first name.</returns>
-        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by last name.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <returns>Array of person with same last name.</returns>
-        IEnumerable<FileCabinetRecord> FindByLastName(string lastName) => throw new NotImplementedException();
-
-        /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth) => throw new NotImplementedException();
 
         /// <summary>
         /// Make snapshot of the current list of records.

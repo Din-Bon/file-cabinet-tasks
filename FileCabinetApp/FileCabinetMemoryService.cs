@@ -9,9 +9,6 @@ namespace FileCabinetApp
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
         private readonly IRecordValidator validator;
 
         /// <summary>
@@ -53,8 +50,49 @@ namespace FileCabinetApp
             };
 
             this.list.Add(record);
-            this.AddToDictionaries(record);
             return record.Id;
+        }
+
+        /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        /// <returns>Selected records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> SelectRecord(bool[] fields, string[] parameters)
+        {
+            if (fields.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(fields), "wrong fields: array doesn't contain value");
+            }
+
+            if (parameters.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(parameters), "wrong parameters: array doesn't contain value");
+            }
+
+            List<FileCabinetRecord> records = new List<FileCabinetRecord>();
+            bool noParameters = true;
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                string? parameter = parameters[i];
+
+                if (!string.IsNullOrEmpty(parameter))
+                {
+                    records.AddRange(this.FindByParameter(parameter, i));
+                    noParameters = false;
+                }
+            }
+
+            records = records.GroupBy(record => record).Select(record => record.Key).ToList();
+
+            if (noParameters)
+            {
+                records = this.list;
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(records);
         }
 
         /// <summary>
@@ -83,13 +121,10 @@ namespace FileCabinetApp
             if (index == -1)
             {
                 this.list.Add(record);
-                this.AddToDictionaries(record);
             }
             else
             {
-                FileCabinetRecord oldRecord = this.list[index];
                 this.list[index] = record;
-                this.EditInDictionaries(oldRecord, this.list[index]);
             }
         }
 
@@ -131,9 +166,7 @@ namespace FileCabinetApp
                 {
                     foreach (FileCabinetRecord record in records)
                     {
-                        this.RemoveInDictionaries(record);
                         this.ChangeRecordParameters(record, parameter, i);
-                        this.AddToDictionaries(record);
                         Console.Write($" #{record.Id}");
                     }
                 }
@@ -171,69 +204,11 @@ namespace FileCabinetApp
             while (i < records.Count)
             {
                 this.list.Remove(records[i]);
-                this.RemoveInDictionaries(records[i]);
                 Console.Write($" #{records[i].Id}");
                 i++;
             }
 
             Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Find persons by first name.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <returns>Array of person with same first name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            firstName = firstName.ToUpperInvariant();
-
-            if (!this.firstNameDictionary.ContainsKey(firstName))
-            {
-                throw new ArgumentException("wrong first name", nameof(firstName));
-            }
-
-            ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName]);
-            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
-            return records;
-        }
-
-        /// <summary>
-        /// Find persons by last name.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <returns>Array of person with same last name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            lastName = lastName.ToUpperInvariant();
-
-            if (!this.lastNameDictionary.ContainsKey(lastName))
-            {
-                throw new ArgumentException("wrong last name", nameof(lastName));
-            }
-
-            ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.lastNameDictionary[lastName]);
-            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
-            return records;
-        }
-
-        /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
-        {
-            var dateOfBirth = DateTime.ParseExact(strDateOfBirth, "yyyy-MMM-dd", System.Globalization.CultureInfo.InvariantCulture);
-
-            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
-            {
-                throw new ArgumentException("wrong date of birth", nameof(strDateOfBirth));
-            }
-
-            ReadOnlyCollection<FileCabinetRecord> collection = new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirth]);
-            IEnumerable<FileCabinetRecord> records = new MemoryEnumerable(collection);
-            return records;
         }
 
         /// <summary>
@@ -253,6 +228,7 @@ namespace FileCabinetApp
         /// <returns>Counts of imported records.</returns>
         public int Restore(FileCabinetServiceSnapshot snapshot)
         {
+            // Need to optimize
             IList<FileCabinetRecord> importRecords = snapshot.Records;
             int listSize = this.list.Count;
             int count = 0;
@@ -273,7 +249,6 @@ namespace FileCabinetApp
                 try
                 {
                     this.validator.ValidateParameters(person, record.Income, record.Tax, record.Block);
-                    this.AddToDictionaries(record);
                     importIds.Add(record.Id);
                     count++;
                 }
@@ -299,7 +274,6 @@ namespace FileCabinetApp
                         this.list.Remove(record);
                         index--;
                         deleted++;
-                        this.RemoveInDictionaries(record);
                     }
                 }
 
@@ -378,213 +352,6 @@ namespace FileCabinetApp
 
             ?? throw new ArgumentNullException(nameof(value), "wrong parameter: can't find record with this parameter in list");
             return records;
-        }
-
-        /// <summary>
-        /// Add first name as a key and the record as a value in dictionary.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="record">Record of a person with that first name.</param>
-        private void AddFirstNameDictionary(string firstName, FileCabinetRecord record)
-        {
-            firstName = firstName.ToUpperInvariant();
-
-            if (!this.firstNameDictionary.ContainsKey(firstName))
-            {
-                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { record });
-            }
-            else
-            {
-                this.firstNameDictionary[firstName].Add(record);
-            }
-        }
-
-        /// <summary>
-        /// Add last name as a key and the record as a value in dictionary.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="record">Record of a person with that last name.</param>
-        private void AddLastNameDictionary(string lastName, FileCabinetRecord record)
-        {
-            lastName = lastName.ToUpperInvariant();
-
-            if (!this.lastNameDictionary.ContainsKey(lastName))
-            {
-                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { record });
-            }
-            else
-            {
-                this.lastNameDictionary[lastName].Add(record);
-            }
-        }
-
-        /// <summary>
-        /// Add date of birth as a key and the record as a value in dictionary.
-        /// </summary>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
-        /// <param name="record">Record of a person with that date of birth.</param>
-        private void AddDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord record)
-        {
-            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
-            {
-                this.dateOfBirthDictionary.Add(dateOfBirth, new List<FileCabinetRecord>() { record });
-            }
-            else
-            {
-                this.dateOfBirthDictionary[dateOfBirth].Add(record);
-            }
-        }
-
-        /// <summary>
-        /// Add in all dictionaries.
-        /// </summary>
-        /// <param name="record">Record of a person..</param>
-        private void AddToDictionaries(FileCabinetRecord record)
-        {
-            this.AddFirstNameDictionary(record.FirstName, record);
-            this.AddLastNameDictionary(record.LastName, record);
-            this.AddDateOfBirthDictionary(record.DateOfBirth, record);
-        }
-
-        /// <summary>
-        /// Edit value with that first name in dictionary.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="oldRecord">Old record of a person.</param>
-        /// <param name="newRecord">New record of a person with that first name.</param>
-        private void EditFirstNameDictionary(string firstName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
-        {
-            firstName = firstName.ToUpperInvariant();
-
-            if (!this.firstNameDictionary.ContainsKey(firstName))
-            {
-                this.firstNameDictionary.Add(firstName, new List<FileCabinetRecord>() { newRecord });
-            }
-            else
-            {
-                this.firstNameDictionary[firstName].Add(newRecord);
-            }
-
-            this.RemoveInFirstNameDictionary(oldRecord);
-        }
-
-        /// <summary>
-        /// Edit value with that last name in dictionary.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="oldRecord">Old record of a person.</param>
-        /// <param name="newRecord">New record of a person with that last name.</param>
-        private void EditLastNameDictionary(string lastName, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
-        {
-            lastName = lastName.ToUpperInvariant();
-
-            if (!this.lastNameDictionary.ContainsKey(lastName))
-            {
-                this.lastNameDictionary.Add(lastName, new List<FileCabinetRecord>() { newRecord });
-            }
-            else
-            {
-                this.lastNameDictionary[lastName].Add(newRecord);
-            }
-
-            this.RemoveInLastNameDictionary(oldRecord);
-        }
-
-        /// <summary>
-        /// Edit value with that date of birth in dictionary.
-        /// </summary>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
-        /// <param name="oldRecord">Old record of a person.</param>
-        /// <param name="newRecord">New record of a person with that date of birth.</param>
-        private void EditDateOfBirthDictionary(DateTime dateOfBirth, FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
-        {
-            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
-            {
-                this.dateOfBirthDictionary.Add(dateOfBirth, new List<FileCabinetRecord>() { newRecord });
-            }
-            else
-            {
-                this.dateOfBirthDictionary[dateOfBirth].Add(newRecord);
-            }
-
-            this.RemoveInDateOfBirthDictionary(oldRecord);
-        }
-
-        /// <summary>
-        /// Edit value everywhere.
-        /// </summary>
-        /// <param name="oldRecord">Old record of a person.</param>
-        /// <param name="newRecord">New record of a person.</param>
-        private void EditInDictionaries(FileCabinetRecord oldRecord, FileCabinetRecord newRecord)
-        {
-            this.EditFirstNameDictionary(newRecord.FirstName, oldRecord, newRecord);
-            this.EditLastNameDictionary(newRecord.LastName, oldRecord, newRecord);
-            this.EditDateOfBirthDictionary(newRecord.DateOfBirth, oldRecord, newRecord);
-        }
-
-        /// <summary>
-        /// Remove record from the firstNameDictionary.
-        /// </summary>
-        /// <param name="record">Record.</param>
-        private void RemoveInFirstNameDictionary(FileCabinetRecord record)
-        {
-            string firstName = record.FirstName.ToUpperInvariant();
-
-            if (this.firstNameDictionary[firstName].Count > 1)
-            {
-                this.firstNameDictionary[firstName].Remove(record);
-            }
-            else
-            {
-                this.firstNameDictionary.Remove(firstName);
-            }
-        }
-
-        /// <summary>
-        /// Remove record from the lastNameDictionary.
-        /// </summary>
-        /// <param name="record">Record.</param>
-        private void RemoveInLastNameDictionary(FileCabinetRecord record)
-        {
-            string lastName = record.LastName.ToUpperInvariant();
-
-            if (this.lastNameDictionary[lastName].Count > 1)
-            {
-                this.lastNameDictionary[lastName].Remove(record);
-            }
-            else
-            {
-                this.lastNameDictionary.Remove(lastName);
-            }
-        }
-
-        /// <summary>
-        /// Remove record from the dateOfBirthDictionary.
-        /// </summary>
-        /// <param name="record">Record.</param>
-        private void RemoveInDateOfBirthDictionary(FileCabinetRecord record)
-        {
-            DateTime dateOfBirth = record.DateOfBirth;
-
-            if (this.dateOfBirthDictionary[dateOfBirth].Count > 1)
-            {
-                this.dateOfBirthDictionary[dateOfBirth].Remove(record);
-            }
-            else
-            {
-                this.dateOfBirthDictionary.Remove(dateOfBirth);
-            }
-        }
-
-        /// <summary>
-        /// Remove record from everywhere.
-        /// </summary>
-        /// <param name="record">Record.</param>
-        private void RemoveInDictionaries(FileCabinetRecord record)
-        {
-            this.RemoveInFirstNameDictionary(record);
-            this.RemoveInLastNameDictionary(record);
-            this.RemoveInDateOfBirthDictionary(record);
         }
     }
 }

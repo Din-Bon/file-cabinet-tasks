@@ -62,54 +62,28 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService);
+            var selectHandler = new SelectCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(obj => { isRunning = false; });
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrint);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrint);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var similarHandler = new SimilarCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(insertHandler);
+            createHandler.SetNext(selectHandler);
+            selectHandler.SetNext(insertHandler);
             insertHandler.SetNext(exitHandler);
             exitHandler.SetNext(updateHandler);
             updateHandler.SetNext(statHandler);
-            statHandler.SetNext(listHandler);
-            listHandler.SetNext(findHandler);
-            findHandler.SetNext(exportHandler);
+            statHandler.SetNext(exportHandler);
             exportHandler.SetNext(importHandler);
             importHandler.SetNext(deleteHandler);
             deleteHandler.SetNext(purgeHandler);
             purgeHandler.SetNext(similarHandler);
             return helpHandler;
-        }
-
-        /// <summary>
-        /// Default record printer.
-        /// </summary>
-        /// <param name="records">Source.</param>
-        private static void DefaultRecordPrint(IEnumerable<FileCabinetRecord> records)
-        {
-            foreach (var record in records)
-            {
-                Console.WriteLine(record.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Default record printer(if source is iterator).
-        /// </summary>
-        /// <param name="records">Source.</param>
-        private static void DefaultRecordPrint(IRecordIterator records)
-        {
-            while (records.HasMore())
-            {
-                Console.WriteLine(records.GetNext().ToString());
-            }
         }
 
         /// <summary>

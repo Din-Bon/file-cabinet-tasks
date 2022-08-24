@@ -56,6 +56,36 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Select records by input parameters.
+        /// </summary>
+        /// <param name="fields">Select these records fields.</param>
+        /// <param name="parameters">Records parameters.</param>
+        /// <returns>Selected records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> SelectRecord(bool[] fields, string[] parameters)
+        {
+            TextWriter writer = new StreamWriter(FileName, true);
+            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Select.");
+
+            try
+            {
+                var records = this.service.SelectRecord(fields, parameters);
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Select completed successfully'.");
+                return records;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Select failed: {ex.Message}");
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+            }
+        }
+
+        /// <summary>
         /// Insert record from the input parameters.
         /// </summary>
         /// <param name="id">Person's id.</param>
@@ -73,7 +103,7 @@ namespace FileCabinetApp
             try
             {
                 this.service.InsertRecord(id, person, income, tax, block);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Insert() completed seccessfully.");
+                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Insert() completed successfully.");
             }
             catch (Exception ex)
             {
@@ -134,96 +164,6 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Delete failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by first name.
-        /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <returns>Array of person with same first name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByFirstName() " +
-                $"for record with firstName = {firstName}");
-
-            try
-            {
-                var firstNameList = this.service.FindByFirstName(firstName);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByFirstName() returned '{firstNameList}'.");
-                return firstNameList;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"FindByFirstName failed: {ex.Message}");
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return null;
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by last name.
-        /// </summary>
-        /// <param name="lastName">Person's last name.</param>
-        /// <returns>Array of person with same last name.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByLastName() " +
-                $"for record with lastName = {lastName}");
-
-            try
-            {
-                var lastNameList = this.service.FindByLastName(lastName);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByLastName() returned '{lastNameList}'.");
-                return lastNameList;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"FindByLastName failed: {ex.Message}");
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return null;
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-            }
-        }
-
-        /// <summary>
-        /// Find persons by date of birth.
-        /// </summary>
-        /// <param name="strDateOfBirth">Person's date.</param>
-        /// <returns>Array of person with same date of birth.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateofbirth(string strDateOfBirth)
-        {
-            TextWriter writer = new StreamWriter(FileName, true);
-            writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling FindByDateOfBirth() " +
-                $"for record with DateOfBirth = {strDateOfBirth}");
-
-            try
-            {
-                var dateOfBirthList = this.service.FindByDateofbirth(strDateOfBirth);
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - FindByDateOfBirth() returned '{dateOfBirthList}'.");
-                return dateOfBirthList;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"FindByDateofbirth failed: {ex.Message}");
-                writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
-                return null;
             }
             finally
             {
