@@ -89,7 +89,7 @@ namespace FileCabinetApp
                 Console.WriteLine($"wrong input parameters: {ex.Message}");
             }
 
-            this.fileCabinetService.SelectRecord(fieldsToReturn, values);
+            Memoizer.MemoizeSelect(fieldsToReturn, values, this.fileCabinetService);
         }
     }
 }

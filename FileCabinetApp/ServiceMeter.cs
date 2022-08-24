@@ -43,13 +43,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fields">Select these records fields.</param>
         /// <param name="parameters">Records parameters.</param>
-        public void SelectRecord(bool[] fields, string[] parameters)
+        /// <returns>Selected records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> SelectRecord(bool[] fields, string[] parameters)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            this.service.SelectRecord(fields, parameters);
+            var records = this.service.SelectRecord(fields, parameters);
             stopwatch.Stop();
             Console.WriteLine($"Select method execution duration is {stopwatch.ElapsedTicks} ticks");
+            return records;
         }
 
         /// <summary>

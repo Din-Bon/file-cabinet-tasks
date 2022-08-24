@@ -60,20 +60,23 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fields">Select these records fields.</param>
         /// <param name="parameters">Records parameters.</param>
-        public void SelectRecord(bool[] fields, string[] parameters)
+        /// <returns>Selected records.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> SelectRecord(bool[] fields, string[] parameters)
         {
             TextWriter writer = new StreamWriter(FileName, true);
             writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Calling Select.");
 
             try
             {
-                this.service.SelectRecord(fields, parameters);
+                var records = this.service.SelectRecord(fields, parameters);
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - Select completed successfully'.");
+                return records;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Select failed: {ex.Message}");
                 writer.WriteLine($"{DateTime.Now.ToString("g", CultureInfo.InvariantCulture)} - {ex.Message}");
+                return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
             }
             finally
             {

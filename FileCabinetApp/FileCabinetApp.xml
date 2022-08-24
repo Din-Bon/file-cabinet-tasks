@@ -855,6 +855,7 @@
             </summary>
             <param name="fields">Select these records fields.</param>
             <param name="parameters">Records parameters.</param>
+            <returns>Selected records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -925,19 +926,6 @@
             </summary>
             <param name="bytes">Bytes with data.</param>
             <returns>Record.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PrintHeader(System.Boolean[],System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print head of the table for select command.
-            </summary>
-            <param name="fields">Array of bool value, index mean records field.</param>
-            <param name="records">Help to find the optimal column size.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.PrintDividingLine(System.Int32[],System.Boolean[])">
-            <summary>
-            Print dividing line between rows in tabular output.
-            </summary>
-            <param name="lengths">Column widths.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CompareRecordFields(FileCabinetApp.FileCabinetRecord,System.String[])">
             <summary>
@@ -1028,6 +1016,7 @@
             </summary>
             <param name="fields">Select these records fields.</param>
             <param name="parameters">Records parameters.</param>
+            <returns>Selected records.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -1077,19 +1066,6 @@
             Get records count.
             </summary>
             <returns>Records count.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.PrintHeader(System.Boolean[],System.Collections.Generic.List{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Print head of the table for select command.
-            </summary>
-            <param name="fields">Array of bool value, index mean records field.</param>
-            <param name="records">Help to find the optimal column size.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.PrintDividingLine(System.Int32[],System.Boolean[])">
-            <summary>
-            Print dividing line between rows in tabular output.
-            </summary>
-            <param name="lengths">Column widths.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -1224,6 +1200,7 @@
             </summary>
             <param name="fields">Select these records fields.</param>
             <param name="parameters">Records parameters.</param>
+            <returns>Record collection.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -1313,6 +1290,19 @@
             Read data from xml file.
             </summary>
             <returns>List of records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Memoizer">
+            <summary>
+            Memoize data from search methods.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Memoizer.MemoizeSelect(System.Boolean[],System.String[],FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Memoize records from select function.
+            </summary>
+            <param name="fields">Fields to return.</param>
+            <param name="input">Records parameters that we select.</param>
+            <param name="fileCabinetService">Can get records from the current filecabinetservice object.</param>
         </member>
         <member name="T:FileCabinetApp.Person">
             <summary>
@@ -1435,6 +1425,7 @@
             </summary>
             <param name="fields">Select these records fields.</param>
             <param name="parameters">Records parameters.</param>
+            <returns>Selected records.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -1519,6 +1510,7 @@
             </summary>
             <param name="fields">Select these records fields.</param>
             <param name="parameters">Records parameters.</param>
+            <returns>Selected records.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.InsertRecord(System.Int32,FileCabinetApp.Person,System.Int16,System.Decimal,System.Char)">
             <summary>
@@ -1574,6 +1566,31 @@
             Get records count.
             </summary>
             <returns>Count of record and count of removed records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.TabularOutput">
+            <summary>
+            Print records in tabular style.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.TabularOutput.SelectPrinter(System.Boolean[],System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print records.
+            </summary>
+            <param name="fields">Designates output fields.</param>
+            <param name="records">Records to output.</param>
+        </member>
+        <member name="M:FileCabinetApp.TabularOutput.PrintHeader(System.Boolean[],System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Print head of the table for select command.
+            </summary>
+            <param name="fields">Array of bool value, index mean records field.</param>
+            <param name="records">Help to find the optimal column size.</param>
+        </member>
+        <member name="M:FileCabinetApp.TabularOutput.PrintDividingLine(System.Int32[],System.Boolean[])">
+            <summary>
+            Print dividing line between rows in tabular output.
+            </summary>
+            <param name="lengths">Column widths.</param>
         </member>
         <member name="T:FileCabinetApp.BlockValidator">
             <summary>
