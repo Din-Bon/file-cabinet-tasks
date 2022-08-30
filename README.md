@@ -74,6 +74,7 @@ Example:
 +----+-----------+----------+
 |  1 | John      | Doe      |
 +----+-----------+----------+
+```
 
 ### help
 Example:
@@ -92,6 +93,7 @@ Available commands:
         delete  - delete record
         purge   - purge records
         select  - select records
+```
 
 ## Command line parameters for FileCabinetGenerator.
 | Full Parameter Name | Short Parameter Name | Description                    |
